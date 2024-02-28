@@ -153,9 +153,7 @@ const UserListPartial = () => {
 						/>
 					</FieldWrap>
 				</CardHeaderChild>
-				<CardHeaderChild>
-					
-				</CardHeaderChild>
+				<CardHeaderChild />
 			</CardHeader>
 			<CardBody className='overflow-auto'>
 				<TableTemplate

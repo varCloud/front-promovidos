@@ -143,7 +143,7 @@ export const ThResizer: FC<IThResizerProps> = (props) => {
 				'absolute -right-0.5 top-0 z-10',
 				'h-full w-1',
 				'cursor-col-resize touch-none select-none',
-				[`bg-${color as TColors}-${colorIntensity as TColorIntensity}`],
+				[`bg-${color}-${colorIntensity}`],
 				'rounded-full',
 				'[@media(hover:hover)]:opacity-0',
 				'[@media(hover:hover){&:hover}]:opacity-100',

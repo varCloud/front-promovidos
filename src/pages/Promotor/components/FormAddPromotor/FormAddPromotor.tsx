@@ -11,7 +11,6 @@ import Select from '../../../../components/form/Select';
 import Progress from '../../../../components/ui/Progress';
 import Textarea from '../../../../components/form/Textarea';
 import PromovidosService from '../../../../services/promovidos.service';
-import { createServiceFactory } from '../../../../services/config/CreateServiceFactory';
 import { FetchService } from '../../../../services/config/FetchService';
 import PromotorService from '../../../../services/promotor.service';
 
@@ -23,26 +22,26 @@ type TValues = {
 	mail: string;
 	telefono: string;
 	seccion: string;
-	genero:string;
-	direccion:string;
-}
+	genero: string;
+	direccion: string;
+};
 
-const  FormAddPromovido = ({ handleCloseModal , handleCloseModalWithReload }) => {
+const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }: any) => {
 	const [passwordShowStatus, setPasswordShowStatus] = useState<boolean>(false);
 	const [passwordRepeatShowStatus, setPasswordRepeatShowStatus] = useState<boolean>(false);
-	const _promotorService: PromotorService = new PromotorService(new FetchService())
+	const _promotorService: PromotorService = new PromotorService(new FetchService());
 
 	const formik = useFormik({
 		initialValues: {
-			usuario: "",
-			contrasena: "",
-			nombres: "",
-			mail: "",
-			telefono: "",
-			seccion: "",
-			genero:"",
-			apellidos:"",
-			direccion:""
+			usuario: '',
+			contrasena: '',
+			nombres: '',
+			mail: '',
+			telefono: '',
+			seccion: '',
+			genero: '',
+			apellidos: '',
+			direccion: '',
 		},
 		validate: (values: TValues) => {
 			const errors: Partial<TValues> = {};
@@ -55,10 +54,14 @@ const  FormAddPromovido = ({ handleCloseModal , handleCloseModalWithReload }) =>
 				errors.nombres = 'Must be 20 letters or shorter';
 			}
 
-			if (values.mail && values.mail.toString().length > 0 && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.mail)) {
+			if (
+				values.mail &&
+				values.mail.toString().length > 0 &&
+				!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.mail)
+			) {
 				errors.mail = 'la estructrura del email es incorrecta';
 			}
-			
+
 			// if (values.usuario) {
 			// 	errors.usuario = 'Campo Requerido';
 			// }
@@ -69,8 +72,8 @@ const  FormAddPromovido = ({ handleCloseModal , handleCloseModalWithReload }) =>
 			return errors;
 		},
 		onSubmit: async () => {
-			await _promotorService.crearPromotor(formik.values)
-			handleCloseModalWithReload()
+			await _promotorService.crearPromotor(formik.values);
+			handleCloseModalWithReload();
 		},
 	});
 
@@ -168,7 +171,9 @@ const  FormAddPromovido = ({ handleCloseModal , handleCloseModalWithReload }) =>
 					invalidFeedback={formik.errors.telefono}
 					validFeedback='Información correcta'>
 					<FieldWrap
-						firstSuffix={<Icon icon='HeroDevicePhoneMobile' className='mx-2' size='text-xl' />}>
+						firstSuffix={
+							<Icon icon='HeroDevicePhoneMobile' className='mx-2' size='text-xl' />
+						}>
 						<Input
 							id='telefono'
 							autoComplete='telefono'
@@ -256,7 +261,13 @@ const  FormAddPromovido = ({ handleCloseModal , handleCloseModalWithReload }) =>
 					invalidFeedback={formik.errors.nombres}
 					validFeedback='Información correcta'>
 					<FieldWrap
-						firstSuffix={<Icon icon='HeroEllipsisHorizontalCircle' className='mx-2' size='text-xl' />}>
+						firstSuffix={
+							<Icon
+								icon='HeroEllipsisHorizontalCircle'
+								className='mx-2'
+								size='text-xl'
+							/>
+						}>
 						<Input
 							id='contrasena'
 							autoComplete='contrasena'
@@ -269,7 +280,7 @@ const  FormAddPromovido = ({ handleCloseModal , handleCloseModalWithReload }) =>
 					</FieldWrap>
 				</Validation>
 			</div>
-			<div className='flex gap-10 justify-end'>
+			<div className='flex justify-end gap-10'>
 				<Button
 					size='lg'
 					variant='default'
@@ -289,4 +300,4 @@ const  FormAddPromovido = ({ handleCloseModal , handleCloseModalWithReload }) =>
 		</form>
 	);
 };
-export default FormAddPromovido
+export default FormAddPromovido;

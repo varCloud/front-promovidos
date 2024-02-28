@@ -16,7 +16,7 @@ const bgColorUtil = (
 	opacity?: string,
 	cond?: string,
 ) => {
-	const value = bgColor(color, shade) as string;
+	const value = bgColor(color, shade);
 	const conditional = typeof cond === 'string' ? cond : '';
 
 	if (opacity) return `${conditional}${value}/${opacity}`;

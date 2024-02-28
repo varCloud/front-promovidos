@@ -114,7 +114,7 @@ const NavIcon: FC<INavIconProps> = (props) => {
 	return (
 		<Icon
 			data-component-name='Nav/NavIcon'
-			icon={icon as TIcons}
+			icon={icon}
 			className={classNames(
 				'w-6 flex-none text-2xl',
 				{

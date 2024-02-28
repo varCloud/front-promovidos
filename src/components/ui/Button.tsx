@@ -55,61 +55,53 @@ const Button = forwardRef<HTMLButtonElement, IButtonProps>((props, ref) => {
 		solid: classNames(
 			// Default
 			{
-				[`bg-${color as TColors}-${colorIntensity as TColorIntensity}`]: !isActive,
+				[`bg-${color}-${colorIntensity}`]: !isActive,
 			},
-			[
-				`${borderWidth as TBorderWidth} border-${color as TColors}-${
-					colorIntensity as TColorIntensity
-				}`,
-			],
+			[`${borderWidth} border-${color}-${colorIntensity}`],
 			[`${textColor}`],
 			// Hover
-			[`hover:bg-${color as TColors}-${shadeColorIntensity as TColorIntensity}`],
-			[`hover:border-${color as TColors}-${shadeColorIntensity as TColorIntensity}`],
+			[`hover:bg-${color}-${shadeColorIntensity}`],
+			[`hover:border-${color}-${shadeColorIntensity}`],
 			// Active
-			[`active:bg-${color as TColors}-${shadeColorIntensity as TColorIntensity}`],
-			[`active:border-${color as TColors}-${shadeColorIntensity as TColorIntensity}`],
+			[`active:bg-${color}-${shadeColorIntensity}`],
+			[`active:border-${color}-${shadeColorIntensity}`],
 			{
-				[`bg-${color as TColors}-${shadeColorIntensity as TColorIntensity}`]: isActive,
-				[`border-${color as TColors}-${shadeColorIntensity as TColorIntensity}`]: isActive,
+				[`bg-${color}-${shadeColorIntensity}`]: isActive,
+				[`border-${color}-${shadeColorIntensity}`]: isActive,
 			},
 		),
 		outline: classNames(
 			// Default
 			'bg-transparent',
-			[`${borderWidth as TBorderWidth}`],
+			[`${borderWidth}`],
 			{
-				[`border-${color as TColors}-${colorIntensity as TColorIntensity}/50`]: !isActive,
+				[`border-${color}-${colorIntensity}/50`]: !isActive,
 			},
 			'text-black dark:text-white',
 			// Hover
-			[`hover:border-${color as TColors}-${colorIntensity as TColorIntensity}`],
+			[`hover:border-${color}-${colorIntensity}`],
 			// Active
-			[`active:border-${color as TColors}-${colorIntensity as TColorIntensity}`],
+			[`active:border-${color}-${colorIntensity}`],
 			{
-				[`border-${color as TColors}-${colorIntensity as TColorIntensity}`]: isActive,
+				[`border-${color}-${colorIntensity}`]: isActive,
 			},
 		),
 		default: classNames(
 			// Default
 			'bg-transparent',
 			{ 'text-zinc-600 dark:text-zinc-400': !isActive },
-			[`${borderWidth as TBorderWidth}`],
+			[`${borderWidth}`],
 			'border-transparent',
 			// Hover
-			[
-				`hover:text-${color as TColors}-${
-					colorIntensity as TColorIntensity
-				} dark:hover:text-${color as TColors}-${colorIntensity as TColorIntensity}`,
-			],
+			[`hover:text-${color}-${colorIntensity} dark:hover:text-${color}-${colorIntensity}`],
 			// Active
-			[`active:text-${color as TColors}-${colorIntensity as TColorIntensity}`],
+			[`active:text-${color}-${colorIntensity}`],
 			{
-				[`text-${color as TColors}-${colorIntensity as TColorIntensity}`]: isActive,
+				[`text-${color}-${colorIntensity}`]: isActive,
 			},
 		),
 	};
-	const btnVariantClasses = btnVariants[variant as TButtonVariants];
+	const btnVariantClasses = btnVariants[variant];
 
 	/**
 	 * Padding & Font Size & Icon Margin
@@ -178,9 +170,9 @@ const Button = forwardRef<HTMLButtonElement, IButtonProps>((props, ref) => {
 			rightIcon: classNames('ltr:ml-2.5', 'rtl:mr-2.5'),
 		},
 	};
-	const btnSizeClasses = btnSizes[size as TButtonSize].general;
-	const btnIconClasses = btnSizes[size as TButtonSize].icon;
-	const btnRightIconClasses = HAS_CHILDREN ? btnSizes[size as TButtonSize].rightIcon : undefined;
+	const btnSizeClasses = btnSizes[size].general;
+	const btnIconClasses = btnSizes[size].icon;
+	const btnRightIconClasses = HAS_CHILDREN ? btnSizes[size].rightIcon : undefined;
 
 	/**
 	 * Disable
@@ -201,7 +193,7 @@ const Button = forwardRef<HTMLButtonElement, IButtonProps>((props, ref) => {
 		<button ref={ref} data-component-name='Button' type='button' className={classes} {...rest}>
 			{(!!icon || isLoading) && (
 				<Icon
-					icon={isLoading ? 'DuoLoading' : (icon as TIcons)}
+					icon={isLoading ? 'DuoLoading' : icon}
 					className={classNames({ 'animate-spin': isLoading }, btnIconClasses)}
 				/>
 			)}

@@ -6,7 +6,7 @@ interface IPortalProps {
 	id?: string;
 }
 const Portal: FC<IPortalProps> = ({ id, children }) => {
-	const mount = document.getElementById(id as string);
+	const mount = document.getElementById(id);
 	if (mount) return ReactDOM.createPortal(children, mount);
 	return null;
 };

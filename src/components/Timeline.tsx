@@ -26,7 +26,7 @@ export const TimelineItem: FC<ITimelineItemProps> = (props) => {
 						/>
 					) : (
 						<Icon
-							icon={icon as TIcons}
+							icon={icon}
 							size='text-2xl'
 							color={color}
 							colorIntensity={colorShade}

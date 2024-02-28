@@ -23,6 +23,7 @@ interface ISelectProps
 	dimension?: TSelectDimension;
 	value?: string | number | readonly string[] | undefined;
 	variant?: TSelectVariants;
+	placeholder?: any;
 }
 const Select: FC<ISelectProps> = (props) => {
 	const {
@@ -48,11 +49,11 @@ const Select: FC<ISelectProps> = (props) => {
 		solid: {
 			general: classNames(
 				// Default
-				[`${borderWidth as TBorderWidth} border-zinc-100 dark:border-zinc-800`],
+				[`${borderWidth} border-zinc-100 dark:border-zinc-800`],
 				'bg-zinc-100 dark:bg-zinc-800',
 				// Hover
-				[`hover:border-${color as TColors}-${colorIntensity as TColorIntensity}`],
-				[`dark:hover:border-${color as TColors}-${colorIntensity as TColorIntensity}`],
+				[`hover:border-${color}-${colorIntensity}`],
+				[`dark:hover:border-${color}-${colorIntensity}`],
 				// Focus
 				'focus:border-zinc-300 dark:focus:border-zinc-800',
 				'focus:bg-transparent dark:focus:bg-transparent',
@@ -87,7 +88,7 @@ const Select: FC<ISelectProps> = (props) => {
 			general: classNames('px-1.5', 'py-2.5', 'text-xl'),
 		},
 	};
-	const selectDimensionClasses = selectDimension[dimension as TSelectDimension].general;
+	const selectDimensionClasses = selectDimension[dimension].general;
 
 	const classes = classNames(
 		'w-full appearance-none outline-0',

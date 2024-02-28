@@ -40,7 +40,7 @@ const Progress: FC<IProgressProps> = (props) => {
 			<div
 				className={classNames(
 					'h-full',
-					[`bg-${color as TColors}-${colorIntensity as TColorIntensity}`],
+					[`bg-${color}-${colorIntensity}`],
 					{ 'animate-pulse': isAnimation },
 					rounded,
 					themeConfig.transition,

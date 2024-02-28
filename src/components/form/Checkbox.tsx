@@ -64,15 +64,15 @@ const Checkbox = forwardRef<HTMLInputElement, ICheckboxProps>((props, ref) => {
 				// border
 				'border-zinc-100 dark:border-zinc-800',
 				// hover:border
-				[`hover:border-${color as TColors}-${colorIntensity as TColorIntensity}`],
-				[`dark:hover:border-${color as TColors}-${colorIntensity as TColorIntensity}`],
+				[`hover:border-${color}-${colorIntensity}`],
+				[`dark:hover:border-${color}-${colorIntensity}`],
 				// bg
 				'bg-center bg-no-repeat',
 				// checked:bg
 				"checked:bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAgMCAyNCAyNCI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMCAwaDI0djI0SDB6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE3LjczOCA2LjM1MmExIDEgMCAxIDEgMS41MjQgMS4yOTZsLTguNSAxMGExIDEgMCAwIDEtMS40MjYuMWwtNC41LTRhMSAxIDAgMSAxIDEuMzI4LTEuNDk1bDMuNzM2IDMuMzIgNy44MzgtOS4yMnoiLz48L2c+PC9zdmc+')]",
 				"indeterminate:bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZT0iI2ZmZmZmZiIgY2xhc3M9InctNiBoLTYiPgogIDxwYXRoIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZD0iTTE5LjUgMTJoLTE1IiAvPgo8L3N2Zz4K')]",
-				[`checked:bg-${color as TColors}-${colorIntensity as TColorIntensity}`],
-				[`indeterminate:bg-${color as TColors}-${colorIntensity as TColorIntensity}`],
+				[`checked:bg-${color}-${colorIntensity}`],
+				[`indeterminate:bg-${color}-${colorIntensity}`],
 				rounded,
 			),
 			validation: classNames({
@@ -87,22 +87,22 @@ const Checkbox = forwardRef<HTMLInputElement, ICheckboxProps>((props, ref) => {
 				// border
 				'border-zinc-100 dark:border-zinc-800',
 				// hover:border
-				[`hover:border-${color as TColors}-${colorIntensity as TColorIntensity}`],
-				[`dark:hover:border-${color as TColors}-${colorIntensity as TColorIntensity}`],
+				[`hover:border-${color}-${colorIntensity}`],
+				[`dark:hover:border-${color}-${colorIntensity}`],
 				// bg
 				'bg-left bg-no-repeat',
 				'bg-[url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAgMCA4IDgiPjxjaXJjbGUgY3g9IjQiIGN5PSI0IiByPSIzIiBvcGFjaXR5PSIuMjUiLz48L3N2Zz4=")]',
 				'dark:bg-[url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAgMCA4IDgiPjxjaXJjbGUgY3g9IjQiIGN5PSI0IiByPSIzIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMjUiLz48L3N2Zz4=")]',
 				// checked:bg
-				[`checked:bg-${color as TColors}-${colorIntensity as TColorIntensity}`],
+				[`checked:bg-${color}-${colorIntensity}`],
 				'checked:bg-right',
 				'checked:!bg-[url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAgMCA4IDgiPjxjaXJjbGUgY3g9IjQiIGN5PSI0IiByPSIzIiBmaWxsPSIjZmZmIi8+PC9zdmc+")]',
 			),
 			validation: classNames(),
 		},
 	};
-	const checkboxVariantClasses = checkboxVariants[variant as TCheckboxVariants].general;
-	const checkboxValidationsClasses = checkboxVariants[variant as TCheckboxVariants].validation;
+	const checkboxVariantClasses = checkboxVariants[variant].general;
+	const checkboxValidationsClasses = checkboxVariants[variant].validation;
 
 	/**
 	 * Width&Height & Margin & Font Size
@@ -127,8 +127,8 @@ const Checkbox = forwardRef<HTMLInputElement, ICheckboxProps>((props, ref) => {
 			label: classNames('text-xl'),
 		},
 	};
-	const checkboxDimensionClasses = checkboxDimensions[dimension as TCheckboxDimension].general;
-	const labelDimensionClasses = checkboxDimensions[dimension as TCheckboxDimension].label;
+	const checkboxDimensionClasses = checkboxDimensions[dimension].general;
+	const labelDimensionClasses = checkboxDimensions[dimension].label;
 
 	const checkboxClasses = classNames(
 		'cursor-pointer appearance-none',

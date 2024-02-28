@@ -13,18 +13,11 @@ import { Link } from 'react-router-dom';
 import Container from '../../components/layouts/Container/Container';
 import { appPages } from '../../config/pages.config';
 import usersDb, { TUser } from '../../mocks/db/users.db';
-import Card, {
-	CardBody,
-	CardHeader,
-	CardHeaderChild,
-	CardTitle,
-} from '../../components/ui/Card';
+import Card, { CardBody, CardHeader, CardHeaderChild, CardTitle } from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Icon from '../../components/icon/Icon';
 import Input from '../../components/form/Input';
-import TableTemplate, {
-	TableCardFooterTemplate,
-} from '../../templates/common/TableParts.template';
+import TableTemplate, { TableCardFooterTemplate } from '../../templates/common/TableParts.template';
 import Badge from '../../components/ui/Badge';
 import Dropdown, {
 	DropdownItem,
@@ -40,7 +33,12 @@ import FieldWrap from '../../components/form/FieldWrap';
 import Avatar from '../../components/Avatar';
 import Tooltip from '../../components/ui/Tooltip';
 import PageWrapper from '../../components/layouts/PageWrapper/PageWrapper';
-import Modal, { ModalBody, ModalFooter, ModalFooterChild, ModalHeader } from '../../components/ui/Modal';
+import Modal, {
+	ModalBody,
+	ModalFooter,
+	ModalFooterChild,
+	ModalHeader,
+} from '../../components/ui/Modal';
 import PromovidosService from '../../services/promovidos.service';
 import { FetchService } from '../../services/config/FetchService';
 import FormAddPromotor from './components/FormAddPromotor/FormAddPromotor';
@@ -49,7 +47,7 @@ import PromotorService from '../../services/promotor.service';
 const columnHelper = createColumnHelper<any>();
 
 const editLinkPath = `../${appPages.crmAppPages.subPages.customerPage.subPages.editPageLink.to}/`;
-const sinRegistro = 'N/A'
+const sinRegistro = 'N/A';
 const columns = [
 	columnHelper.accessor('image', {
 		cell: (info) => (
@@ -57,7 +55,6 @@ const columns = [
 				<Avatar
 					src={info.getValue()?.thumb}
 					name={`${info.row.original.nombres} ${info.row.original.apellidos}`}
-
 					rounded='rounded'
 				/>
 			</Link>
@@ -69,9 +66,10 @@ const columns = [
 	}),
 	columnHelper.accessor('nombres', {
 		cell: (info) => (
-
 			<Link to={`${editLinkPath}${info.row.original.id}`}>
-				<div className='font-bold'>{info.row.original.nombres} {info.row.original.apellidos}</div>
+				<div className='font-bold'>
+					{info.row.original.nombres} {info.row.original.apellidos}
+				</div>
 			</Link>
 		),
 		header: 'Nombres',
@@ -87,11 +85,17 @@ const columns = [
 
 	columnHelper.accessor('celular', {
 		cell: (info) => (
-			<div className='flex gap-2 flex-row justify-center '>
+			<div className='flex flex-row justify-center gap-2 '>
 				<span>{info.getValue()}</span>
-				{info.getValue() ? <span> <Icon icon='HeroCheckBadge' color='blue' /></span> : sinRegistro}
+				{info.getValue() ? (
+					<span>
+						{' '}
+						<Icon icon='HeroCheckBadge' color='blue' />
+					</span>
+				) : (
+					sinRegistro
+				)}
 			</div>
-
 		),
 		header: 'Telefono',
 		footer: 'Telefono',
@@ -99,11 +103,17 @@ const columns = [
 
 	columnHelper.accessor('mail', {
 		cell: (info) => (
-			<div className='flex gap-2 flex-row justify-center '>
+			<div className='flex flex-row justify-center gap-2 '>
 				<span>{info.getValue()}</span>
-				{info.getValue() ? <span> <Icon icon='HeroCheckBadge' color='blue' /></span> : sinRegistro}
+				{info.getValue() ? (
+					<span>
+						{' '}
+						<Icon icon='HeroCheckBadge' color='blue' />
+					</span>
+				) : (
+					sinRegistro
+				)}
 			</div>
-
 		),
 		header: 'Email',
 		footer: 'Email',
@@ -111,26 +121,24 @@ const columns = [
 
 	columnHelper.accessor('redesSociales', {
 		cell: (info) => (
-			<div className='flex gap-2 flex-row justify-center '>
+			<div className='flex flex-row justify-center gap-2 '>
 				<span>{info.getValue() ?? sinRegistro}</span>
 			</div>
-
 		),
 		header: 'Redes Sociales',
 		footer: 'Redes Sociales',
 	}),
 
-	columnHelper.display( {
-		cell: (info) => (
+	columnHelper.display({
+		cell: (_info) => (
 			<div className='flex items-center gap-2'>
 				<Tooltip text='Editar'>
-					<Button icon='HeroPencil'></Button>
+					<Button icon='HeroPencil' />
 				</Tooltip>
 				<Tooltip text='Eliminar'>
-					<Button icon='HeroTrash'  color='red' colorIntensity='800'></Button>
+					<Button icon='HeroTrash' color='red' colorIntensity='800' />
 				</Tooltip>
 			</div>
-
 		),
 		header: 'Acciones',
 		footer: 'Acciones',
@@ -143,19 +151,19 @@ const Promotor = () => {
 	const [exModal1, setExModal1] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [promotores, setPromotores] = useState<any>([]);
-	const _promotorService: PromotorService = new PromotorService(new FetchService())
+	const _promotorService: PromotorService = new PromotorService(new FetchService());
 
 	async function obtenerPromotores() {
-		setLoading(true)
-		const _promotores = await _promotorService.obtenerPromotores()
-		setPromotores([..._promotores])
-		setLoading(false)
+		setLoading(true);
+		const _promotores = await _promotorService.obtenerPromotores();
+		setPromotores([..._promotores]);
+		setLoading(false);
 	}
 
 	useEffect(() => {
 		obtenerPromotores();
 		return () => {};
-	}, [])
+	}, []);
 
 	const table = useReactTable({
 		data: promotores,
@@ -179,11 +187,11 @@ const Promotor = () => {
 
 	const handleCloseModal = () => {
 		setExModal1(false);
-	}
+	};
 	const handleCloseModalWithReload = async () => {
 		setExModal1(false);
-		await obtenerPromotores()
-	}
+		await obtenerPromotores();
+	};
 
 	if (loading) {
 		return <div>Loading...</div>;
@@ -238,15 +246,21 @@ const Promotor = () => {
 						</CardHeader>
 
 						<CardBody className='overflow-auto'>
-							<TableTemplate className='table-fixed max-md:min-w-[70rem]' table={table} />
+							<TableTemplate
+								className='table-fixed max-md:min-w-[70rem]'
+								table={table}
+							/>
 						</CardBody>
 						<TableCardFooterTemplate table={table} />
 					</Card>
 				</Container>
-				<Modal isOpen={exModal1} setIsOpen={setExModal1} isStaticBackdrop={true} >
+				<Modal isOpen={exModal1} setIsOpen={setExModal1} isStaticBackdrop>
 					<ModalHeader>Agregar Promotor</ModalHeader>
 					<ModalBody>
-						<FormAddPromotor handleCloseModal={handleCloseModal}  handleCloseModalWithReload={handleCloseModalWithReload}></FormAddPromotor>
+						<FormAddPromotor
+							handleCloseModal={handleCloseModal}
+							handleCloseModalWithReload={handleCloseModalWithReload}
+						/>
 					</ModalBody>
 				</Modal>
 			</PageWrapper>

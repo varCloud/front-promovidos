@@ -14,7 +14,7 @@ import usersDb, { TUser } from '../../mocks/db/users.db';
 const ChatPage = () => {
 	const { id } = useParams();
 
-	const currentUserData: TUser = usersDb.find((key) => key.username === id) as TUser;
+	const currentUserData: TUser = usersDb.find((key) => key.username === id);
 
 	const formik = useFormik({
 		onSubmit(): void | Promise<never> {

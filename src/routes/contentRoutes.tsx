@@ -159,7 +159,6 @@ const ChatPage = lazy(() => import('../pages/ChatPage/Chat.page'));
 const UnderConstructionPage = lazy(() => import('../pages/UnderConstruction.page'));
 
 const contentRoutes: RouteProps[] = [
-
 	{
 		path: appPages.promovidoAppPages.to,
 		element: <Promovido />,

@@ -90,17 +90,15 @@ const RichText: FC<IRichTextProps> = (props) => {
 		solid: {
 			general: classNames(
 				// Default
-				[`${borderWidth as TBorderWidth}`],
+				[`${borderWidth}`],
 				{
 					'border-zinc-100 dark:border-zinc-800': !isFocused,
 					'bg-zinc-100 dark:bg-zinc-800': !isFocused,
 				},
 				// Hover
 				{
-					[`hover:border-${color as TColors}-${colorIntensity as TColorIntensity}`]:
-						!isFocused,
-					[`dark:hover:border-${color as TColors}-${colorIntensity as TColorIntensity}`]:
-						!isFocused,
+					[`hover:border-${color}-${colorIntensity}`]: !isFocused,
+					[`dark:hover:border-${color}-${colorIntensity}`]: !isFocused,
 				},
 				// Focus
 				{

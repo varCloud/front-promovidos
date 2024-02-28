@@ -45,7 +45,7 @@ const Balance: FC<IBalanceProps> = (props) => {
 			data-component-name='Balance'
 			className={classNames(
 				'flex items-center gap-2 bg-zinc-950/5 p-2 dark:bg-zinc-950/50',
-				[`${rounded as TRounded}`],
+				[`${rounded}`],
 				className,
 			)}
 			{...rest}>

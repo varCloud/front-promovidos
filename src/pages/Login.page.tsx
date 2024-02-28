@@ -11,6 +11,8 @@ import LogoTemplate from '../templates/layouts/Logo/Logo.template';
 import FieldWrap from '../components/form/FieldWrap';
 import Icon from '../components/icon/Icon';
 import Validation from '../components/form/Validation';
+import LoginService from '../services/login.service';
+import { FetchService } from '../services/config/FetchService';
 
 type TValues = {
 	username: string;
@@ -24,8 +26,8 @@ const LoginPage = () => {
 
 	const formik = useFormik({
 		initialValues: {
-			username:'',
-			password:'',
+			username: '',
+			password: '',
 		},
 		validate: (values: TValues) => {
 			const errors: Partial<TValues> = {};
@@ -44,11 +46,9 @@ const LoginPage = () => {
 			onLogin(values.username, values.password)
 				.then(() => {})
 				.catch((e: Error) => {
-					if (e.cause === 'username') {
-						setFieldError('username', e.message);
-						setFieldError('password', e.message);
-					}
-					if (e.cause === 'password') setFieldError('password', e.message);
+					console.log('error', e);
+					setFieldError('username', e.message);
+					setFieldError('password', e.message);
 				});
 		},
 	});
@@ -61,7 +61,7 @@ const LoginPage = () => {
 						<LogoTemplate className='h-12' />
 					</div>
 					<div className='text-center'>
-						<span className='text-4xl text-center font-semibold'>Promovidos</span>
+						<span className='text-center text-4xl font-semibold'>Promovidos</span>
 					</div>
 					<div>
 						<span className='text-2xl font-semibold'>Iniciar Sesión</span>
@@ -78,8 +78,7 @@ const LoginPage = () => {
 								isTouched={formik.touched.username}
 								invalidFeedback={formik.errors.username}
 								validFeedback='Informacion correcta'>
-								<FieldWrap
-									firstSuffix={<Icon icon='HeroUser' className='mx-2' />}>
+								<FieldWrap firstSuffix={<Icon icon='HeroUser' className='mx-2' />}>
 									<Input
 										dimension='lg'
 										id='username'
@@ -139,9 +138,7 @@ const LoginPage = () => {
 					</form>
 					<div>
 						<span className='flex gap-2 text-sm'>
-							<span className='text-zinc-400 dark:text-zinc-600'>
-								Desarrollo por
-							</span>
+							<span className='text-zinc-400 dark:text-zinc-600'>Desarrollo por</span>
 							<Link to='https://bluecloud.com.mx/' className='hover:text-inherit'>
 								BlueCloud
 							</Link>

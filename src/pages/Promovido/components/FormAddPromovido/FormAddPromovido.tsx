@@ -11,7 +11,6 @@ import Select from '../../../../components/form/Select';
 import Progress from '../../../../components/ui/Progress';
 import Textarea from '../../../../components/form/Textarea';
 import PromovidosService from '../../../../services/promovidos.service';
-import { createServiceFactory } from '../../../../services/config/CreateServiceFactory';
 import { FetchService } from '../../../../services/config/FetchService';
 
 type TValues = {
@@ -24,13 +23,13 @@ type TValues = {
 	mail: string;
 	seccion: string;
 	redesSociales: string;
-	idPromotor: number
-}
+	idPromotor: number;
+};
 
-const  FormAddPromovido = ({ handleCloseModal , handleCloseModalWithReload }) => {
+const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }) => {
 	const [passwordShowStatus, setPasswordShowStatus] = useState<boolean>(false);
 	const [passwordRepeatShowStatus, setPasswordRepeatShowStatus] = useState<boolean>(false);
-	const _promovidosService:PromovidosService = new PromovidosService(new FetchService())
+	const _promovidosService: PromovidosService = new PromovidosService(new FetchService());
 
 	const formik = useFormik({
 		initialValues: {
@@ -43,7 +42,7 @@ const  FormAddPromovido = ({ handleCloseModal , handleCloseModalWithReload }) =>
 			mail: '',
 			seccion: '',
 			redesSociales: '',
-			idPromotor: 1
+			idPromotor: 1,
 		},
 		validate: (values: TValues) => {
 			const errors: Partial<TValues> = {};
@@ -56,15 +55,19 @@ const  FormAddPromovido = ({ handleCloseModal , handleCloseModalWithReload }) =>
 				errors.nombres = 'Must be 20 letters or shorter';
 			}
 
-			if (values.mail && values.mail.toString().length > 0 && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.mail)) {
+			if (
+				values.mail &&
+				values.mail.toString().length > 0 &&
+				!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.mail)
+			) {
 				errors.mail = 'la estructrura del email es incorrecta';
 			}
 
 			return errors;
 		},
 		onSubmit: async () => {
-			await _promovidosService.crearPromovido(formik.values)
-			handleCloseModalWithReload()
+			await _promovidosService.crearPromovido(formik.values);
+			handleCloseModalWithReload();
 		},
 	});
 
@@ -217,7 +220,7 @@ const  FormAddPromovido = ({ handleCloseModal , handleCloseModalWithReload }) =>
 					</FieldWrap>
 				</Validation>
 			</div>
-			<div className='flex gap-10 justify-end'>
+			<div className='flex justify-end gap-10'>
 				<Button
 					size='lg'
 					variant='default'
@@ -237,4 +240,4 @@ const  FormAddPromovido = ({ handleCloseModal , handleCloseModalWithReload }) =>
 		</form>
 	);
 };
-export default FormAddPromovido
+export default FormAddPromovido;

@@ -48,27 +48,24 @@ const Alert: FC<IAlertProps> = (props) => {
 	const badgeVariants: { [key in TAlertVariants]: string } = {
 		solid: classNames(
 			[`${textColor}`],
-			[`bg-${color as TColors}-${colorIntensity as TColorIntensity}`],
+			[`bg-${color}-${colorIntensity}`],
 			'border-transparent',
 		),
 		outline: classNames(
-			[`border-${color as TColors}-${colorIntensity as TColorIntensity}`],
-			[`bg-${color as TColors}-${colorIntensity as TColorIntensity}/10`],
-			[`text-${color as TColors}-${colorIntensity as TColorIntensity}`],
+			[`border-${color}-${colorIntensity}`],
+			[`bg-${color}-${colorIntensity}/10`],
+			[`text-${color}-${colorIntensity}`],
 		),
-		default: classNames(
-			[`text-${color as TColors}-${colorIntensity as TColorIntensity}`],
-			'border-transparent',
-		),
+		default: classNames([`text-${color}-${colorIntensity}`], 'border-transparent'),
 	};
-	const badgeVariantClasses = badgeVariants[variant as TAlertVariants];
+	const badgeVariantClasses = badgeVariants[variant];
 
 	const classes = classNames(
 		'relative',
 		'flex h-fit items-stretch',
 		'p-4',
-		[`${borderWidth as TBorderWidth}`],
-		[`${rounded as TRounded}`],
+		[`${borderWidth}`],
+		[`${rounded}`],
 		badgeVariantClasses,
 		className,
 	);

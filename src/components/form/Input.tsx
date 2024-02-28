@@ -43,11 +43,11 @@ const Input = forwardRef<HTMLInputElement, IInputProps>((props, ref) => {
 		solid: {
 			general: classNames(
 				// Default
-				[`${borderWidth as TBorderWidth} border-zinc-100 dark:border-zinc-800`],
+				[`${borderWidth} border-zinc-100 dark:border-zinc-800`],
 				'bg-zinc-100 dark:bg-zinc-800',
 				// Hover
-				[`hover:border-${color as TColors}-${colorIntensity as TColorIntensity}`],
-				[`dark:hover:border-${color as TColors}-${colorIntensity as TColorIntensity}`],
+				[`hover:border-${color}-${colorIntensity}`],
+				[`dark:hover:border-${color}-${colorIntensity}`],
 				// Focus
 				'focus:border-zinc-300 dark:focus:border-zinc-800',
 				'focus:bg-transparent dark:focus:bg-transparent',
@@ -82,7 +82,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>((props, ref) => {
 			general: classNames('px-1.5', 'py-2.5', 'text-xl'),
 		},
 	};
-	const inputDimensionClasses = inputDimension[dimension as TInputDimension].general;
+	const inputDimensionClasses = inputDimension[dimension].general;
 
 	const classes = classNames(
 		'w-full appearance-none outline-0',

@@ -70,15 +70,15 @@ const SelectReact: FC<ISelectReactProps> = (props) => {
 		solid: {
 			control: classNames(
 				// Default
-				[`${borderWidth as TBorderWidth} border-zinc-100 dark:border-zinc-800`],
+				[`${borderWidth} border-zinc-100 dark:border-zinc-800`],
 				'bg-zinc-100 dark:bg-zinc-800',
 				'w-full',
 				'text-black dark:text-white',
 				themeConfig.transition,
-				[`${rounded as TRounded}`],
+				[`${rounded}`],
 				// Hover
-				[`hover:border-${color as TColors}-${colorIntensity as TColorIntensity}`],
-				[`dark:hover:border-${color as TColors}-${colorIntensity as TColorIntensity}`],
+				[`hover:border-${color}-${colorIntensity}`],
+				[`dark:hover:border-${color}-${colorIntensity}`],
 			),
 			controlFocus: classNames(
 				{
@@ -107,7 +107,7 @@ const SelectReact: FC<ISelectReactProps> = (props) => {
 		lg: { control: classNames('!min-h-[3rem] text-lg') },
 		xl: { control: classNames('!min-h-[3.25rem] text-xl') },
 	};
-	const selectDimensionClasses = selectDimensions[dimension as TSelectDimension].control;
+	const selectDimensionClasses = selectDimensions[dimension].control;
 
 	const { roundedCustom } = useRoundedSize(rounded);
 
@@ -134,22 +134,19 @@ const SelectReact: FC<ISelectReactProps> = (props) => {
 					),
 				option: (state) =>
 					classNames('px-1.5 py-1', themeConfig.transition, {
-						[`bg-${color as TColors}-${colorIntensity as TColorIntensity}`]:
-							state.isFocused,
+						[`bg-${color}-${colorIntensity}`]: state.isFocused,
 						[`${textColor}`]: state.isFocused,
 						'opacity-50': state?.data?.isDisabled,
 					}),
 				menu: () =>
-					classNames('bg-white dark:bg-black overflow-hidden shadow-lg', [
-						`${rounded as TRounded}`,
-					]),
+					classNames('bg-white dark:bg-black overflow-hidden shadow-lg', [`${rounded}`]),
 				group: () => classNames('border-zinc-500/25', '[&:not(:last-child)]:border-b'),
 				groupHeading: () => classNames('font-semibold', 'px-1.5', 'pt-1.5', 'pb-0.5'),
 				placeholder: () => classNames('text-black/50', 'dark:text-white/50'),
 				indicatorSeparator: () => classNames('rounded', '!bg-zinc-500/50'),
 				multiValue: (state) =>
 					classNames(
-						`bg-${color as TColors}-${colorIntensity as TColorIntensity}`,
+						`bg-${color}-${colorIntensity}`,
 						'm-0.5',
 						'ltr:pl-1 rtl:pr-1',
 						[`${textColor}`],

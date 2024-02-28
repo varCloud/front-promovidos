@@ -4,6 +4,8 @@ import useLocalStorage from '../hooks/useLocalStorage';
 import { authPages } from '../config/pages.config';
 import useFakeUserAPI from '../mocks/hooks/useFakeUserAPI';
 import { TUser } from '../mocks/db/users.db';
+import LoginService from '../services/login.service';
+import { FetchService } from '../services/config/FetchService';
 
 export interface IAuthContextProps {
 	usernameStorage: string | ((newValue: string | null) => void) | null;
@@ -20,17 +22,26 @@ interface IAuthProviderProps {
 export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
 	const [usernameStorage, setUserName] = useLocalStorage('user', null);
 
+	const _loginService: LoginService = new LoginService(new FetchService());
+
 	const { response, isLoading, getCheckUser } = useFakeUserAPI(usernameStorage as string);
-	const userData = response as TUser;
+	const userData = response;
 
 	const navigate = useNavigate();
 
 	// call this function when you want to authenticate the user
 	const onLogin = async (username: string, password: string) => {
-		await getCheckUser(username, password).then(async () => {
-			if (typeof setUserName === 'function')
-				await setUserName(username).then(() => navigate('/'));
-		});
+		try {
+			const currentUser = await _loginService.iniciarSesion({
+				usuario: username,
+				contrasena: password,
+			});
+			if (typeof setUserName === 'function') {
+				await setUserName(currentUser).then(() => navigate('/'));
+			}
+		} catch (error) {
+			throw error;
+		}
 	};
 
 	// call this function to sign out logged-in user

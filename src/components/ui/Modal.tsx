@@ -193,7 +193,7 @@ const Content: FC<IContentProps> = (props) => {
 	const classes = classNames(
 		'pointer-events-auto relative flex w-full flex-col bg-white dark:bg-zinc-950',
 		'shadow-2xl',
-		[`${rounded as TRounded}`],
+		[`${rounded}`],
 		{
 			'max-h-full overflow-hidden': isScrollable,
 			'h-full': !!fullScreen,

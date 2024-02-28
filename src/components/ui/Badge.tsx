@@ -27,26 +27,23 @@ const Badge: FC<IBadgeProps> = (props) => {
 	const badgeVariant: { [key in TBadgeVariants]: string } = {
 		solid: classNames(
 			[`${textColor}`],
-			[`bg-${color as TColors}-${colorIntensity as TColorIntensity}`],
+			[`bg-${color}-${colorIntensity}`],
 			'border-transparent',
 		),
 		outline: classNames(
-			[`border-${color as TColors}-${colorIntensity as TColorIntensity}`],
-			[`bg-${color as TColors}-${colorIntensity as TColorIntensity}/10`],
-			[`text-${color as TColors}-${colorIntensity as TColorIntensity}`],
+			[`border-${color}-${colorIntensity}`],
+			[`bg-${color}-${colorIntensity}/10`],
+			[`text-${color}-${colorIntensity}`],
 		),
-		default: classNames(
-			[`text-${color as TColors}-${colorIntensity as TColorIntensity}`],
-			'border-transparent',
-		),
+		default: classNames([`text-${color}-${colorIntensity}`], 'border-transparent'),
 	};
-	const badgeVariantClasses = badgeVariant[variant as TBadgeVariants];
+	const badgeVariantClasses = badgeVariant[variant];
 
 	const classes = classNames(
 		'inline-flex items-center justify-center',
 		'px-2',
-		[`${borderWidth as TBorderWidth}`],
-		[`${rounded as TRounded}`],
+		[`${borderWidth}`],
+		[`${rounded}`],
 		badgeVariantClasses,
 		className,
 	);

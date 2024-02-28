@@ -79,8 +79,8 @@ const Radio: FC<IRadioProps> = (props) => {
 			label: classNames('text-xl'),
 		},
 	};
-	const radioDimensionClasses = radioDimensions[dimension as TRadioDimension].general;
-	const labelDimensionClasses = radioDimensions[dimension as TRadioDimension].label;
+	const radioDimensionClasses = radioDimensions[dimension].general;
+	const labelDimensionClasses = radioDimensions[dimension].label;
 
 	const radioClasses = classNames(
 		'peer',
@@ -89,12 +89,12 @@ const Radio: FC<IRadioProps> = (props) => {
 		// border
 		'border-zinc-100 dark:border-zinc-800',
 		// hover:border
-		[`hover:border-${color as TColors}-${colorIntensity as TColorIntensity}`],
-		[`dark:hover:border-${color as TColors}-${colorIntensity as TColorIntensity}`],
+		[`hover:border-${color}-${colorIntensity}`],
+		[`dark:hover:border-${color}-${colorIntensity}`],
 		// checked:ring
 		'checked:ring-4 checked:ring-inset checked:ring-white dark:checked:ring-zinc-900',
 		// checked:bg
-		[`checked:bg-${color as TColors}-${colorIntensity as TColorIntensity}`],
+		[`checked:bg-${color}-${colorIntensity}`],
 		{ 'sr-only': children },
 		themeConfig.borderWidth,
 		themeConfig.transition,
@@ -137,11 +137,7 @@ const Radio: FC<IRadioProps> = (props) => {
 				<label
 					className={classNames(
 						'cursor-pointer overflow-hidden rounded-md border-4 border-transparent outline outline-4 outline-offset-2 outline-zinc-100 dark:outline-zinc-800',
-						[
-							`peer-checked:border-${color as TColors}-${
-								colorIntensity as TColorIntensity
-							}`,
-						],
+						[`peer-checked:border-${color}-${colorIntensity}`],
 					)}
 					htmlFor={id || inputHintId}>
 					{children}
