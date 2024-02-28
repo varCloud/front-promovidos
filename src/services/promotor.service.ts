@@ -1,7 +1,8 @@
+import { URIS_CONFIG } from '../config/uris.config';
 import { IService } from './config/Iservice';
 
 class PromotorService {
-	readonly base_uri = 'https://api-promovidos.onrender.com/';
+	readonly base_uri = URIS_CONFIG.BASE_URL
 
 	constructor(private _httpClient: IService) {}
 

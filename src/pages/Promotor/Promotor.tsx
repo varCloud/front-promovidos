@@ -54,7 +54,7 @@ const columns = [
 			<Link to={`${editLinkPath}${info.row.original.id}`}>
 				<Avatar
 					src={info.getValue()?.thumb}
-					name={`${info.row.original.nombres} ${info.row.original.apellidos}`}
+					name={`${info.row.original.Usuario.nombres}`}
 					rounded='rounded'
 				/>
 			</Link>
@@ -68,7 +68,7 @@ const columns = [
 		cell: (info) => (
 			<Link to={`${editLinkPath}${info.row.original.id}`}>
 				<div className='font-bold'>
-					{info.row.original.nombres} {info.row.original.apellidos}
+					{info.row.original.Usuario.nombres} {info.row.original.apellidos}
 				</div>
 			</Link>
 		),
@@ -83,7 +83,7 @@ const columns = [
 		footer: 'Direccion',
 	}),
 
-	columnHelper.accessor('celular', {
+	columnHelper.accessor('Usuario.telefono', {
 		cell: (info) => (
 			<div className='flex flex-row justify-center gap-2 '>
 				<span>{info.getValue()}</span>
@@ -101,7 +101,7 @@ const columns = [
 		footer: 'Telefono',
 	}),
 
-	columnHelper.accessor('mail', {
+	columnHelper.accessor('Usuario.mail', {
 		cell: (info) => (
 			<div className='flex flex-row justify-center gap-2 '>
 				<span>{info.getValue()}</span>
@@ -119,14 +119,14 @@ const columns = [
 		footer: 'Email',
 	}),
 
-	columnHelper.accessor('redesSociales', {
+	columnHelper.accessor('Usuario.seccion', {
 		cell: (info) => (
 			<div className='flex flex-row justify-center gap-2 '>
 				<span>{info.getValue() ?? sinRegistro}</span>
 			</div>
 		),
-		header: 'Redes Sociales',
-		footer: 'Redes Sociales',
+		header: 'Distrito/Seccion',
+		footer: 'Distrito/Seccion',
 	}),
 
 	columnHelper.display({

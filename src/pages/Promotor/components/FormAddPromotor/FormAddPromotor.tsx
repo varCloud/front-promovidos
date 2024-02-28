@@ -13,6 +13,7 @@ import Textarea from '../../../../components/form/Textarea';
 import PromovidosService from '../../../../services/promovidos.service';
 import { FetchService } from '../../../../services/config/FetchService';
 import PromotorService from '../../../../services/promotor.service';
+import { getAge } from '../../../../components/utils/functions';
 
 type TValues = {
 	usuario: string;
@@ -24,6 +25,9 @@ type TValues = {
 	seccion: string;
 	genero: string;
 	direccion: string;
+	idRol:number;
+	fechaNacimiento: string;
+	edad: string;
 };
 
 const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }: any) => {
@@ -40,8 +44,11 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }: any)
 			telefono: '',
 			seccion: '',
 			genero: '',
+			fechaNacimiento: '',
+			edad:'',
 			apellidos: '',
 			direccion: '',
+			idRol:3
 		},
 		validate: (values: TValues) => {
 			const errors: Partial<TValues> = {};
@@ -61,14 +68,10 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }: any)
 			) {
 				errors.mail = 'la estructrura del email es incorrecta';
 			}
+			if(values.fechaNacimiento){
+				values.edad = getAge(values.fechaNacimiento).toString()
+			}
 
-			// if (values.usuario) {
-			// 	errors.usuario = 'Campo Requerido';
-			// }
-
-			// if (values.contrasena) {
-			// 	errors.contrasena = 'Campo Requerido';
-			// }
 			return errors;
 		},
 		onSubmit: async () => {
@@ -185,6 +188,53 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }: any)
 						/>
 					</FieldWrap>
 				</Validation>
+			</div>
+			<div className='flex flex-row gap-3'>
+				<div className='w-[90%]'>
+				<Label htmlFor='fechaNacimiento'>Fecha de nacimiento</Label>
+				<Validation
+					isValid={formik.isValid}
+					isTouched={formik.touched.fechaNacimiento}
+					invalidFeedback={formik.errors.fechaNacimiento}
+					validFeedback='Información correcta'>
+					<FieldWrap
+						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
+						<Input
+							id='fechaNacimiento'
+							autoComplete='fechaNacimiento'
+							name='fechaNacimiento'
+							placeholder='Telefono celular'
+							value={formik.values.fechaNacimiento}
+							onChange={formik.handleChange}
+							onBlur={formik.handleBlur}
+							type='date'
+						/>
+					</FieldWrap>
+				</Validation>
+
+				</div>
+				<div>
+				<Label htmlFor='edad'>Edad</Label>
+				<Validation
+					isValid={formik.isValid}
+					isTouched={formik.touched.edad}
+					invalidFeedback={formik.errors.edad}
+					validFeedback='Información correcta'>
+					<FieldWrap
+						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
+						<Input
+							id='edad'
+							autoComplete='edad'
+							name='edad'
+							placeholder='Edad'
+							value={formik.values.edad}
+							onChange={formik.handleChange}
+							onBlur={formik.handleBlur}
+							disabled
+						/>
+					</FieldWrap>
+				</Validation>
+				</div>
 			</div>
 			<div>
 				<Label htmlFor='genero'>Genero</Label>

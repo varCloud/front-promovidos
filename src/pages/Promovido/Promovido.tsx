@@ -42,6 +42,7 @@ import Modal, {
 import FormAddPromovido from './components/FormAddPromovido/FormAddPromovido';
 import PromovidosService from '../../services/promovidos.service';
 import { FetchService } from '../../services/config/FetchService';
+import PromotorService from '../../services/promotor.service';
 
 const columnHelper = createColumnHelper<any>();
 
@@ -82,7 +83,7 @@ const columns = [
 		footer: 'Direccion',
 	}),
 
-	columnHelper.accessor('celular', {
+	columnHelper.accessor('telefono', {
 		cell: (info) => (
 			<div className='flex flex-row justify-center gap-2 '>
 				<span>{info.getValue()}</span>
@@ -150,7 +151,16 @@ const Promovido = () => {
 	const [exModal1, setExModal1] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [promovidos, setPromovidos] = useState<any>([]);
+	const [promotores, setPromotores] = useState<any>([]);
 	const _promovidosService: PromovidosService = new PromovidosService(new FetchService());
+	const _promotorService: PromotorService = new PromotorService(new FetchService());
+
+	async function obtenerPromotres() {
+		setLoading(true);
+		const _promotores = await _promotorService.obtenerPromotores();
+		setPromotores([..._promotores]);
+		setLoading(false);
+	}
 
 	async function obtenerPromovidos() {
 		setLoading(true);
@@ -160,13 +170,8 @@ const Promovido = () => {
 	}
 
 	useEffect(() => {
-		async function obtenerPromovidos() {
-			setLoading(true);
-			const _promovidos = await _promovidosService.obtenerPromovidos();
-			setPromovidos([..._promovidos]);
-			setLoading(false);
-		}
 		obtenerPromovidos();
+		obtenerPromotres();
 		return () => {};
 	}, []);
 
@@ -265,6 +270,7 @@ const Promovido = () => {
 						<FormAddPromovido
 							handleCloseModal={handleCloseModal}
 							handleCloseModalWithReload={handleCloseModalWithReload}
+							promotores={promotores}
 						/>
 					</ModalBody>
 				</Modal>

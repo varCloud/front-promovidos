@@ -12,6 +12,8 @@ import Progress from '../../../../components/ui/Progress';
 import Textarea from '../../../../components/form/Textarea';
 import PromovidosService from '../../../../services/promovidos.service';
 import { FetchService } from '../../../../services/config/FetchService';
+import PromotorService from '../../../../services/promotor.service';
+import { getAge } from '../../../../components/utils/functions';
 
 type TValues = {
 	nombres: string;
@@ -23,14 +25,19 @@ type TValues = {
 	mail: string;
 	seccion: string;
 	redesSociales: string;
-	idPromotor: number;
+	idPromotor: string;
+	idRol:number;
+	edad: string;
 };
 
-const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }) => {
+
+
+const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promotores }) => {
 	const [passwordShowStatus, setPasswordShowStatus] = useState<boolean>(false);
 	const [passwordRepeatShowStatus, setPasswordRepeatShowStatus] = useState<boolean>(false);
 	const _promovidosService: PromovidosService = new PromovidosService(new FetchService());
 
+	
 	const formik = useFormik({
 		initialValues: {
 			nombres: '',
@@ -42,7 +49,9 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }) => {
 			mail: '',
 			seccion: '',
 			redesSociales: '',
-			idPromotor: 1,
+			idPromotor: '',
+			idRol:4,
+			edad:''
 		},
 		validate: (values: TValues) => {
 			const errors: Partial<TValues> = {};
@@ -63,13 +72,20 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }) => {
 				errors.mail = 'la estructrura del email es incorrecta';
 			}
 
+			if(values.fechaNacimiento){
+				values.edad = getAge(values.fechaNacimiento).toString()
+			}
+
 			return errors;
 		},
 		onSubmit: async () => {
 			await _promovidosService.crearPromovido(formik.values);
 			handleCloseModalWithReload();
 		},
+	
 	});
+
+	console.log(formik.values)
 
 	return (
 		<form className='flex flex-col gap-4' noValidate>
@@ -79,14 +95,14 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }) => {
 					isValid={formik.isValid}
 					isTouched={formik.touched.nombres}
 					invalidFeedback={formik.errors.nombres}
-					validFeedback='Good'>
+					validFeedback='Información correcta'>
 					<FieldWrap
 						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
 						<Input
 							id='nombres'
 							autoComplete='nombres'
 							name='nombres'
-							placeholder='nombres'
+							placeholder='Nombres'
 							value={formik.values.nombres}
 							onChange={formik.handleChange}
 							onBlur={formik.handleBlur}
@@ -100,14 +116,14 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }) => {
 					isValid={formik.isValid}
 					isTouched={formik.touched.apellidos}
 					invalidFeedback={formik.errors.apellidos}
-					validFeedback='Good'>
+					validFeedback='Información correcta'>
 					<FieldWrap
 						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
 						<Input
 							id='apellidos'
 							autoComplete='apellidos'
 							name='apellidos'
-							placeholder='apellidos'
+							placeholder='Apellidos'
 							value={formik.values.apellidos}
 							onChange={formik.handleChange}
 							onBlur={formik.handleBlur}
@@ -121,7 +137,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }) => {
 					isValid={formik.isValid}
 					isTouched={formik.touched.mail}
 					invalidFeedback={formik.errors.mail}
-					validFeedback='Good'>
+					validFeedback='Información correcta'>
 					<FieldWrap
 						firstSuffix={<Icon icon='HeroEnvelope' className='mx-2' size='text-xl' />}>
 						<Input
@@ -142,14 +158,14 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }) => {
 					isValid={formik.isValid}
 					isTouched={formik.touched.direccion}
 					invalidFeedback={formik.errors.direccion}
-					validFeedback='Good'>
+					validFeedback='Información correcta'>
 					<FieldWrap
 						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
 						<Input
 							id='direccion'
 							autoComplete='direccion'
 							name='direccion'
-							placeholder='direccion'
+							placeholder='Direccion'
 							value={formik.values.direccion}
 							onChange={formik.handleChange}
 							onBlur={formik.handleBlur}
@@ -163,7 +179,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }) => {
 					isValid={formik.isValid}
 					isTouched={formik.touched.celular}
 					invalidFeedback={formik.errors.celular}
-					validFeedback='Good'>
+					validFeedback='Información correcta'>
 					<FieldWrap
 						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
 						<Input
@@ -178,13 +194,85 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }) => {
 					</FieldWrap>
 				</Validation>
 			</div>
+			<div className='flex flex-row gap-3'>
+				<div className='w-[90%]'>
+				<Label htmlFor='fechaNacimiento'>Fecha de nacimiento</Label>
+				<Validation
+					isValid={formik.isValid}
+					isTouched={formik.touched.fechaNacimiento}
+					invalidFeedback={formik.errors.fechaNacimiento}
+					validFeedback='Información correcta'>
+					<FieldWrap
+						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
+						<Input
+							id='fechaNacimiento'
+							autoComplete='fechaNacimiento'
+							name='fechaNacimiento'
+							placeholder='Telefono celular'
+							value={formik.values.fechaNacimiento}
+							onChange={formik.handleChange}
+							onBlur={formik.handleBlur}
+							type='date'
+						/>
+					</FieldWrap>
+				</Validation>
+
+				</div>
+				<div>
+				<Label htmlFor='edad'>Edad</Label>
+				<Validation
+					isValid={formik.isValid}
+					isTouched={formik.touched.edad}
+					invalidFeedback={formik.errors.edad}
+					validFeedback='Información correcta'>
+					<FieldWrap
+						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
+						<Input
+							id='edad'
+							autoComplete='edad'
+							name='edad'
+							placeholder='Edad'
+							value={formik.values.edad}
+							onChange={formik.handleChange}
+							onBlur={formik.handleBlur}
+							disabled
+						/>
+					</FieldWrap>
+				</Validation>
+				</div>
+			</div>
+			<div>
+				<Label htmlFor='genero'>Genero</Label>
+				<Validation
+					isValid={formik.isValid}
+					isTouched={formik.touched.genero}
+					invalidFeedback={formik.errors.genero}
+					validFeedback='Información correcta'>
+					<FieldWrap
+						firstSuffix={<Icon icon='HeroUserCircle' className='mx-2' size='text-xl' />}
+						lastSuffix={
+							<Icon className='mx-2 cursor-pointer' icon='HeroChevronDown' />
+						}>
+						<Select
+							id='genero'
+							name='genero'
+							placeholder='Selecciona un genero'
+							value={formik.values.genero}
+							onChange={formik.handleChange}
+							onBlur={formik.handleBlur}>
+							<option value='masculino'>Masculino</option>
+							<option value='femenino'>Femenino</option>
+						</Select>
+					</FieldWrap>
+				</Validation>
+			</div>
 			<div>
 				<Label htmlFor='seccion'>Seccion</Label>
 				<Validation
 					isValid={formik.isValid}
 					isTouched={formik.touched.seccion}
 					invalidFeedback={formik.errors.seccion}
-					validFeedback='Good'>
+					validFeedback='Información correcta'>
 					<FieldWrap
 						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
 						<Input
@@ -205,18 +293,46 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }) => {
 					isValid={formik.isValid}
 					isTouched={formik.touched.redesSociales}
 					invalidFeedback={formik.errors.redesSociales}
-					validFeedback='Good'>
+					validFeedback='Información correcta'>
 					<FieldWrap
 						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
 						<Input
 							id='redesSociales'
 							autoComplete='redesSociales'
 							name='redesSociales'
-							placeholder='redesSociales'
+							placeholder='Redes sociales'
 							value={formik.values.redesSociales}
 							onChange={formik.handleChange}
 							onBlur={formik.handleBlur}
 						/>
+					</FieldWrap>
+				</Validation>
+			</div>
+			<div>
+				<Label htmlFor='idPromotor'>Promotor</Label>
+				<Validation
+					isValid={formik.isValid}
+					isTouched={formik.touched.idPromotor}
+					invalidFeedback={formik.errors.idPromotor}
+					validFeedback='Información correcta'>
+					<FieldWrap
+						firstSuffix={<Icon icon='HeroUserCircle' className='mx-2' size='text-xl' />}
+						lastSuffix={
+							<Icon className='mx-2 cursor-pointer' icon='HeroChevronDown' />
+						}>
+						<Select
+							id='idPromotor'
+							name='idPromotor'
+							placeholder='Selecciona un promotor'
+							value={formik.values.idPromotor}
+							onChange={formik.handleChange}
+							onBlur={formik.handleBlur}>
+							{
+								promotores.map((item) => {
+									return (<option key={item.idPromotor} value={item.idPromotor}>{item.Usuario.nombres}</option>)
+								})
+							}
+						</Select>
 					</FieldWrap>
 				</Validation>
 			</div>
