@@ -3,7 +3,6 @@ import { RouteProps } from 'react-router-dom';
 import { appPages, authPages, componentsPages, examplePages } from '../config/pages.config';
 import NotFoundPage from '../pages/NotFound.page';
 import LoginPage from '../pages/Login.page';
-import Promovido from '../pages/Promovido/Promovido';
 import Promotor from '../pages/Promotor/Promotor';
 
 /**
@@ -105,6 +104,8 @@ const DuotoneIconsPage = lazy(
 const SalesDashboardPage = lazy(
 	() => import('../pages/sales/SalesDashboardPage/SalesDashboard.page'),
 );
+const PromovidoPage = lazy(() => import('../pages/Promovido/Promovido.page'));
+
 const ProductListPage = lazy(
 	() => import('../pages/sales/products/ProductListPage/ProductList.page'),
 );
@@ -142,7 +143,7 @@ const ProfilePage = lazy(() => import('../pages/Profile.page'));
  * AI
  */
 const AiDashboardPage = lazy(() => import('../pages/ai/AiDashboardPage/AiDashboard.page'));
-const promovidoPage = lazy(() => import('../pages/Promovido/Promovido'));
+
 const ChatPhotoPage = lazy(() => import('../pages/ai/chat/ChatPhotoPage/ChatPhoto.page'));
 const ChatVideoPage = lazy(() => import('../pages/ai/chat/ChatVideoPage/ChatVideo.page'));
 const ChatAudioPage = lazy(() => import('../pages/ai/chat/ChatAudioPage/ChatAudio.page'));
@@ -161,7 +162,7 @@ const UnderConstructionPage = lazy(() => import('../pages/UnderConstruction.page
 const contentRoutes: RouteProps[] = [
 	{
 		path: appPages.promovidoAppPages.to,
-		element: <Promovido />,
+		element: <PromovidoPage />,
 	},
 
 	{

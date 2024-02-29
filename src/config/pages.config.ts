@@ -25,6 +25,7 @@ export const appPages = {
 		to: '/promovido',
 		text: 'Promovidos',
 		icon: 'HeroUsers',
+		subPages: {}
 	},
 
 	promotorAppPages: {
@@ -32,6 +33,7 @@ export const appPages = {
 		to: '/promotor',
 		text: 'Promotores',
 		icon: 'HeroUser',
+		subPages: {}
 	},
 
 	aiAppPages: {

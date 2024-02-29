@@ -43,6 +43,11 @@ import PromovidosService from '../../services/promovidos.service';
 import { FetchService } from '../../services/config/FetchService';
 import FormAddPromotor from './components/FormAddPromotor/FormAddPromotor';
 import PromotorService from '../../services/promotor.service';
+import Header, { HeaderLeft, HeaderRight } from '../../components/layouts/Header/Header';
+import Breadcrumb from '../../components/layouts/Breadcrumb/Breadcrumb';
+import DefaultHeaderRightCommon from '../../templates/layouts/Headers/_common/DefaultHeaderRight.common';
+import { useAuth } from '../../context/authContext';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 const columnHelper = createColumnHelper<any>();
 
@@ -151,7 +156,8 @@ const Promotor = () => {
 	const [exModal1, setExModal1] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [promotores, setPromotores] = useState<any>([]);
-	const _promotorService: PromotorService = new PromotorService(new FetchService());
+	const { token } = JSON.parse(window.localStorage.getItem(`user`));
+	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
 
 	async function obtenerPromotores() {
 		setLoading(true);
@@ -162,7 +168,7 @@ const Promotor = () => {
 
 	useEffect(() => {
 		obtenerPromotores();
-		return () => {};
+		return () => { };
 	}, []);
 
 	const table = useReactTable({
@@ -196,76 +202,74 @@ const Promotor = () => {
 	if (loading) {
 		return <div>Loading...</div>;
 	}
-
-	if (promotores.length > 0) {
 		return (
-			<PageWrapper name='Customer List'>
-				<Subheader>
-					<SubheaderLeft>
-						<FieldWrap
-							firstSuffix={<Icon className='mx-2' icon='HeroMagnifyingGlass' />}
-							lastSuffix={
-								globalFilter && (
-									<Icon
-										icon='HeroXMark'
-										color='red'
-										className='mx-2 cursor-pointer'
-										onClick={() => {
-											setGlobalFilter('');
-										}}
-									/>
-								)
-							}>
-							<Input
-								id='example'
-								name='example'
-								placeholder='Buscar...'
-								value={globalFilter ?? ''}
-								onChange={(e) => setGlobalFilter(e.target.value)}
-							/>
-						</FieldWrap>
-					</SubheaderLeft>
-					<SubheaderRight>
-						<Button variant='solid' icon='HeroPlus' onClick={() => setExModal1(true)}>
-							Agregar
-						</Button>
-					</SubheaderRight>
-				</Subheader>
-				<Container>
-					<Card className='h-full'>
-						<CardHeader>
-							<CardHeaderChild>
-								<CardTitle>Promotores</CardTitle>
-								<Badge
-									variant='outline'
-									className='border-transparent px-4'
-									rounded='rounded-full'>
-									{table.getFilteredRowModel().rows.length} registros
-								</Badge>
-							</CardHeaderChild>
-						</CardHeader>
+			<>
+				<PageWrapper name='Customer List'>
+					<Subheader>
+						<SubheaderLeft>
+							<FieldWrap
+								firstSuffix={<Icon className='mx-2' icon='HeroMagnifyingGlass' />}
+								lastSuffix={
+									globalFilter && (
+										<Icon
+											icon='HeroXMark'
+											color='red'
+											className='mx-2 cursor-pointer'
+											onClick={() => {
+												setGlobalFilter('');
+											}}
+										/>
+									)
+								}>
+								<Input
+									id='example'
+									name='example'
+									placeholder='Buscar...'
+									value={globalFilter ?? ''}
+									onChange={(e) => setGlobalFilter(e.target.value)}
+								/>
+							</FieldWrap>
+						</SubheaderLeft>
+						<SubheaderRight>
+							<Button variant='solid' icon='HeroPlus' onClick={() => setExModal1(true)}>
+								Agregar
+							</Button>
+						</SubheaderRight>
+					</Subheader>
+					<Container>
+						<Card className='h-full'>
+							<CardHeader>
+								<CardHeaderChild>
+									<CardTitle>Promotores</CardTitle>
+									<Badge
+										variant='outline'
+										className='border-transparent px-4'
+										rounded='rounded-full'>
+										{table.getFilteredRowModel().rows.length} registros
+									</Badge>
+								</CardHeaderChild>
+							</CardHeader>
 
-						<CardBody className='overflow-auto'>
-							<TableTemplate
-								className='table-fixed max-md:min-w-[70rem]'
-								table={table}
+							<CardBody className='overflow-auto'>
+								<TableTemplate
+									className='table-fixed max-md:min-w-[70rem]'
+									table={table}
+								/>
+							</CardBody>
+							<TableCardFooterTemplate table={table} />
+						</Card>
+					</Container>
+					<Modal isOpen={exModal1} setIsOpen={setExModal1} isStaticBackdrop>
+						<ModalHeader>Agregar Promotor</ModalHeader>
+						<ModalBody>
+							<FormAddPromotor
+								handleCloseModal={handleCloseModal}
+								handleCloseModalWithReload={handleCloseModalWithReload}
 							/>
-						</CardBody>
-						<TableCardFooterTemplate table={table} />
-					</Card>
-				</Container>
-				<Modal isOpen={exModal1} setIsOpen={setExModal1} isStaticBackdrop>
-					<ModalHeader>Agregar Promotor</ModalHeader>
-					<ModalBody>
-						<FormAddPromotor
-							handleCloseModal={handleCloseModal}
-							handleCloseModalWithReload={handleCloseModalWithReload}
-						/>
-					</ModalBody>
-				</Modal>
-			</PageWrapper>
-		);
-	}
+						</ModalBody>
+					</Modal>
+				</PageWrapper>
+			</>)
 };
 
 export default Promotor;

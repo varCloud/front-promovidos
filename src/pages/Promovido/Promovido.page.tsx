@@ -43,6 +43,10 @@ import FormAddPromovido from './components/FormAddPromovido/FormAddPromovido';
 import PromovidosService from '../../services/promovidos.service';
 import { FetchService } from '../../services/config/FetchService';
 import PromotorService from '../../services/promotor.service';
+import Header, { HeaderLeft, HeaderRight } from '../../components/layouts/Header/Header';
+import Breadcrumb from '../../components/layouts/Breadcrumb/Breadcrumb';
+import DefaultHeaderRightCommon from '../../templates/layouts/Headers/_common/DefaultHeaderRight.common';
+import { useAuth } from '../../context/authContext';
 
 const columnHelper = createColumnHelper<any>();
 
@@ -152,8 +156,9 @@ const Promovido = () => {
 	const [loading, setLoading] = useState<boolean>(true);
 	const [promovidos, setPromovidos] = useState<any>([]);
 	const [promotores, setPromotores] = useState<any>([]);
-	const _promovidosService: PromovidosService = new PromovidosService(new FetchService());
-	const _promotorService: PromotorService = new PromotorService(new FetchService());
+	const { token } = JSON.parse(window.localStorage.getItem(`user`));
+	const _promovidosService: PromovidosService = new PromovidosService(new FetchService(token));
+	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
 
 	async function obtenerPromotres() {
 		setLoading(true);
@@ -207,8 +212,8 @@ const Promovido = () => {
 		return <div>Loading...</div>;
 	}
 
-	if (promovidos.length > 0) {
 		return (
+			<>
 			<PageWrapper name='Customer List'>
 				<Subheader>
 					<SubheaderLeft>
@@ -275,8 +280,8 @@ const Promovido = () => {
 					</ModalBody>
 				</Modal>
 			</PageWrapper>
+			</>
 		);
-	}
 };
 
 export default Promovido;

@@ -1,9 +1,9 @@
 import { URIS_CONFIG } from '../config/uris.config';
+import { useAuth } from '../context/authContext';
 import { IService } from './config/Iservice';
 
 class PromotorService {
 	readonly base_uri = URIS_CONFIG.BASE_URL
-
 	constructor(private _httpClient: IService) {}
 
 	async obtenerPromotores() {

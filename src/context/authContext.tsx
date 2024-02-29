@@ -1,4 +1,4 @@
-import React, { createContext, FC, ReactNode, useContext, useMemo } from 'react';
+import React, { createContext, FC, ReactNode, useContext, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { authPages } from '../config/pages.config';
@@ -8,7 +8,7 @@ import LoginService from '../services/login.service';
 import { FetchService } from '../services/config/FetchService';
 
 export interface IAuthContextProps {
-	usernameStorage: string | ((newValue: string | null) => void) | null;
+	usernameStorage: string | ((newValue: string | null) => void) | any | null;
 	onLogin: (username: string, password: string) => Promise<void>;
 	onLogout: () => void;
 	userData: TUser;
@@ -21,11 +21,11 @@ interface IAuthProviderProps {
 }
 export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
 	const [usernameStorage, setUserName] = useLocalStorage('user', null);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const _loginService: LoginService = new LoginService(new FetchService(''));
 
-	const _loginService: LoginService = new LoginService(new FetchService());
-
-	const { response, isLoading, getCheckUser } = useFakeUserAPI(usernameStorage as string);
-	const userData = response;
+	//const { response, isLoading, getCheckUser } = useFakeUserAPI(usernameStorage as string);
+	let userData
 
 	const navigate = useNavigate();
 
@@ -36,11 +36,15 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
 				usuario: username,
 				contrasena: password,
 			});
+			
 			if (typeof setUserName === 'function') {
+				userData = currentUser
 				await setUserName(currentUser).then(() => navigate('/'));
 			}
 		} catch (error) {
 			throw error;
+		} finally{
+			setIsLoading(false)
 		}
 	};
 

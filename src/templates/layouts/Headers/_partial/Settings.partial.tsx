@@ -9,10 +9,12 @@ import ButtonGroup from '../../../../components/ui/ButtonGroup';
 import DARK_MODE from '../../../../constants/darkMode.constant';
 import useFontSize from '../../../../hooks/useFontSize';
 import useDarkMode from '../../../../hooks/useDarkMode';
+import { useAuth } from '../../../../context/authContext';
 
 const SettingsPartial = () => {
 	const { fontSize, setFontSize } = useFontSize();
 	const { darkModeStatus, setDarkModeStatus } = useDarkMode();
+	const { isLoading, userData, onLogout } = useAuth();
 	return (
 		<Dropdown>
 			<DropdownToggle hasIcon={false}>
@@ -20,7 +22,7 @@ const SettingsPartial = () => {
 			</DropdownToggle>
 			<DropdownMenu placement='bottom-end'>
 				<DropdownItem className='flex flex-col !items-start'>
-					<div>Font Size:</div>
+					<div>Zoom:</div>
 					<ButtonGroup>
 						<Button
 							icon='HeroMinus'
@@ -36,7 +38,7 @@ const SettingsPartial = () => {
 					</ButtonGroup>
 				</DropdownItem>
 				<DropdownItem className='flex flex-col !items-start'>
-					<div>Dark Mode:</div>
+					<div>Temae:</div>
 					<ButtonGroup>
 						<Button
 							icon='HeroMoon'
@@ -54,6 +56,16 @@ const SettingsPartial = () => {
 							isActive={darkModeStatus === DARK_MODE.SYSTEM}
 						/>
 					</ButtonGroup>
+				</DropdownItem>
+				<DropdownItem className='flex flex-col !items-start'>
+					<div>Cerrar Sesion:</div>
+					
+						<Button
+							icon='HeroArrowRightOnRectangle'
+							onClick={() => onLogout()}
+							isActive={darkModeStatus === DARK_MODE.DARK}
+						/>
+					
 				</DropdownItem>
 			</DropdownMenu>
 		</Dropdown>
