@@ -23,6 +23,24 @@ class PromotorService {
 			throw error;
 		}
 	}
+
+	async actualizarPromotor(payload: any) {
+		try {
+			const uri = `${this.base_uri}promotores/`;
+			return await this._httpClient.putData(uri, payload);
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async eliminarPromotor(id: any) {
+		try {
+			const uri = `${this.base_uri}promotores/${id}`;
+			return await this._httpClient.deleteData(uri);
+		} catch (error) {
+			throw error;
+		}
+	}
 }
 
 export default PromotorService;

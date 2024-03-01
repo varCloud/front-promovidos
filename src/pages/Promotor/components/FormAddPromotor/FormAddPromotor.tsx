@@ -47,9 +47,7 @@ const initialValues = {
 	idRol:3
 }
 
-const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , valuesForm }: any) => {
-	const [passwordShowStatus, setPasswordShowStatus] = useState<boolean>(false);
-	const [passwordRepeatShowStatus, setPasswordRepeatShowStatus] = useState<boolean>(false);
+const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , valuesForm, isEdit}: any) => {
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
 
@@ -80,7 +78,14 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 			return errors;
 		},
 		onSubmit: async () => {
-			await _promotorService.crearPromotor(formik.values);
+			if(isEdit){
+
+				await _promotorService.actualizarPromotor(formik.values);	
+
+			}else{
+
+				await _promotorService.crearPromotor(formik.values);
+			}
 			handleCloseModalWithReload();
 		},
 	});
@@ -215,7 +220,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 							id='fechaNacimiento'
 							autoComplete='fechaNacimiento'
 							name='fechaNacimiento'
-							placeholder='Telefono celular'
+							placeholder='Fecha de nacimiento'
 							value={formik.values.fechaNacimiento}
 							onChange={formik.handleChange}
 							onBlur={formik.handleBlur}

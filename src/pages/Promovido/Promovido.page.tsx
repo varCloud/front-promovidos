@@ -47,107 +47,110 @@ import Header, { HeaderLeft, HeaderRight } from '../../components/layouts/Header
 import Breadcrumb from '../../components/layouts/Breadcrumb/Breadcrumb';
 import DefaultHeaderRightCommon from '../../templates/layouts/Headers/_common/DefaultHeaderRight.common';
 import { useAuth } from '../../context/authContext';
+import { formatDateCalendarInput } from '../../components/utils/functions';
 
 const columnHelper = createColumnHelper<any>();
 
 const editLinkPath = `../${appPages.crmAppPages.subPages.customerPage.subPages.editPageLink.to}/`;
 const sinRegistro = 'N/A';
-const columns = [
-	columnHelper.accessor('image', {
-		cell: (info) => (
-			<Link to={`${editLinkPath}${info.row.original.id}`}>
-				<Avatar
-					src={info.getValue()?.thumb}
-					name={`${info.row.original.nombres} ${info.row.original.apellidos}`}
-					rounded='rounded'
-				/>
-			</Link>
-		),
-		header: 'Perfil',
-		footer: 'Perfil',
-		enableGlobalFilter: false,
-		enableSorting: false,
-	}),
-	columnHelper.accessor('nombres', {
-		cell: (info) => (
-			<Link to={`${editLinkPath}${info.row.original.id}`}>
-				<div className='font-bold'>
-					{info.row.original.nombres} {info.row.original.apellidos}
+const columns = (handleOpenEditModal) => {
+	return [
+		columnHelper.accessor('image', {
+			cell: (info) => (
+				<Link to={`${editLinkPath}${info.row.original.id}`}>
+					<Avatar
+						src={info.getValue()?.thumb}
+						name={`${info.row.original.nombres} ${info.row.original.apellidos}`}
+						rounded='rounded'
+					/>
+				</Link>
+			),
+			header: 'Perfil',
+			footer: 'Perfil',
+			enableGlobalFilter: false,
+			enableSorting: false,
+		}),
+		columnHelper.accessor('nombres', {
+			cell: (info) => (
+				<Link to={`${editLinkPath}${info.row.original.id}`}>
+					<div className='font-bold'>
+						{info.row.original.nombres} {info.row.original.apellidos}
+					</div>
+				</Link>
+			),
+			header: 'Nombres',
+			footer: 'Nombres',
+		}),
+		columnHelper.accessor('direccion', {
+			cell: (info) => (
+				<div className='font-bold'>{info.row.original.direccion ?? sinRegistro}</div>
+			),
+			header: 'Direccion',
+			footer: 'Direccion',
+		}),
+
+		columnHelper.accessor('telefono', {
+			cell: (info) => (
+				<div className='flex flex-row justify-center gap-2 '>
+					<span>{info.getValue()}</span>
+					{info.getValue() ? (
+						<span>
+							{' '}
+							<Icon icon='HeroCheckBadge' color='blue' />
+						</span>
+					) : (
+						sinRegistro
+					)}
 				</div>
-			</Link>
-		),
-		header: 'Nombres',
-		footer: 'Nombres',
-	}),
-	columnHelper.accessor('direccion', {
-		cell: (info) => (
-			<div className='font-bold'>{info.row.original.direccion ?? sinRegistro}</div>
-		),
-		header: 'Direccion',
-		footer: 'Direccion',
-	}),
+			),
+			header: 'Telefono',
+			footer: 'Telefono',
+		}),
 
-	columnHelper.accessor('telefono', {
-		cell: (info) => (
-			<div className='flex flex-row justify-center gap-2 '>
-				<span>{info.getValue()}</span>
-				{info.getValue() ? (
-					<span>
-						{' '}
-						<Icon icon='HeroCheckBadge' color='blue' />
-					</span>
-				) : (
-					sinRegistro
-				)}
-			</div>
-		),
-		header: 'Telefono',
-		footer: 'Telefono',
-	}),
+		columnHelper.accessor('mail', {
+			cell: (info) => (
+				<div className='flex flex-row justify-center gap-2 '>
+					<span>{info.getValue()}</span>
+					{info.getValue() ? (
+						<span>
+							{' '}
+							<Icon icon='HeroCheckBadge' color='blue' />
+						</span>
+					) : (
+						sinRegistro
+					)}
+				</div>
+			),
+			header: 'Email',
+			footer: 'Email',
+		}),
 
-	columnHelper.accessor('mail', {
-		cell: (info) => (
-			<div className='flex flex-row justify-center gap-2 '>
-				<span>{info.getValue()}</span>
-				{info.getValue() ? (
-					<span>
-						{' '}
-						<Icon icon='HeroCheckBadge' color='blue' />
-					</span>
-				) : (
-					sinRegistro
-				)}
-			</div>
-		),
-		header: 'Email',
-		footer: 'Email',
-	}),
+		columnHelper.accessor('redesSociales', {
+			cell: (info) => (
+				<div className='flex flex-row justify-center gap-2 '>
+					<span>{info.getValue() ?? sinRegistro}</span>
+				</div>
+			),
+			header: 'Redes Sociales',
+			footer: 'Redes Sociales',
+		}),
 
-	columnHelper.accessor('redesSociales', {
-		cell: (info) => (
-			<div className='flex flex-row justify-center gap-2 '>
-				<span>{info.getValue() ?? sinRegistro}</span>
-			</div>
-		),
-		header: 'Redes Sociales',
-		footer: 'Redes Sociales',
-	}),
-
-	columnHelper.display({
-		cell: (_info) => (
-			<div className='flex items-center gap-2'>
-				<Tooltip text='Editar'>
-					<Button icon='HeroPencil' />
-				</Tooltip>
-				<Tooltip text='Eliminar'>
-					<Button icon='HeroTrash' color='red' colorIntensity='800' />
-				</Tooltip>
-			</div>
-		),
-		header: 'Acciones',
-		footer: 'Acciones',
-	}),
-];
+		columnHelper.display({
+			cell: (_info) => (
+				<div className='flex items-center gap-2'>
+					<Tooltip text='Editar'>
+						<Button icon='HeroPencil' onClick={() => { handleOpenEditModal(_info.row.original) }} />
+					</Tooltip>
+					<Tooltip text='Eliminar'>
+						<Button icon='HeroTrash' color='red' colorIntensity='800' />
+					</Tooltip>
+				</div>
+			),
+			header: 'Acciones',
+			footer: 'Acciones',
+		}),
+	];
+}
 
 const Promovido = () => {
 	const [sorting, setSorting] = useState<SortingState>([]);
@@ -156,6 +159,7 @@ const Promovido = () => {
 	const [loading, setLoading] = useState<boolean>(true);
 	const [promovidos, setPromovidos] = useState<any>([]);
 	const [promotores, setPromotores] = useState<any>([]);
+	const [currentValue, setCurrentValue] = useState<any>();
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _promovidosService: PromovidosService = new PromovidosService(new FetchService(token));
 	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
@@ -174,15 +178,30 @@ const Promovido = () => {
 		setLoading(false);
 	}
 
+	const handleOpenEditModal = (data) => {
+		
+		if(data.fechaNacimiento && data.fechaNacimiento.toString().length > 0){
+			data.fechaNacimiento = formatDateCalendarInput(data.fechaNacimiento)
+		}
+		
+		setCurrentValue(data)
+		setExModal1(true)
+	}
+
+	const handleOpenAddModal = () => {
+		setCurrentValue({})
+		setExModal1(true)
+	}
+
 	useEffect(() => {
 		obtenerPromovidos();
 		obtenerPromotres();
-		return () => {};
+		return () => { };
 	}, []);
 
 	const table = useReactTable({
 		data: promovidos,
-		columns,
+		columns:columns(handleOpenEditModal),
 		state: {
 			sorting,
 			globalFilter,
@@ -212,8 +231,8 @@ const Promovido = () => {
 		return <div>Loading...</div>;
 	}
 
-		return (
-			<>
+	return (
+		<>
 			<PageWrapper name='Customer List'>
 				<Subheader>
 					<SubheaderLeft>
@@ -241,7 +260,7 @@ const Promovido = () => {
 						</FieldWrap>
 					</SubheaderLeft>
 					<SubheaderRight>
-						<Button variant='solid' icon='HeroPlus' onClick={() => setExModal1(true)}>
+						<Button variant='solid' icon='HeroPlus' onClick={() => handleOpenAddModal()}>
 							Agregar
 						</Button>
 					</SubheaderRight>
@@ -276,12 +295,13 @@ const Promovido = () => {
 							handleCloseModal={handleCloseModal}
 							handleCloseModalWithReload={handleCloseModalWithReload}
 							promotores={promotores}
+							valuesForm={currentValue}
 						/>
 					</ModalBody>
 				</Modal>
 			</PageWrapper>
-			</>
-		);
+		</>
+	);
 };
 
 export default Promovido;

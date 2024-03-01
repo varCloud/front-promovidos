@@ -61,7 +61,7 @@ const LoginPage = () => {
 						<LogoTemplate className='h-12' />
 					</div>
 					<div className='text-center'>
-						<span className='text-center text-4xl font-semibold'>Promovidos</span>
+						{/* <span className='text-center text-4xl font-semibold'>Promovidos</span> */}
 					</div>
 					<div>
 						<span className='text-2xl font-semibold'>Iniciar Sesión</span>

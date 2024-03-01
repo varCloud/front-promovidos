@@ -75,9 +75,7 @@ export class FetchService implements IService {
 		try {
 			const response = await fetch(url, {
 				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
+				headers: this.defaultHeader(),
 				body: JSON.stringify(data),
 			});
 			if (!response.ok) {

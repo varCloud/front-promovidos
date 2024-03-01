@@ -74,7 +74,7 @@ const columns = (handleOpenEditModal ) => {
 		columnHelper.accessor('nombres', {
 			cell: (info) => (
 				<Link to={`${editLinkPath}${info.row.original.id}`}>
-					<div className='font-bold'>
+					<div>
 						{info.row.original.Usuario.nombres} {info.row.original.apellidos}
 					</div>
 				</Link>
@@ -84,7 +84,7 @@ const columns = (handleOpenEditModal ) => {
 		}),
 		columnHelper.accessor('direccion', {
 			cell: (info) => (
-				<div className='font-bold'>{info.row.original.direccion ?? sinRegistro}</div>
+				<div>{info.row.original.direccion ?? sinRegistro}</div>
 			),
 			header: 'Direccion',
 			footer: 'Direccion',
@@ -94,14 +94,6 @@ const columns = (handleOpenEditModal ) => {
 			cell: (info) => (
 				<div className='flex flex-row justify-center gap-2 '>
 					<span>{info.getValue()}</span>
-					{info.getValue() ? (
-						<span>
-							{' '}
-							<Icon icon='HeroCheckBadge' color='blue' />
-						</span>
-					) : (
-						sinRegistro
-					)}
 				</div>
 			),
 			header: 'Telefono',
@@ -111,15 +103,7 @@ const columns = (handleOpenEditModal ) => {
 		columnHelper.accessor('Usuario.mail', {
 			cell: (info) => (
 				<div className='flex flex-row justify-center gap-2 '>
-					<span>{info.getValue()}</span>
-					{info.getValue() ? (
-						<span>
-							{' '}
-							<Icon icon='HeroCheckBadge' color='blue' />
-						</span>
-					) : (
-						sinRegistro
-					)}
+					<span>{info.getValue() ?? sinRegistro}</span>
 				</div>
 			),
 			header: 'Email',
@@ -159,7 +143,7 @@ const Promotor = () => {
 	const [loading, setLoading] = useState<boolean>(true);
 	const [promotores, setPromotores] = useState<any>([]);
 	const [currentValue, setCurrentValue] = useState<any>();
-	currentValue
+	const [isEdit, setIsEdit] = useState<any>();
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
 
@@ -176,16 +160,19 @@ const Promotor = () => {
 	}, []);
 
 	const handleOpenEditModal = (data) => {
+
 		if(data.fechaNacimiento && data.fechaNacimiento.toString().length > 0){
 			data.fechaNacimiento = formatDateCalendarInput(data.fechaNacimiento)
 		}
 		
 		setCurrentValue(data)
+		setIsEdit(true)
 		setExModal1(true)
 	}
 
 	const handleOpenAddModal = () => {
 		setCurrentValue({})
+		setIsEdit(false)
 		setExModal1(true)
 	}
 
@@ -286,6 +273,7 @@ const Promotor = () => {
 							handleCloseModal={handleCloseModal}
 							handleCloseModalWithReload={handleCloseModalWithReload}
 							valuesForm={currentValue}
+							isEdit={isEdit}
 						/>
 					</ModalBody>
 				</Modal>
