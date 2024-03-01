@@ -46,7 +46,7 @@ const initialValues = {
 }
 
 
-const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promotores , valuesForm}) => {
+const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promotores , valuesForm, isEdit}) => {
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _promovidosService: PromovidosService = new PromovidosService(new FetchService(token));
 
@@ -79,7 +79,12 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promo
 			return errors;
 		},
 		onSubmit: async () => {
-			await _promovidosService.crearPromovido(formik.values);
+			if(isEdit) {
+				await _promovidosService.actualizarPromovido(formik.values);
+			} else {
+				await _promovidosService.crearPromovido(formik.values);
+			}
+
 			handleCloseModalWithReload();
 		},
 	

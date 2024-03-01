@@ -79,13 +79,11 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 		},
 		onSubmit: async () => {
 			if(isEdit){
-
 				await _promotorService.actualizarPromotor(formik.values);	
-
-			}else{
-
+			} else {
 				await _promotorService.crearPromotor(formik.values);
 			}
+
 			handleCloseModalWithReload();
 		},
 	});

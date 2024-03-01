@@ -19,12 +19,6 @@ import Icon from '../../components/icon/Icon';
 import Input from '../../components/form/Input';
 import TableTemplate, { TableCardFooterTemplate } from '../../templates/common/TableParts.template';
 import Badge from '../../components/ui/Badge';
-import Dropdown, {
-	DropdownItem,
-	DropdownMenu,
-	DropdownNavLinkItem,
-	DropdownToggle,
-} from '../../components/ui/Dropdown';
 import Subheader, {
 	SubheaderLeft,
 	SubheaderRight,
@@ -50,9 +44,9 @@ import { useAuth } from '../../context/authContext';
 import { formatDateCalendarInput } from '../../components/utils/functions';
 
 const columnHelper = createColumnHelper<any>();
-
 const editLinkPath = `../${appPages.crmAppPages.subPages.customerPage.subPages.editPageLink.to}/`;
 const sinRegistro = 'N/A';
+
 const columns = (handleOpenEditModal) => {
 	return [
 		columnHelper.accessor('image', {
@@ -73,7 +67,7 @@ const columns = (handleOpenEditModal) => {
 		columnHelper.accessor('nombres', {
 			cell: (info) => (
 				<Link to={`${editLinkPath}${info.row.original.id}`}>
-					<div className='font-bold'>
+					<div>
 						{info.row.original.nombres} {info.row.original.apellidos}
 					</div>
 				</Link>
@@ -83,7 +77,7 @@ const columns = (handleOpenEditModal) => {
 		}),
 		columnHelper.accessor('direccion', {
 			cell: (info) => (
-				<div className='font-bold'>{info.row.original.direccion ?? sinRegistro}</div>
+				<div>{info.row.original.direccion ?? sinRegistro}</div>
 			),
 			header: 'Direccion',
 			footer: 'Direccion',
@@ -92,15 +86,7 @@ const columns = (handleOpenEditModal) => {
 		columnHelper.accessor('telefono', {
 			cell: (info) => (
 				<div className='flex flex-row justify-center gap-2 '>
-					<span>{info.getValue()}</span>
-					{info.getValue() ? (
-						<span>
-							{' '}
-							<Icon icon='HeroCheckBadge' color='blue' />
-						</span>
-					) : (
-						sinRegistro
-					)}
+					<span>{info.getValue()  ?? sinRegistro }</span>
 				</div>
 			),
 			header: 'Telefono',
@@ -110,15 +96,7 @@ const columns = (handleOpenEditModal) => {
 		columnHelper.accessor('mail', {
 			cell: (info) => (
 				<div className='flex flex-row justify-center gap-2 '>
-					<span>{info.getValue()}</span>
-					{info.getValue() ? (
-						<span>
-							{' '}
-							<Icon icon='HeroCheckBadge' color='blue' />
-						</span>
-					) : (
-						sinRegistro
-					)}
+					<span>{info.getValue() ?? sinRegistro }</span>
 				</div>
 			),
 			header: 'Email',
@@ -160,6 +138,7 @@ const Promovido = () => {
 	const [promovidos, setPromovidos] = useState<any>([]);
 	const [promotores, setPromotores] = useState<any>([]);
 	const [currentValue, setCurrentValue] = useState<any>();
+	const [isEdit, setIsEdit] = useState<any>();
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _promovidosService: PromovidosService = new PromovidosService(new FetchService(token));
 	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
@@ -183,13 +162,14 @@ const Promovido = () => {
 		if(data.fechaNacimiento && data.fechaNacimiento.toString().length > 0){
 			data.fechaNacimiento = formatDateCalendarInput(data.fechaNacimiento)
 		}
-		
+		setIsEdit(true)
 		setCurrentValue(data)
 		setExModal1(true)
 	}
 
 	const handleOpenAddModal = () => {
 		setCurrentValue({})
+		setIsEdit(false)
 		setExModal1(true)
 	}
 
@@ -296,6 +276,7 @@ const Promovido = () => {
 							handleCloseModalWithReload={handleCloseModalWithReload}
 							promotores={promotores}
 							valuesForm={currentValue}
+							isEdit={isEdit}
 						/>
 					</ModalBody>
 				</Modal>

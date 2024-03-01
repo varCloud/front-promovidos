@@ -23,6 +23,24 @@ class PromovidosService {
 			throw error;
 		}
 	}
+
+	async actualizarPromovido(payload: any) {
+		try {
+			const uri = `${this.base_uri}promovidos/`;
+			return await this._httpClient.putData(uri, payload);
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async eliminarPromovido(id: any) {
+		try {
+			const uri = `${this.base_uri}promovidos/${id}`;
+			return await this._httpClient.deleteData(uri);
+		} catch (error) {
+			throw error;
+		}
+	}	
 }
 
 export default PromovidosService;

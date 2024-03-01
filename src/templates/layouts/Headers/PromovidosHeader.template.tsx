@@ -5,6 +5,9 @@ import SettingsPartial from './_partial/Settings.partial';
 const PromovidosHeaderTemplate = () => {
 	return (
 		<Header>
+			<HeaderLeft>
+				<p></p>
+			</HeaderLeft>
 			<HeaderRight>
             <SettingsPartial />
 			</HeaderRight>
