@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Aside, { AsideBody, AsideFooter, AsideHead } from '../../../components/layouts/Aside/Aside';
 import LogoAndAsideTogglePart from './_parts/LogoAndAsideToggle.part';
 import DarkModeSwitcherPart from './_parts/DarkModeSwitcher.part';
-import { appPages, componentsPages } from '../../../config/pages.config';
+import { appPages, componentsPages, promovidosAllPages } from '../../../config/pages.config';
 import Nav, {
 	NavButton,
 	NavCollapse,
@@ -19,6 +19,20 @@ import usersDb from '../../../mocks/db/users.db';
 const DefaultAsideTemplate = () => {
 	const navigate = useNavigate();
 
+	return(
+		<Aside>
+			<AsideHead>
+				<LogoAndAsideTogglePart />
+			</AsideHead>
+			<AsideBody>
+				<Nav>
+					<NavItem {...promovidosAllPages.promotorAppPages} />
+					<NavItem {...promovidosAllPages.promovidoAppPages} />
+					</Nav>
+			</AsideBody>
+		</Aside>
+	)
+
 	return (
 		<Aside>
 			<AsideHead>
@@ -26,8 +40,9 @@ const DefaultAsideTemplate = () => {
 			</AsideHead>
 			<AsideBody>
 				<Nav>
-					<NavItem {...appPages.promotorAppPages} />
-					<NavItem {...appPages.promovidoAppPages} />
+					<NavItem {...promovidosAllPages.promotorAppPages} />
+					<NavItem {...promovidosAllPages.promovidoAppPages} />
+
 					<NavItem {...appPages.salesAppPages.subPages.salesDashboardPage} />
 					<NavItem {...appPages.aiAppPages.subPages.aiDashboardPage}>
 						<Badge

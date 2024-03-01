@@ -48,114 +48,118 @@ import Breadcrumb from '../../components/layouts/Breadcrumb/Breadcrumb';
 import DefaultHeaderRightCommon from '../../templates/layouts/Headers/_common/DefaultHeaderRight.common';
 import { useAuth } from '../../context/authContext';
 import useLocalStorage from '../../hooks/useLocalStorage';
+import { formatDateCalendarInput } from '../../components/utils/functions';
 
 const columnHelper = createColumnHelper<any>();
 
 const editLinkPath = `../${appPages.crmAppPages.subPages.customerPage.subPages.editPageLink.to}/`;
 const sinRegistro = 'N/A';
-const columns = [
-	columnHelper.accessor('image', {
-		cell: (info) => (
-			<Link to={`${editLinkPath}${info.row.original.id}`}>
-				<Avatar
-					src={info.getValue()?.thumb}
-					name={`${info.row.original.Usuario.nombres}`}
-					rounded='rounded'
-				/>
-			</Link>
-		),
-		header: 'Perfil',
-		footer: 'Perfil',
-		enableGlobalFilter: false,
-		enableSorting: false,
-	}),
-	columnHelper.accessor('nombres', {
-		cell: (info) => (
-			<Link to={`${editLinkPath}${info.row.original.id}`}>
-				<div className='font-bold'>
-					{info.row.original.Usuario.nombres} {info.row.original.apellidos}
+const columns = (handleOpenEditModal ) => {
+	return [
+		columnHelper.accessor('image', {
+			cell: (info) => (
+				<Link to={`${editLinkPath}${info.row.original.id}`}>
+					<Avatar
+						src={info.getValue()?.thumb}
+						name={`${info.row.original.Usuario.nombres}`}
+						rounded='rounded'
+					/>
+				</Link>
+			),
+			header: 'Perfil',
+			footer: 'Perfil',
+			enableGlobalFilter: false,
+			enableSorting: false,
+		}),
+		columnHelper.accessor('nombres', {
+			cell: (info) => (
+				<Link to={`${editLinkPath}${info.row.original.id}`}>
+					<div className='font-bold'>
+						{info.row.original.Usuario.nombres} {info.row.original.apellidos}
+					</div>
+				</Link>
+			),
+			header: 'Nombres',
+			footer: 'Nombres',
+		}),
+		columnHelper.accessor('direccion', {
+			cell: (info) => (
+				<div className='font-bold'>{info.row.original.direccion ?? sinRegistro}</div>
+			),
+			header: 'Direccion',
+			footer: 'Direccion',
+		}),
+
+		columnHelper.accessor('Usuario.telefono', {
+			cell: (info) => (
+				<div className='flex flex-row justify-center gap-2 '>
+					<span>{info.getValue()}</span>
+					{info.getValue() ? (
+						<span>
+							{' '}
+							<Icon icon='HeroCheckBadge' color='blue' />
+						</span>
+					) : (
+						sinRegistro
+					)}
 				</div>
-			</Link>
-		),
-		header: 'Nombres',
-		footer: 'Nombres',
-	}),
-	columnHelper.accessor('direccion', {
-		cell: (info) => (
-			<div className='font-bold'>{info.row.original.direccion ?? sinRegistro}</div>
-		),
-		header: 'Direccion',
-		footer: 'Direccion',
-	}),
+			),
+			header: 'Telefono',
+			footer: 'Telefono',
+		}),
 
-	columnHelper.accessor('Usuario.telefono', {
-		cell: (info) => (
-			<div className='flex flex-row justify-center gap-2 '>
-				<span>{info.getValue()}</span>
-				{info.getValue() ? (
-					<span>
-						{' '}
-						<Icon icon='HeroCheckBadge' color='blue' />
-					</span>
-				) : (
-					sinRegistro
-				)}
-			</div>
-		),
-		header: 'Telefono',
-		footer: 'Telefono',
-	}),
+		columnHelper.accessor('Usuario.mail', {
+			cell: (info) => (
+				<div className='flex flex-row justify-center gap-2 '>
+					<span>{info.getValue()}</span>
+					{info.getValue() ? (
+						<span>
+							{' '}
+							<Icon icon='HeroCheckBadge' color='blue' />
+						</span>
+					) : (
+						sinRegistro
+					)}
+				</div>
+			),
+			header: 'Email',
+			footer: 'Email',
+		}),
 
-	columnHelper.accessor('Usuario.mail', {
-		cell: (info) => (
-			<div className='flex flex-row justify-center gap-2 '>
-				<span>{info.getValue()}</span>
-				{info.getValue() ? (
-					<span>
-						{' '}
-						<Icon icon='HeroCheckBadge' color='blue' />
-					</span>
-				) : (
-					sinRegistro
-				)}
-			</div>
-		),
-		header: 'Email',
-		footer: 'Email',
-	}),
+		columnHelper.accessor('seccion', {
+			cell: (info) => (
+				<div className='flex flex-row justify-center gap-2 '>
+					<span>{info.getValue() ?? sinRegistro}</span>
+				</div>
+			),
+			header: 'Distrito/Seccion',
+			footer: 'Distrito/Seccion',
+		}),
 
-	columnHelper.accessor('Usuario.seccion', {
-		cell: (info) => (
-			<div className='flex flex-row justify-center gap-2 '>
-				<span>{info.getValue() ?? sinRegistro}</span>
-			</div>
-		),
-		header: 'Distrito/Seccion',
-		footer: 'Distrito/Seccion',
-	}),
-
-	columnHelper.display({
-		cell: (_info) => (
-			<div className='flex items-center gap-2'>
-				<Tooltip text='Editar'>
-					<Button icon='HeroPencil' />
-				</Tooltip>
-				<Tooltip text='Eliminar'>
-					<Button icon='HeroTrash' color='red' colorIntensity='800' />
-				</Tooltip>
-			</div>
-		),
-		header: 'Acciones',
-		footer: 'Acciones',
-	}),
-];
-
+		columnHelper.display({
+			cell: (_info) => (
+				<div className='flex items-center gap-2'>
+					<Tooltip text='Editar'>
+						<Button icon='HeroPencil' onClick={() => { handleOpenEditModal(_info.row.original) }} />
+					</Tooltip>
+					<Tooltip text='Eliminar'>
+						<Button icon='HeroTrash' color='red' colorIntensity='800' />
+					</Tooltip>
+				</div>
+			),
+			header: 'Acciones',
+			footer: 'Acciones',
+		}),
+	];
+}
 const Promotor = () => {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [globalFilter, setGlobalFilter] = useState<string>('');
 	const [exModal1, setExModal1] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [promotores, setPromotores] = useState<any>([]);
+	const [currentValue, setCurrentValue] = useState<any>();
+	currentValue
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
 
@@ -171,9 +175,31 @@ const Promotor = () => {
 		return () => { };
 	}, []);
 
+	const handleOpenEditModal = (data) => {
+		if(data.fechaNacimiento && data.fechaNacimiento.toString().length > 0){
+			data.fechaNacimiento = formatDateCalendarInput(data.fechaNacimiento)
+		}
+		
+		setCurrentValue(data)
+		setExModal1(true)
+	}
+
+	const handleOpenAddModal = () => {
+		setCurrentValue({})
+		setExModal1(true)
+	}
+
+	const handleCloseModal = () => {
+		setExModal1(false);
+	};
+	const handleCloseModalWithReload = async () => {
+		setExModal1(false);
+		await obtenerPromotores();
+	};
+
 	const table = useReactTable({
 		data: promotores,
-		columns,
+		columns: columns(handleOpenEditModal),
 		state: {
 			sorting,
 			globalFilter,
@@ -188,88 +214,83 @@ const Promotor = () => {
 		initialState: {
 			pagination: { pageSize: 20 },
 		},
+
 		// debugTable: true,
 	});
 
-	const handleCloseModal = () => {
-		setExModal1(false);
-	};
-	const handleCloseModalWithReload = async () => {
-		setExModal1(false);
-		await obtenerPromotores();
-	};
 
 	if (loading) {
 		return <div>Loading...</div>;
 	}
-		return (
-			<>
-				<PageWrapper name='Customer List'>
-					<Subheader>
-						<SubheaderLeft>
-							<FieldWrap
-								firstSuffix={<Icon className='mx-2' icon='HeroMagnifyingGlass' />}
-								lastSuffix={
-									globalFilter && (
-										<Icon
-											icon='HeroXMark'
-											color='red'
-											className='mx-2 cursor-pointer'
-											onClick={() => {
-												setGlobalFilter('');
-											}}
-										/>
-									)
-								}>
-								<Input
-									id='example'
-									name='example'
-									placeholder='Buscar...'
-									value={globalFilter ?? ''}
-									onChange={(e) => setGlobalFilter(e.target.value)}
-								/>
-							</FieldWrap>
-						</SubheaderLeft>
-						<SubheaderRight>
-							<Button variant='solid' icon='HeroPlus' onClick={() => setExModal1(true)}>
-								Agregar
-							</Button>
-						</SubheaderRight>
-					</Subheader>
-					<Container>
-						<Card className='h-full'>
-							<CardHeader>
-								<CardHeaderChild>
-									<CardTitle>Promotores</CardTitle>
-									<Badge
-										variant='outline'
-										className='border-transparent px-4'
-										rounded='rounded-full'>
-										{table.getFilteredRowModel().rows.length} registros
-									</Badge>
-								</CardHeaderChild>
-							</CardHeader>
-
-							<CardBody className='overflow-auto'>
-								<TableTemplate
-									className='table-fixed max-md:min-w-[70rem]'
-									table={table}
-								/>
-							</CardBody>
-							<TableCardFooterTemplate table={table} />
-						</Card>
-					</Container>
-					<Modal isOpen={exModal1} setIsOpen={setExModal1} isStaticBackdrop>
-						<ModalHeader>Agregar Promotor</ModalHeader>
-						<ModalBody>
-							<FormAddPromotor
-								handleCloseModal={handleCloseModal}
-								handleCloseModalWithReload={handleCloseModalWithReload}
+	return (
+		<>
+			<PageWrapper name='Customer List'>
+				<Subheader>
+					<SubheaderLeft>
+						<FieldWrap
+							firstSuffix={<Icon className='mx-2' icon='HeroMagnifyingGlass' />}
+							lastSuffix={
+								globalFilter && (
+									<Icon
+										icon='HeroXMark'
+										color='red'
+										className='mx-2 cursor-pointer'
+										onClick={() => {
+											setGlobalFilter('');
+										}}
+									/>
+								)
+							}>
+							<Input
+								id='example'
+								name='example'
+								placeholder='Buscar...'
+								value={globalFilter ?? ''}
+								onChange={(e) => setGlobalFilter(e.target.value)}
 							/>
-						</ModalBody>
-					</Modal>
-				</PageWrapper>
-			</>)
+						</FieldWrap>
+					</SubheaderLeft>
+					<SubheaderRight>
+						<Button variant='solid' icon='HeroPlus' onClick={() => handleOpenAddModal()}>
+							Agregar
+						</Button>
+					</SubheaderRight>
+				</Subheader>
+				<Container>
+					<Card className='h-full'>
+						<CardHeader>
+							<CardHeaderChild>
+								<CardTitle>Promotores</CardTitle>
+								<Badge
+									variant='outline'
+									className='border-transparent px-4'
+									rounded='rounded-full'>
+									{table.getFilteredRowModel().rows.length} registros
+								</Badge>
+							</CardHeaderChild>
+						</CardHeader>
+
+						<CardBody className='overflow-auto'>
+							<TableTemplate
+								className='table-fixed max-md:min-w-[70rem]'
+								table={table}
+							/>
+						</CardBody>
+						<TableCardFooterTemplate table={table} />
+					</Card>
+				</Container>
+				<Modal isOpen={exModal1} setIsOpen={setExModal1} isStaticBackdrop>
+					<ModalHeader>Agregar Promotor</ModalHeader>
+					<ModalBody>
+						<FormAddPromotor
+							handleCloseModal={handleCloseModal}
+							handleCloseModalWithReload={handleCloseModalWithReload}
+							valuesForm={currentValue}
+						/>
+					</ModalBody>
+				</Modal>
+			</PageWrapper>
+		</>)
 };
 
 export default Promotor;

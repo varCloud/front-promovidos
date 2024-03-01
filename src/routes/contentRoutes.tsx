@@ -1,6 +1,6 @@
 import React, { lazy } from 'react';
 import { RouteProps } from 'react-router-dom';
-import { appPages, authPages, componentsPages, examplePages } from '../config/pages.config';
+import { appPages, authPages, componentsPages, examplePages, promovidosAllPages } from '../config/pages.config';
 import NotFoundPage from '../pages/NotFound.page';
 import LoginPage from '../pages/Login.page';
 import Promotor from '../pages/Promotor/Promotor';
@@ -161,12 +161,12 @@ const UnderConstructionPage = lazy(() => import('../pages/UnderConstruction.page
 
 const contentRoutes: RouteProps[] = [
 	{
-		path: appPages.promovidoAppPages.to,
+		path: promovidosAllPages.promovidoAppPages.to,
 		element: <PromovidoPage />,
 	},
 
 	{
-		path: appPages.promotorAppPages.to,
+		path: promovidosAllPages.promotorAppPages.to,
 		element: <Promotor />,
 	},
 

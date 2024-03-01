@@ -33,9 +33,8 @@ type TValues = {
 
 
 const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promotores }) => {
-	const [passwordShowStatus, setPasswordShowStatus] = useState<boolean>(false);
-	const [passwordRepeatShowStatus, setPasswordRepeatShowStatus] = useState<boolean>(false);
-	const _promovidosService: PromovidosService = new PromovidosService(new FetchService());
+	const { token } = JSON.parse(window.localStorage.getItem(`user`));
+	const _promovidosService: PromovidosService = new PromovidosService(new FetchService(token));
 
 	
 	const formik = useFormik({
@@ -295,7 +294,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promo
 					invalidFeedback={formik.errors.redesSociales}
 					validFeedback='Información correcta'>
 					<FieldWrap
-						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
+						firstSuffix={<Icon icon='HeroHandThumbUp' className='mx-2' size='text-xl' />}>
 						<Input
 							id='redesSociales'
 							autoComplete='redesSociales'

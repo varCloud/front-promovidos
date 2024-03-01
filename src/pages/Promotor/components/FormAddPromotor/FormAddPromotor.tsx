@@ -28,28 +28,33 @@ type TValues = {
 	idRol:number;
 	fechaNacimiento: string;
 	edad: string;
+	redesSociales: string;
 };
 
-const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }: any) => {
+const initialValues = {
+	usuario: '',
+	contrasena: '',
+	nombres: '',
+	mail: '',
+	telefono: '',
+	seccion: '',
+	genero: '',
+	fechaNacimiento: '',
+	edad:'',
+	apellidos: '',
+	direccion: '',
+	redesSociales: '',
+	idRol:3
+}
+
+const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , valuesForm }: any) => {
 	const [passwordShowStatus, setPasswordShowStatus] = useState<boolean>(false);
 	const [passwordRepeatShowStatus, setPasswordRepeatShowStatus] = useState<boolean>(false);
-	const _promotorService: PromotorService = new PromotorService(new FetchService());
+	const { token } = JSON.parse(window.localStorage.getItem(`user`));
+	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
 
 	const formik = useFormik({
-		initialValues: {
-			usuario: '',
-			contrasena: '',
-			nombres: '',
-			mail: '',
-			telefono: '',
-			seccion: '',
-			genero: '',
-			fechaNacimiento: '',
-			edad:'',
-			apellidos: '',
-			direccion: '',
-			idRol:3
-		},
+		initialValues: { ...initialValues  },
 		validate: (values: TValues) => {
 			const errors: Partial<TValues> = {};
 
@@ -80,13 +85,20 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }: any)
 		},
 	});
 
+	useEffect(()=>{
+		const values  = {...valuesForm , ...valuesForm.Usuario}
+		delete values.Usuario
+		formik.setValues({...values , idRol:3})
+		
+	},[])
+
 	return (
 		<form className='flex flex-col gap-4' noValidate>
 			<div>
 				<Label htmlFor='nombres'>Nombres</Label>
 				<Validation
 					isValid={formik.isValid}
-					isTouched={formik.touched.nombres}
+					isTouched={formik.touched.nombres && Boolean(formik.touched.nombres)}
 					invalidFeedback={formik.errors.nombres}
 					validFeedback='Información correcta'>
 					<FieldWrap
@@ -255,8 +267,8 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }: any)
 							value={formik.values.genero}
 							onChange={formik.handleChange}
 							onBlur={formik.handleBlur}>
-							<option value='m'>Masculino</option>
-							<option value='f'>Femenino</option>
+							<option value='masculino'>Masculino</option>
+							<option value='femenino'>Femenino</option>
 						</Select>
 					</FieldWrap>
 				</Validation>
@@ -283,6 +295,27 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }: any)
 				</Validation>
 			</div>
 			<div>
+				<Label htmlFor='redesSociales'>Redes Sociales</Label>
+				<Validation
+					isValid={formik.isValid}
+					isTouched={formik.touched.redesSociales}
+					invalidFeedback={formik.errors.redesSociales}
+					validFeedback='Información correcta'>
+					<FieldWrap
+						firstSuffix={<Icon icon='HeroHandThumbUp' className='mx-2' size='text-xl' />}>
+						<Input
+							id='redesSociales'
+							autoComplete='redesSociales'
+							name='redesSociales'
+							placeholder='Redes sociales'
+							value={formik.values.redesSociales}
+							onChange={formik.handleChange}
+							onBlur={formik.handleBlur}
+						/>
+					</FieldWrap>
+				</Validation>
+			</div>
+			<div hidden>
 				<Label htmlFor='usuario'>Usuario</Label>
 				<Validation
 					isValid={formik.isValid}
@@ -303,7 +336,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload }: any)
 					</FieldWrap>
 				</Validation>
 			</div>
-			<div>
+			<div  hidden>
 				<Label htmlFor='contrasena'>Constraseña</Label>
 				<Validation
 					isValid={formik.isValid}

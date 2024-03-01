@@ -4,22 +4,8 @@ import usersDb from '../mocks/db/users.db';
 import rolesDb from '../mocks/db/roles.db';
 import projectsDb from '../mocks/db/projects.db';
 
-export const examplePages = {
-	examplesPage: {
-		id: 'examplesPage',
-		to: '/examples-page',
-		text: 'Examples Page',
-		icon: 'HeroBookOpen',
-	},
-	duotoneIconsPage: {
-		id: 'duotoneIconsPage',
-		to: '/duotone-icons',
-		text: 'Duotone Icons',
-		icon: 'HeroCubeTransparent',
-	},
-};
 
-export const appPages = {
+export const promovidosAllPages  = {
 	promovidoAppPages: {
 		id: 'promovido',
 		to: '/promovido',
@@ -35,6 +21,25 @@ export const appPages = {
 		icon: 'HeroUser',
 		subPages: {}
 	},
+}
+
+export const examplePages = {
+	examplesPage: {
+		id: 'examplesPage',
+		to: '/examples-page',
+		text: 'Examples Page',
+		icon: 'HeroBookOpen',
+	},
+	duotoneIconsPage: {
+		id: 'duotoneIconsPage',
+		to: '/duotone-icons',
+		text: 'Duotone Icons',
+		icon: 'HeroCubeTransparent',
+	},
+};
+
+
+export const appPages = {
 
 	aiAppPages: {
 		id: 'aiApp',
@@ -508,9 +513,13 @@ export const authPages = {
 	},
 };
 
+// const pagesConfig = {
+// 	...examplePages,
+// 	...authPages,
+// };
 const pagesConfig = {
-	...examplePages,
 	...authPages,
-};
+	...promovidosAllPages
+}
 
 export default pagesConfig;
