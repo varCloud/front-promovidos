@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
+	ColumnFiltersState,
 	createColumnHelper,
+	FilterFn,
 	getCoreRowModel,
 	getFilteredRowModel,
 	getPaginationRowModel,
@@ -33,6 +35,8 @@ import Modal, {
 	ModalFooterChild,
 	ModalHeader,
 } from '../../components/ui/Modal';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 import FormAddPromovido from './components/FormAddPromovido/FormAddPromovido';
 import PromovidosService from '../../services/promovidos.service';
 import { FetchService } from '../../services/config/FetchService';
@@ -43,11 +47,14 @@ import DefaultHeaderRightCommon from '../../templates/layouts/Headers/_common/De
 import { useAuth } from '../../context/authContext';
 import { formatDateCalendarInput } from '../../components/utils/functions';
 
+
+const MySwal = withReactContent(Swal)
+
+  
 const columnHelper = createColumnHelper<any>();
 const editLinkPath = `../${appPages.crmAppPages.subPages.customerPage.subPages.editPageLink.to}/`;
 const sinRegistro = 'N/A';
-
-const columns = (handleOpenEditModal) => {
+const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal) => {
 	return [
 		columnHelper.accessor('image', {
 			cell: (info) => (
@@ -68,12 +75,25 @@ const columns = (handleOpenEditModal) => {
 			cell: (info) => (
 				<Link to={`${editLinkPath}${info.row.original.id}`}>
 					<div>
-						{info.row.original.nombres} {info.row.original.apellidos}
+						{info.row.original.nombres}&nbsp;{info.row.original.apellidos}
 					</div>
 				</Link>
 			),
-			header: 'Nombres',
-			footer: 'Nombres',
+			header: 'Nombre',
+			footer: 'Nombre',
+			enableGlobalFilter: true,
+			enableSorting: true,
+		}),
+		columnHelper.accessor('Promotor.Usuario.nombres', {
+			cell: (info) => (
+				<div className=''>
+					<span>{info.getValue()  ?? sinRegistro }</span>
+				</div>
+			),
+			header: 'Promotor',
+			footer: 'Promotor',
+			enableGlobalFilter: true,
+			enableSorting: true,
 		}),
 		columnHelper.accessor('direccion', {
 			cell: (info) => (
@@ -116,11 +136,14 @@ const columns = (handleOpenEditModal) => {
 		columnHelper.display({
 			cell: (_info) => (
 				<div className='flex items-center gap-2'>
+					<Tooltip text='Ver'>
+						<Button icon='HeroEye' isActive color='sky'  onClick={() => { handleOpenViewModal(_info.row.original) }} />
+					</Tooltip>
 					<Tooltip text='Editar'>
-						<Button icon='HeroPencil' onClick={() => { handleOpenEditModal(_info.row.original) }} />
+						<Button icon='HeroPencil' isActive color='violet' onClick={() => { handleOpenEditModal(_info.row.original) }} />
 					</Tooltip>
 					<Tooltip text='Eliminar'>
-						<Button icon='HeroTrash' color='red' colorIntensity='800' />
+						<Button icon='HeroTrash'isActive  color='red' colorIntensity='800' onClick={() => { handleOpenDeleteAlert(_info.row.original) }} />
 					</Tooltip>
 				</div>
 			),
@@ -139,10 +162,13 @@ const Promovido = () => {
 	const [promotores, setPromotores] = useState<any>([]);
 	const [currentValue, setCurrentValue] = useState<any>();
 	const [isEdit, setIsEdit] = useState<any>();
+	const [isView, setIsView] = useState<any>();
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _promovidosService: PromovidosService = new PromovidosService(new FetchService(token));
 	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
-
+	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+		[]
+	  )
 	async function obtenerPromotres() {
 		setLoading(true);
 		const _promotores = await _promotorService.obtenerPromotores();
@@ -163,6 +189,18 @@ const Promovido = () => {
 			data.fechaNacimiento = formatDateCalendarInput(data.fechaNacimiento)
 		}
 		setIsEdit(true)
+		setIsView(false)
+		setCurrentValue(data)
+		setExModal1(true)
+	}
+
+	const handleOpenViewModal = (data) => {
+		
+		if(data.fechaNacimiento && data.fechaNacimiento.toString().length > 0){
+			data.fechaNacimiento = formatDateCalendarInput(data.fechaNacimiento)
+		}
+		setIsView(true)
+		setIsEdit(false)
 		setCurrentValue(data)
 		setExModal1(true)
 	}
@@ -173,15 +211,34 @@ const Promovido = () => {
 		setExModal1(true)
 	}
 
+	const handleOpenDeleteAlert = (data) =>{
+		MySwal.fire({
+			title: `<span class="text-lg">Estas seguro que deseas eliminar el promovido: <span> <br/> <span class="text-xl text-red-700">${data.nombres} ${data.apellidos ?? ''}<span>`,
+			icon: "question",
+			showCancelButton: true,
+			confirmButtonText: "Eliminar",
+			confirmButtonColor:"#991b1b"
+		  }).then(async (result) => {
+			if(result.isConfirmed){
+				 await _promovidosService.eliminarPromovido(data.idPromovido)
+				 await obtenerPromovidos()
+			}
+		  })
+	}
+
 	useEffect(() => {
 		obtenerPromovidos();
 		obtenerPromotres();
 		return () => { };
 	}, []);
 
+	const filterTable = () =>{
+
+	}
+
 	const table = useReactTable({
 		data: promovidos,
-		columns:columns(handleOpenEditModal),
+		columns:columns(handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal),
 		state: {
 			sorting,
 			globalFilter,
@@ -196,8 +253,11 @@ const Promovido = () => {
 		initialState: {
 			pagination: { pageSize: 20 },
 		},
-		// debugTable: true,
+
+		debugTable: true,
 	});
+	
+
 
 	const handleCloseModal = () => {
 		setExModal1(false);
@@ -277,6 +337,7 @@ const Promovido = () => {
 							promotores={promotores}
 							valuesForm={currentValue}
 							isEdit={isEdit}
+							isView={isView}
 						/>
 					</ModalBody>
 				</Modal>

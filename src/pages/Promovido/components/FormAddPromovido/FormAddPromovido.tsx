@@ -14,6 +14,7 @@ import PromovidosService from '../../../../services/promovidos.service';
 import { FetchService } from '../../../../services/config/FetchService';
 import PromotorService from '../../../../services/promotor.service';
 import { getAge } from '../../../../components/utils/functions';
+import SelectReact from '../../../../components/form/SelectReact';
 
 type TValues = {
 	nombres: string;
@@ -25,8 +26,8 @@ type TValues = {
 	mail: string;
 	seccion: string;
 	redesSociales: string;
-	idPromotor: string;
-	idRol:number;
+	idPromotor: undefined;
+	idRol: number;
 	edad: string;
 };
 
@@ -40,17 +41,17 @@ const initialValues = {
 	mail: '',
 	seccion: '',
 	redesSociales: '',
-	idPromotor: '',
-	idRol:4,
-	edad:''
+	idPromotor: undefined,
+	idRol: 4,
+	edad: ''
 }
 
 
-const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promotores , valuesForm, isEdit}) => {
+const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promotores, valuesForm, isEdit, isView }) => {
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _promovidosService: PromovidosService = new PromovidosService(new FetchService(token));
-
-	
+	const [currentSelectPromtor, setCurrentSelectPromotor] = useState<any>();
+	const [loading, setLoading] = useState<boolean>(false);
 	const formik = useFormik({
 		initialValues: { ...initialValues },
 		validate: (values: TValues) => {
@@ -72,29 +73,46 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promo
 				errors.mail = 'la estructrura del email es incorrecta';
 			}
 
-			if(values.fechaNacimiento){
+			if (values.fechaNacimiento) {
 				values.edad = getAge(values.fechaNacimiento).toString()
 			}
 
 			return errors;
 		},
 		onSubmit: async () => {
-			if(isEdit) {
-				await _promovidosService.actualizarPromovido(formik.values);
-			} else {
-				await _promovidosService.crearPromovido(formik.values);
+			setLoading(true)
+			try {
+				if (isEdit) {
+					await _promovidosService.actualizarPromovido(formik.values);
+				} else {
+					await _promovidosService.crearPromovido(formik.values);
+				}
+				setLoading(false)
+				handleCloseModalWithReload();
+			} catch (error) {
+				console.log(error)
 			}
-
-			handleCloseModalWithReload();
 		},
-	
+
 	});
 
-	useEffect(()=>{
-		formik.setValues({...valuesForm , idRol:4})
-	},[])
+	useEffect(() => {
+		setCurrentIdPromotor()
+		formik.setValues({ ...valuesForm, idRol: 4 })
 
-	console.log(formik.values)
+	}, [])
+
+	const onChangeSelectPromotor = (data) => {
+		formik.setFieldValue(`idPromotor`, data.value)
+	}
+
+	const setCurrentIdPromotor = () => {
+		const valuePromotor = promotores.find((item) => item.idPromotor == valuesForm.idPromotor);
+		if (valuePromotor) {
+			setCurrentSelectPromotor({ value: valuePromotor.idPromotor, label: valuePromotor.Usuario.nombres })
+		}
+
+	}
 
 	return (
 		<form className='flex flex-col gap-4' noValidate>
@@ -109,6 +127,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promo
 						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
 						<Input
 							id='nombres'
+							disabled={isView}
 							autoComplete='nombres'
 							name='nombres'
 							placeholder='Nombres'
@@ -130,6 +149,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promo
 						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
 						<Input
 							id='apellidos'
+							disabled={isView}
 							autoComplete='apellidos'
 							name='apellidos'
 							placeholder='Apellidos'
@@ -151,6 +171,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promo
 						firstSuffix={<Icon icon='HeroEnvelope' className='mx-2' size='text-xl' />}>
 						<Input
 							id='mail'
+							disabled={isView}
 							autoComplete='mail'
 							name='mail'
 							placeholder='Correo electronico'
@@ -172,6 +193,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promo
 						firstSuffix={<Icon icon='HeroHome' className='mx-2' size='text-xl' />}>
 						<Input
 							id='direccion'
+							disabled={isView}
 							autoComplete='direccion'
 							name='direccion'
 							placeholder='Direccion'
@@ -193,6 +215,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promo
 						firstSuffix={<Icon icon='HeroDevicePhoneMobile' className='mx-2' size='text-xl' />}>
 						<Input
 							id='telefono'
+							disabled={isView}
 							autoComplete='telefono'
 							name='telefono'
 							placeholder='Telefono'
@@ -205,49 +228,50 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promo
 			</div>
 			<div className='flex flex-row gap-3'>
 				<div className='w-[90%]'>
-				<Label htmlFor='fechaNacimiento'>Fecha de nacimiento</Label>
-				<Validation
-					isValid={formik.isValid}
-					isTouched={formik.touched.fechaNacimiento}
-					invalidFeedback={formik.errors.fechaNacimiento}
-					validFeedback='Información correcta'>
-					<FieldWrap
-						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
-						<Input
-							id='fechaNacimiento'
-							autoComplete='fechaNacimiento'
-							name='fechaNacimiento'
-							placeholder='Fecha de nacimiento'
-							value={formik.values.fechaNacimiento}
-							onChange={formik.handleChange}
-							onBlur={formik.handleBlur}
-							type='date'
-						/>
-					</FieldWrap>
-				</Validation>
+					<Label htmlFor='fechaNacimiento'>Fecha de nacimiento</Label>
+					<Validation
+						isValid={formik.isValid}
+						isTouched={formik.touched.fechaNacimiento}
+						invalidFeedback={formik.errors.fechaNacimiento}
+						validFeedback='Información correcta'>
+						<FieldWrap
+							firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
+							<Input
+								id='fechaNacimiento'
+								disabled={isView}
+								autoComplete='fechaNacimiento'
+								name='fechaNacimiento'
+								placeholder='Fecha de nacimiento'
+								value={formik.values.fechaNacimiento}
+								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+								type='date'
+							/>
+						</FieldWrap>
+					</Validation>
 
 				</div>
 				<div>
-				<Label htmlFor='edad'>Edad</Label>
-				<Validation
-					isValid={formik.isValid}
-					isTouched={formik.touched.edad}
-					invalidFeedback={formik.errors.edad}
-					validFeedback='Información correcta'>
-					<FieldWrap
-						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
-						<Input
-							id='edad'
-							autoComplete='edad'
-							name='edad'
-							placeholder='Edad'
-							value={formik.values.edad}
-							onChange={formik.handleChange}
-							onBlur={formik.handleBlur}
-							disabled
-						/>
-					</FieldWrap>
-				</Validation>
+					<Label htmlFor='edad'>Edad</Label>
+					<Validation
+						isValid={formik.isValid}
+						isTouched={formik.touched.edad}
+						invalidFeedback={formik.errors.edad}
+						validFeedback='Información correcta'>
+						<FieldWrap
+							firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
+							<Input
+								id='edad'
+								disabled={isView}
+								autoComplete='edad'
+								name='edad'
+								placeholder='Edad'
+								value={formik.values.edad}
+								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+							/>
+						</FieldWrap>
+					</Validation>
 				</div>
 			</div>
 			<div>
@@ -264,6 +288,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promo
 						}>
 						<Select
 							id='genero'
+							disabled={isView}
 							name='genero'
 							placeholder='Selecciona un genero'
 							value={formik.values.genero}
@@ -286,6 +311,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promo
 						firstSuffix={<Icon icon='HeroBolt' className='mx-2' size='text-xl' />}>
 						<Input
 							id='seccion'
+							disabled={isView}
 							autoComplete='seccion'
 							name='seccion'
 							placeholder='Seccion'
@@ -307,6 +333,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promo
 						firstSuffix={<Icon icon='HeroHandThumbUp' className='mx-2' size='text-xl' />}>
 						<Input
 							id='redesSociales'
+							disabled={isView}
 							autoComplete='redesSociales'
 							name='redesSociales'
 							placeholder='Redes sociales'
@@ -321,36 +348,33 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promo
 				<Label htmlFor='idPromotor'>Promotor</Label>
 				<Validation
 					isValid={formik.isValid}
-					isTouched={formik.touched.idPromotor}
-					invalidFeedback={formik.errors.idPromotor}
+					isTouched={formik.touched.idPromotor && Boolean(formik.touched.idPromotor)}
+					invalidFeedback={formik.errors.idPromotor && formik.errors.idPromotor.toString()}
 					validFeedback='Información correcta'>
 					<FieldWrap
 						firstSuffix={<Icon icon='HeroUserCircle' className='mx-2' size='text-xl' />}
-						lastSuffix={
-							<Icon className='mx-2 cursor-pointer' icon='HeroChevronDown' />
-						}>
-						<Select
-							id='idPromotor'
-							name='idPromotor'
-							placeholder='Selecciona un promotor'
-							value={formik.values.idPromotor}
-							onChange={formik.handleChange}
-							onBlur={formik.handleBlur}>
-							{
-								promotores.map((item) => {
-									return (<option key={item.idPromotor} value={item.idPromotor}>{item.Usuario.nombres}</option>)
-								})
-							}
-						</Select>
+					>
+						<div className='col-span-12 lg:col-span-4'>
+							<SelectReact
+								options={promotores.map((item) => { return { value: item.idPromotor, label: item.Usuario.nombres } })}
+								id='idPromotor'
+								isDisabled={isView}
+								name='idPromotor'
+								value={currentSelectPromtor}
+								onChange={(item) => onChangeSelectPromotor(item)}
+							/>
+						</div>
+
 					</FieldWrap>
 				</Validation>
 			</div>
-			<div className='flex justify-end gap-10'>
+			<div className='flex justify-end gap-8'>
 				<Button
 					size='lg'
-					variant='default'
+					variant='outline'
 					className='font-semibold'
 					onClick={handleCloseModal}>
+
 					Cancelar
 				</Button>
 
@@ -358,7 +382,10 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , promo
 					size='lg'
 					variant='solid'
 					className='font-semibold'
-					onClick={() => formik.handleSubmit()}>
+					onClick={() => formik.handleSubmit()}
+					isDisable={isView}
+					isLoading={loading}
+				>
 					Guardar
 				</Button>
 			</div>
