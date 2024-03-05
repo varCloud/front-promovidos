@@ -143,7 +143,7 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 						<Button icon='HeroPencil' isActive color='violet' onClick={() => { handleOpenEditModal(_info.row.original) }} />
 					</Tooltip>
 					<Tooltip text='Eliminar'>
-						<Button icon='HeroTrash'isActive  color='red' colorIntensity='800' onClick={() => { handleOpenDeleteAlert(_info.row.original) }} />
+						<Button icon='HeroTrash' isActive  color='red' colorIntensity='800' onClick={() => { handleOpenDeleteAlert(_info.row.original) }} />
 					</Tooltip>
 				</div>
 			),

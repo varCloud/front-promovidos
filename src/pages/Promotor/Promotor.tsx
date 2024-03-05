@@ -39,6 +39,8 @@ import Modal, {
 	ModalFooterChild,
 	ModalHeader,
 } from '../../components/ui/Modal';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 import PromovidosService from '../../services/promovidos.service';
 import { FetchService } from '../../services/config/FetchService';
 import FormAddPromotor from './components/FormAddPromotor/FormAddPromotor';
@@ -49,12 +51,14 @@ import DefaultHeaderRightCommon from '../../templates/layouts/Headers/_common/De
 import { useAuth } from '../../context/authContext';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { formatDateCalendarInput } from '../../components/utils/functions';
+import Cobertura from '../Cobertura/Cobertura';
+const MySwal = withReactContent(Swal)
 
 const columnHelper = createColumnHelper<any>();
 
 const editLinkPath = `../${appPages.crmAppPages.subPages.customerPage.subPages.editPageLink.to}/`;
 const sinRegistro = 'N/A';
-const columns = (handleOpenEditModal ) => {
+const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal) => {
 	return [
 		columnHelper.accessor('image', {
 			cell: (info) => (
@@ -123,11 +127,14 @@ const columns = (handleOpenEditModal ) => {
 		columnHelper.display({
 			cell: (_info) => (
 				<div className='flex items-center gap-2'>
+					<Tooltip text='Ver'>
+						<Button icon='HeroEye' isActive color='sky' onClick={() => { handleOpenViewModal(_info.row.original) }} />
+					</Tooltip>
 					<Tooltip text='Editar'>
-						<Button icon='HeroPencil' onClick={() => { handleOpenEditModal(_info.row.original) }} />
+						<Button icon='HeroPencil' isActive color='violet' onClick={() => { handleOpenEditModal(_info.row.original) }} />
 					</Tooltip>
 					<Tooltip text='Eliminar'>
-						<Button icon='HeroTrash' color='red' colorIntensity='800' />
+						<Button icon='HeroTrash' isActive color='red' colorIntensity='800' onClick={() => { handleOpenDeleteAlert(_info.row.original) }} />
 					</Tooltip>
 				</div>
 			),
@@ -144,6 +151,7 @@ const Promotor = () => {
 	const [promotores, setPromotores] = useState<any>([]);
 	const [currentValue, setCurrentValue] = useState<any>();
 	const [isEdit, setIsEdit] = useState<any>();
+	const [isView, setIsView] = useState<any>();
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
 
@@ -161,13 +169,40 @@ const Promotor = () => {
 
 	const handleOpenEditModal = (data) => {
 
-		if(data.fechaNacimiento && data.fechaNacimiento.toString().length > 0){
+		if (data.fechaNacimiento && data.fechaNacimiento.toString().length > 0) {
 			data.fechaNacimiento = formatDateCalendarInput(data.fechaNacimiento)
 		}
-		
+		setIsView(false)
 		setCurrentValue(data)
 		setIsEdit(true)
 		setExModal1(true)
+	}
+
+	const handleOpenViewModal = (data) => {
+		
+		if(data.fechaNacimiento && data.fechaNacimiento.toString().length > 0){
+			data.fechaNacimiento = formatDateCalendarInput(data.fechaNacimiento)
+		}
+		setIsView(true)
+		setIsEdit(false)
+		setCurrentValue(data)
+		setExModal1(true)
+	}
+
+	const handleOpenDeleteAlert = (data) =>{
+		console.log(data)
+		MySwal.fire({
+			title: `<span class="text-lg">Estas seguro que deseas eliminar el promotor: <span> <br/> <span class="text-xl text-red-700">${data.Usuario.nombres} ${data.Usuario.apellidos ?? ''}<span>`,
+			icon: "question",
+			showCancelButton: true,
+			confirmButtonText: "Eliminar",
+			confirmButtonColor:"#991b1b"
+		  }).then(async (result) => {
+			if(result.isConfirmed){
+				 await _promotorService.eliminarPromotor(data.idPromotor)
+				 await obtenerPromotores()
+			}
+		  })
 	}
 
 	const handleOpenAddModal = () => {
@@ -186,7 +221,7 @@ const Promotor = () => {
 
 	const table = useReactTable({
 		data: promotores,
-		columns: columns(handleOpenEditModal),
+		columns: columns(handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal),
 		state: {
 			sorting,
 			globalFilter,
@@ -209,6 +244,8 @@ const Promotor = () => {
 	if (loading) {
 		return <div>Loading...</div>;
 	}
+
+	
 	return (
 		<>
 			<PageWrapper name='Customer List'>
@@ -244,6 +281,11 @@ const Promotor = () => {
 					</SubheaderRight>
 				</Subheader>
 				<Container>
+					{/* <Card className='h-full'>
+						<CardBody className='overflow-auto'>
+							<Cobertura></Cobertura>
+						</CardBody>
+					</Card> */}
 					<Card className='h-full'>
 						<CardHeader>
 							<CardHeaderChild>
@@ -274,6 +316,7 @@ const Promotor = () => {
 							handleCloseModalWithReload={handleCloseModalWithReload}
 							valuesForm={currentValue}
 							isEdit={isEdit}
+							isView={isView}
 						/>
 					</ModalBody>
 				</Modal>

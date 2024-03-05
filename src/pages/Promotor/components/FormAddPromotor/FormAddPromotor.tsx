@@ -47,10 +47,10 @@ const initialValues = {
 	idRol:3
 }
 
-const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , valuesForm, isEdit}: any) => {
+const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload , valuesForm, isEdit, isView }: any) => {
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
-
+	const [loading, setLoading] = useState<boolean>(false);
 	const formik = useFormik({
 		initialValues: { ...initialValues  },
 		validate: (values: TValues) => {
@@ -78,12 +78,13 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 			return errors;
 		},
 		onSubmit: async () => {
+			setLoading(true)
 			if(isEdit){
 				await _promotorService.actualizarPromotor(formik.values);	
 			} else {
 				await _promotorService.crearPromotor(formik.values);
 			}
-
+			setLoading(false)
 			handleCloseModalWithReload();
 		},
 	});
@@ -94,6 +95,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 		formik.setValues({...values , idRol:3})
 		
 	},[])
+	console.log(isView)
 
 	return (
 		<form className='flex flex-col gap-4' noValidate>
@@ -108,6 +110,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
 						<Input
 							id='nombres'
+							disabled={isView}
 							autoComplete='nombres'
 							name='nombres'
 							placeholder='Nombres'
@@ -129,6 +132,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
 						<Input
 							id='apellidos'
+							disabled={isView}
 							autoComplete='apellidos'
 							name='apellidos'
 							placeholder='Apellidos'
@@ -150,6 +154,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 						firstSuffix={<Icon icon='HeroEnvelope' className='mx-2' size='text-xl' />}>
 						<Input
 							id='mail'
+							disabled={isView}
 							autoComplete='mail'
 							name='mail'
 							placeholder='Correo electronico'
@@ -171,6 +176,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 						firstSuffix={<Icon icon='HeroHome' className='mx-2' size='text-xl' />}>
 						<Input
 							id='direccion'
+							disabled={isView}
 							autoComplete='direccion'
 							name='direccion'
 							placeholder='Direccion'
@@ -194,6 +200,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 						}>
 						<Input
 							id='telefono'
+							disabled={isView}
 							autoComplete='telefono'
 							name='telefono'
 							placeholder='Telefono'
@@ -216,6 +223,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
 						<Input
 							id='fechaNacimiento'
+							disabled={isView}
 							autoComplete='fechaNacimiento'
 							name='fechaNacimiento'
 							placeholder='Fecha de nacimiento'
@@ -265,6 +273,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 						}>
 						<Select
 							id='genero'
+							disabled={isView}
 							name='genero'
 							placeholder='Selecciona un genero'
 							value={formik.values.genero}
@@ -287,6 +296,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 						firstSuffix={<Icon icon='HeroBolt' className='mx-2' size='text-xl' />}>
 						<Input
 							id='seccion'
+							disabled={isView}
 							autoComplete='seccion'
 							name='seccion'
 							placeholder='Seccion'
@@ -308,6 +318,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 						firstSuffix={<Icon icon='HeroHandThumbUp' className='mx-2' size='text-xl' />}>
 						<Input
 							id='redesSociales'
+							disabled={isView}
 							autoComplete='redesSociales'
 							name='redesSociales'
 							placeholder='Redes sociales'
@@ -329,6 +340,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
 						<Input
 							id='usuario'
+							disabled={isView}
 							autoComplete='usuario'
 							name='usuario'
 							placeholder='usuario'
@@ -356,6 +368,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 						}>
 						<Input
 							id='contrasena'
+							disabled={isView}
 							autoComplete='contrasena'
 							name='contrasena'
 							placeholder='contrasena'
@@ -379,6 +392,8 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 					size='lg'
 					variant='solid'
 					className='font-semibold'
+					isDisable={isView}
+					isLoading={loading}
 					onClick={() => formik.handleSubmit()}>
 					Guardar
 				</Button>
@@ -386,4 +401,4 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload , value
 		</form>
 	);
 };
-export default FormAddPromovido;
+export default FormAddPromotor;
