@@ -26,6 +26,7 @@ const DefaultAsideTemplate = () => {
 			</AsideHead>
 			<AsideBody>
 				<Nav>
+					<NavItem {...promovidosAllPages.dashboardPromodivosAppPages} />
 					<NavItem {...promovidosAllPages.promotorAppPages} />
 					<NavItem {...promovidosAllPages.promovidoAppPages} />
 					</Nav>
@@ -40,6 +41,7 @@ const DefaultAsideTemplate = () => {
 			</AsideHead>
 			<AsideBody>
 				<Nav>
+					<NavItem {...promovidosAllPages.dashboardPromodivosAppPages} />
 					<NavItem {...promovidosAllPages.promotorAppPages} />
 					<NavItem {...promovidosAllPages.promovidoAppPages} />
 

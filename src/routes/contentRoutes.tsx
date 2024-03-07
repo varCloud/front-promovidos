@@ -3,7 +3,7 @@ import { RouteProps } from 'react-router-dom';
 import { appPages, authPages, componentsPages, examplePages, promovidosAllPages } from '../config/pages.config';
 import NotFoundPage from '../pages/NotFound.page';
 import LoginPage from '../pages/Login.page';
-import Promotor from '../pages/Promotor/Promotor';
+import Promotor from '../pages/Promotor/Promotor.page';
 
 /**
  * UI
@@ -104,7 +104,7 @@ const DuotoneIconsPage = lazy(
 const SalesDashboardPage = lazy(
 	() => import('../pages/sales/SalesDashboardPage/SalesDashboard.page'),
 );
-const PromovidoPage = lazy(() => import('../pages/Promovido/Promovido.page'));
+
 
 const ProductListPage = lazy(
 	() => import('../pages/sales/products/ProductListPage/ProductList.page'),
@@ -159,7 +159,26 @@ const ChatPage = lazy(() => import('../pages/ChatPage/Chat.page'));
  */
 const UnderConstructionPage = lazy(() => import('../pages/UnderConstruction.page'));
 
+
+/**
+ * PROMOVIDOS
+ */
+const PromovidoPage = lazy(() => import('../pages/Promovido/Promovido.page'));
+const PromotorPage = lazy(() => import('../pages/Promotor/Promotor.page'));
+const DashboardPromovido = lazy(() => import('../pages/DashboardPromovido/DashboardPromovido.page'));
+
 const contentRoutes: RouteProps[] = [
+
+	{
+		path: promovidosAllPages.dashboardPromodivosAppPages.to,
+		element: <DashboardPromovido />,
+	},
+
+	{
+		path: promovidosAllPages.promotorAppPages.to,
+		element: <PromotorPage />,
+	},
+
 	{
 		path: promovidosAllPages.promovidoAppPages.to,
 		element: <PromovidoPage />,

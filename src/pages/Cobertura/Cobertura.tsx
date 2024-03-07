@@ -9,51 +9,34 @@ import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 
 import proj4 from "proj4";
 // import mapDataIE from "@highcharts/map-collection/countries/ie/ie-all.geo.json";
-import mapDataIE from "./morelia.maps.json";
+import geojson from "./morelia.maps.json";
 highchartsMap(Highcharts);
 
 
 const mapOptions = {
     chart: {
-        map: 'geojson'
+        map: geojson
     },
+
     title: {
-        text: 'Map Demo'
+        text: 'GeoJSON in Highmaps'
     },
-    credits: {
-        enabled: false
-    },
+
+
     mapNavigation: {
-        enabled: false
-    },
-    tooltip: {
-        headerFormat: '',
-        pointFormat: '<b>{point.freq}</b><br><b>{point.keyword}</b>                      <br>lat: {point.lat}, lon: {point.lon}'
-    },
-    series: [{
-        // Use the gb-all map with no data as a basemap
-        name: 'Basemap',
-        mapData: mapDataIE,
-        borderColor: '#A0A0A0',
-        nullColor: 'rgba(200, 200, 200, 0.3)',
-        showInLegend: true,
-        keys: ['ZONADREN', 'value']
-    }],
-    point: {
-        events: {
-            click: function () {
-                console.log(this.keyword);
-            }
+        enabled: true,
+        buttonOptions: {
+            verticalAlign: 'bottom'
         }
-    }
+    },
+
+    colorAxis: {
+        tickPixelInterval: 100
+    },
+
 }
 
 const Cobertura = () => {
-
-    return (
-
-        <></>
-    )
 
     // useLayoutEffect(() => {
     //     let root = am5.Root.new("chartdiv");
@@ -68,7 +51,7 @@ const Cobertura = () => {
 
     //     var polygonSeries = chart.series.push(
     //         am5map.MapPolygonSeries.new(root, {
-    //             geoJSON: mapDataIE,
+    //             geoJSON:geojson,
     //             exclude: ["AQ"]
     //         })
     //     );
@@ -146,7 +129,7 @@ const Cobertura = () => {
     //         }
     //     ]);
 
-    //     bubbleSeries.data.setAll(mapDataIE);
+    //     //bubbleSeries.data.setAll(mapDataIE);
 
     //     return () => {
     //         root.dispose();
@@ -154,18 +137,18 @@ const Cobertura = () => {
     // }, []);
 
 
-    // return (
-    //     <>
-    //         <div id="chartdiv" style={{ width: "500px", height: "500px" }}></div>
-    //         <div>
-    //             <HighchartsReact
-    //                 constructorType={'mapChart'}
-    //                 highcharts={Highcharts}
-    //                 options={mapOptions}
-    //             />
-    //         </div>
-    //     </>
-    // )
+    return (
+        <>
+            {/* <div id="chartdiv" style={{ width: "500px", height: "500px" }}></div>
+            <div>
+                <HighchartsReact
+                    constructorType={'mapChart'}
+                    highcharts={Highcharts}
+                    options={mapOptions}
+                />
+            </div> */}
+        </>
+    )
 }
 
 

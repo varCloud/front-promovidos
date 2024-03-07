@@ -248,7 +248,7 @@ const Promotor = () => {
 	
 	return (
 		<>
-			<PageWrapper name='Customer List'>
+			<PageWrapper name='Promotor List'>
 				<Subheader>
 					<SubheaderLeft>
 						<FieldWrap
@@ -281,11 +281,6 @@ const Promotor = () => {
 					</SubheaderRight>
 				</Subheader>
 				<Container>
-					{/* <Card className='h-full'>
-						<CardBody className='overflow-auto'>
-							<Cobertura></Cobertura>
-						</CardBody>
-					</Card> */}
 					<Card className='h-full'>
 						<CardHeader>
 							<CardHeaderChild>

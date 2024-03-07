@@ -6,6 +6,15 @@ import projectsDb from '../mocks/db/projects.db';
 
 
 export const promovidosAllPages  = {
+	dashboardPromodivosAppPages: {
+		id: 'dashboardPromodivos',
+		to: '/dashboardPromodivos',
+		text: 'Dashboard',
+		icon: 'HeroRocketLaunch',
+		subPages: {}
+	},
+
+
 	promovidoAppPages: {
 		id: 'promovido',
 		to: '/promovido',
