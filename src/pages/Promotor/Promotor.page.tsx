@@ -86,12 +86,20 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 			header: 'Nombres',
 			footer: 'Nombres',
 		}),
-		columnHelper.accessor('direccion', {
+		columnHelper.accessor('calle', {
 			cell: (info) => (
-				<div>{info.row.original.direccion ?? sinRegistro}</div>
+				<div>{info.row.original.calle ?? sinRegistro}</div>
 			),
-			header: 'Direccion',
-			footer: 'Direccion',
+			header: 'Calle',
+			footer: 'Calle',
+		}),
+
+		columnHelper.accessor('colonia', {
+			cell: (info) => (
+				<div>{info.getValue()} {info.row.original.cp ? `C.P. ${info.row.original.cp}`:  sinRegistro}</div>
+			),
+			header: 'Colonia',
+			footer: 'Colonia',
 		}),
 
 		columnHelper.accessor('Usuario.telefono', {

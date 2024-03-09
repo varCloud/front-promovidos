@@ -166,6 +166,7 @@ const UnderConstructionPage = lazy(() => import('../pages/UnderConstruction.page
 const PromovidoPage = lazy(() => import('../pages/Promovido/Promovido.page'));
 const PromotorPage = lazy(() => import('../pages/Promotor/Promotor.page'));
 const DashboardPromovido = lazy(() => import('../pages/DashboardPromovido/DashboardPromovido.page'));
+const EnlacePage = lazy(() => import('../pages/Enlace/Enalce.page'));
 
 const contentRoutes: RouteProps[] = [
 
@@ -187,6 +188,12 @@ const contentRoutes: RouteProps[] = [
 	{
 		path: promovidosAllPages.promotorAppPages.to,
 		element: <Promotor />,
+	},
+
+	
+	{
+		path: promovidosAllPages.enlaceAppPages.to,
+		element: <EnlacePage />,
 	},
 
 	/**

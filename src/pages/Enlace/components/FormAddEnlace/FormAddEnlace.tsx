@@ -15,45 +15,34 @@ import { FetchService } from '../../../../services/config/FetchService';
 import PromotorService from '../../../../services/promotor.service';
 import { getAge } from '../../../../components/utils/functions';
 import SelectReact from '../../../../components/form/SelectReact';
+import EnlaceService from '../../../../services/enlace.service';
 
 type TValues = {
 	nombres: string;
-	apellidos: string;
-	fechaNacimiento: string;
-	genero: string;
+	telefono: string;
+	mail: string;
 	calle: string;
 	colonia: string;
 	cp: string;
-	telefono: string;
-	mail: string;
-	seccion: string;
-	redesSociales: string;
-	idPromotor: undefined;
-	idRol: number;
-	edad: string;
+	problematica: string;
+	idPromotorEnlace: undefined;
 };
 
 const initialValues = {
 	nombres: '',
-	apellidos: '',
-	fechaNacimiento: '',
-	genero: '',
-	calle: '',
 	telefono: '',
 	mail: '',
-	seccion: '',
-	redesSociales: '',
-	idPromotor: undefined,
-	idRol: 4,
+	calle: '',
 	colonia: '',
 	cp: '',
-	edad: ''
+	problematica: '',
+	idPromotorEnlace: undefined,
 }
 
 
-const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promotores, valuesForm, isEdit, isView }) => {
+const FormAddEnlace = ({ handleCloseModal, handleCloseModalWithReload, promotores, valuesForm, isEdit, isView }) => {
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
-	const _promovidosService: PromovidosService = new PromovidosService(new FetchService(token));
+	const _enlaceService: EnlaceService = new EnlaceService(new FetchService(token));
 	const [currentSelectPromtor, setCurrentSelectPromotor] = useState<any>();
 	const [loading, setLoading] = useState<boolean>(false);
 	const formik = useFormik({
@@ -77,19 +66,15 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 				errors.mail = 'la estructrura del email es incorrecta';
 			}
 
-			if (values.fechaNacimiento) {
-				values.edad = getAge(values.fechaNacimiento).toString()
-			}
-
 			return errors;
 		},
 		onSubmit: async () => {
 			setLoading(true)
 			try {
 				if (isEdit) {
-					await _promovidosService.actualizarPromovido(formik.values);
+					await _enlaceService.actualizarEnlace(formik.values);
 				} else {
-					await _promovidosService.crearPromovido(formik.values);
+					await _enlaceService.crearEnlace(formik.values);
 				}
 				setLoading(false)
 				handleCloseModalWithReload();
@@ -102,24 +87,25 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 
 	useEffect(() => {
 		setCurrentIdPromotor()
-		formik.setValues({ ...valuesForm, idRol: 4 })
-
+		formik.setValues({ ...valuesForm })
 	}, [])
 
 	const onChangeSelectPromotor = (data) => {
-		formik.setFieldValue(`idPromotor`, data.value)
+		formik.setFieldValue(`idPromotorEnlace`, data.value)
 	}
 
 	const setCurrentIdPromotor = () => {
-		const valuePromotor = promotores.find((item) => item.idPromotor == valuesForm.idPromotor);
+		const valuePromotor = promotores.find((item) => item.idPromotor == valuesForm.idPromotorEnalce);
 		if (valuePromotor) {
 			setCurrentSelectPromotor({ value: valuePromotor.idPromotor, label: valuePromotor.Usuario.nombres })
 		}
-
 	}
+
+	console.log(valuesForm)
 
 	return (
 		<form className='flex flex-col gap-4' noValidate>
+			{/* Nombres */}
 			<div>
 				<Label htmlFor='nombres'>Nombres</Label>
 				<Validation
@@ -142,28 +128,32 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 					</FieldWrap>
 				</Validation>
 			</div>
+
+			{/* Telefono */}
 			<div>
-				<Label htmlFor='apellidos'>Apellidos</Label>
+				<Label htmlFor='telefono'>Telefono</Label>
 				<Validation
 					isValid={formik.isValid}
-					isTouched={formik.touched.apellidos}
-					invalidFeedback={formik.errors.apellidos}
+					isTouched={formik.touched.telefono}
+					invalidFeedback={formik.errors.telefono}
 					validFeedback='Información correcta'>
 					<FieldWrap
-						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
+						firstSuffix={<Icon icon='HeroDevicePhoneMobile' className='mx-2' size='text-xl' />}>
 						<Input
-							id='apellidos'
+							id='telefono'
 							disabled={isView}
-							autoComplete='apellidos'
-							name='apellidos'
-							placeholder='Apellidos'
-							value={formik.values.apellidos}
+							autoComplete='telefono'
+							name='telefono'
+							placeholder='Telefono'
+							value={formik.values.telefono}
 							onChange={formik.handleChange}
 							onBlur={formik.handleBlur}
 						/>
 					</FieldWrap>
 				</Validation>
 			</div>
+
+			{/* Mail */}
 			<div>
 				<Label htmlFor='mail'>Email</Label>
 				<Validation
@@ -209,7 +199,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 					</FieldWrap>
 				</Validation>
 			</div>
-			
+
 			{/* Codigo postal y Colonia */}
 			<div className="flex gap-10">
 				<div className='flex-none'>
@@ -257,152 +247,42 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 					</Validation>
 				</div>
 			</div>
-			<div>
-				<Label htmlFor='telefono'>Celular</Label>
-				<Validation
-					isValid={formik.isValid}
-					isTouched={formik.touched.telefono}
-					invalidFeedback={formik.errors.telefono}
-					validFeedback='Información correcta'>
-					<FieldWrap
-						firstSuffix={<Icon icon='HeroDevicePhoneMobile' className='mx-2' size='text-xl' />}>
-						<Input
-							id='telefono'
-							disabled={isView}
-							autoComplete='telefono'
-							name='telefono'
-							placeholder='Telefono'
-							value={formik.values.telefono}
-							onChange={formik.handleChange}
-							onBlur={formik.handleBlur}
-						/>
-					</FieldWrap>
-				</Validation>
-			</div>
-			<div className='flex flex-row gap-3'>
-				<div className='w-[90%]'>
-					<Label htmlFor='fechaNacimiento'>Fecha de nacimiento</Label>
-					<Validation
-						isValid={formik.isValid}
-						isTouched={formik.touched.fechaNacimiento}
-						invalidFeedback={formik.errors.fechaNacimiento}
-						validFeedback='Información correcta'>
-						<FieldWrap
-							firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
-							<Input
-								id='fechaNacimiento'
-								disabled={isView}
-								autoComplete='fechaNacimiento'
-								name='fechaNacimiento'
-								placeholder='Fecha de nacimiento'
-								value={formik.values.fechaNacimiento}
-								onChange={formik.handleChange}
-								onBlur={formik.handleBlur}
-								type='date'
-							/>
-						</FieldWrap>
-					</Validation>
 
+
+
+			<div>
+				<Label htmlFor='problematica'>Problematica</Label>
+				<Textarea
+					id='problematica'
+					name='problematica'
+					onChange={formik.handleChange}
+					value={formik.values.problematica}
+					placeholder='Problematica ...'
+					rows={8}
+					maxLength={500}
+				/>
+				<div className='mt-2 flex items-center gap-4 text-xs text-zinc-500'>
+					<div className='flex-shrink-0'>
+						Max length:{' '}
+						<span className='font-mono'>
+							{formik.values.problematica?.length ?? 0}
+							/500
+						</span>
+					</div>
+					<Progress
+						className='!h-2'
+						value={formik.values.problematica?.length}
+						max={500}
+					/>
 				</div>
-				<div>
-					<Label htmlFor='edad'>Edad</Label>
-					<Validation
-						isValid={formik.isValid}
-						isTouched={formik.touched.edad}
-						invalidFeedback={formik.errors.edad}
-						validFeedback='Información correcta'>
-						<FieldWrap
-							firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
-							<Input
-								id='edad'
-								disabled={isView}
-								autoComplete='edad'
-								name='edad'
-								placeholder='Edad'
-								value={formik.values.edad}
-								onChange={formik.handleChange}
-								onBlur={formik.handleBlur}
-							/>
-						</FieldWrap>
-					</Validation>
-				</div>
 			</div>
+
 			<div>
-				<Label htmlFor='genero'>Genero</Label>
+				<Label htmlFor='idPromotorEnlace'>Promotor</Label>
 				<Validation
 					isValid={formik.isValid}
-					isTouched={formik.touched.genero}
-					invalidFeedback={formik.errors.genero}
-					validFeedback='Información correcta'>
-					<FieldWrap
-						firstSuffix={<Icon icon='HeroUserCircle' className='mx-2' size='text-xl' />}
-						lastSuffix={
-							<Icon className='mx-2 cursor-pointer' icon='HeroChevronDown' />
-						}>
-						<Select
-							id='genero'
-							disabled={isView}
-							name='genero'
-							placeholder='Selecciona un genero'
-							value={formik.values.genero}
-							onChange={formik.handleChange}
-							onBlur={formik.handleBlur}>
-							<option value='masculino'>Masculino</option>
-							<option value='femenino'>Femenino</option>
-						</Select>
-					</FieldWrap>
-				</Validation>
-			</div>
-			<div>
-				<Label htmlFor='seccion'>Seccion</Label>
-				<Validation
-					isValid={formik.isValid}
-					isTouched={formik.touched.seccion}
-					invalidFeedback={formik.errors.seccion}
-					validFeedback='Información correcta'>
-					<FieldWrap
-						firstSuffix={<Icon icon='HeroBolt' className='mx-2' size='text-xl' />}>
-						<Input
-							id='seccion'
-							disabled={isView}
-							autoComplete='seccion'
-							name='seccion'
-							placeholder='Seccion'
-							value={formik.values.seccion}
-							onChange={formik.handleChange}
-							onBlur={formik.handleBlur}
-						/>
-					</FieldWrap>
-				</Validation>
-			</div>
-			<div>
-				<Label htmlFor='redesSociales'>Redes Sociales</Label>
-				<Validation
-					isValid={formik.isValid}
-					isTouched={formik.touched.redesSociales}
-					invalidFeedback={formik.errors.redesSociales}
-					validFeedback='Información correcta'>
-					<FieldWrap
-						firstSuffix={<Icon icon='HeroHandThumbUp' className='mx-2' size='text-xl' />}>
-						<Input
-							id='redesSociales'
-							disabled={isView}
-							autoComplete='redesSociales'
-							name='redesSociales'
-							placeholder='Redes sociales'
-							value={formik.values.redesSociales}
-							onChange={formik.handleChange}
-							onBlur={formik.handleBlur}
-						/>
-					</FieldWrap>
-				</Validation>
-			</div>
-			<div>
-				<Label htmlFor='idPromotor'>Promotor</Label>
-				<Validation
-					isValid={formik.isValid}
-					isTouched={formik.touched.idPromotor && Boolean(formik.touched.idPromotor)}
-					invalidFeedback={formik.errors.idPromotor && formik.errors.idPromotor.toString()}
+					isTouched={formik.touched.idPromotorEnlace && Boolean(formik.touched.idPromotorEnlace)}
+					invalidFeedback={formik.errors.idPromotorEnlace && formik.errors.idPromotorEnlace.toString()}
 					validFeedback='Información correcta'>
 					<FieldWrap
 						firstSuffix={<Icon icon='HeroUserCircle' className='mx-2' size='text-xl' />}
@@ -410,9 +290,9 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 						<div className='col-span-12 lg:col-span-4'>
 							<SelectReact
 								options={promotores.map((item) => { return { value: item.idPromotor, label: item.Usuario.nombres } })}
-								id='idPromotor'
+								id='idPromotorEnlace'
 								isDisabled={isView}
-								name='idPromotor'
+								name='idPromotorEnlace'
 								value={currentSelectPromtor}
 								onChange={(item) => onChangeSelectPromotor(item)}
 							/>
@@ -445,4 +325,4 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 		</form>
 	);
 };
-export default FormAddPromovido;
+export default FormAddEnlace;

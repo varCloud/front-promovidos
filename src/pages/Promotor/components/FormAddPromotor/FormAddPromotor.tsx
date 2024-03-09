@@ -24,8 +24,10 @@ type TValues = {
 	telefono: string;
 	seccion: string;
 	genero: string;
-	direccion: string;
-	idRol:number;
+	calle: string;
+	colonia: string;
+	cp: string;
+	idRol: number;
 	fechaNacimiento: string;
 	edad: string;
 	redesSociales: string;
@@ -40,19 +42,21 @@ const initialValues = {
 	seccion: '',
 	genero: '',
 	fechaNacimiento: '',
-	edad:'',
+	edad: '',
 	apellidos: '',
-	direccion: '',
+	calle: '',
 	redesSociales: '',
-	idRol:3
+	colonia: '',
+	cp: '',
+	idRol: 3
 }
 
-const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload , valuesForm, isEdit, isView }: any) => {
+const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload, valuesForm, isEdit, isView }: any) => {
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
 	const [loading, setLoading] = useState<boolean>(false);
 	const formik = useFormik({
-		initialValues: { ...initialValues  },
+		initialValues: { ...initialValues },
 		validate: (values: TValues) => {
 			const errors: Partial<TValues> = {};
 
@@ -71,7 +75,7 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload , values
 			) {
 				errors.mail = 'la estructrura del email es incorrecta';
 			}
-			if(values.fechaNacimiento){
+			if (values.fechaNacimiento) {
 				values.edad = getAge(values.fechaNacimiento).toString()
 			}
 
@@ -79,8 +83,8 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload , values
 		},
 		onSubmit: async () => {
 			setLoading(true)
-			if(isEdit){
-				await _promotorService.actualizarPromotor(formik.values);	
+			if (isEdit) {
+				await _promotorService.actualizarPromotor(formik.values);
 			} else {
 				await _promotorService.crearPromotor(formik.values);
 			}
@@ -89,12 +93,12 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload , values
 		},
 	});
 
-	useEffect(()=>{
-		const values  = {...valuesForm , ...valuesForm.Usuario}
+	useEffect(() => {
+		const values = { ...valuesForm, ...valuesForm.Usuario }
 		delete values.Usuario
-		formik.setValues({...values , idRol:3})
-		
-	},[])
+		formik.setValues({ ...values, idRol: 3 })
+
+	}, [])
 	console.log(isView)
 
 	return (
@@ -165,28 +169,80 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload , values
 					</FieldWrap>
 				</Validation>
 			</div>
+			
+			{/*  Calle */}
 			<div>
-				<Label htmlFor='direccion'>Direccion</Label>
+				<Label htmlFor='direccion'>Calle</Label>
 				<Validation
 					isValid={formik.isValid}
-					isTouched={formik.touched.direccion}
-					invalidFeedback={formik.errors.direccion}
+					isTouched={formik.touched.calle}
+					invalidFeedback={formik.errors.calle}
 					validFeedback='Información correcta'>
 					<FieldWrap
 						firstSuffix={<Icon icon='HeroHome' className='mx-2' size='text-xl' />}>
 						<Input
-							id='direccion'
+							id='calle'
 							disabled={isView}
-							autoComplete='direccion'
-							name='direccion'
-							placeholder='Direccion'
-							value={formik.values.direccion}
+							autoComplete='calle'
+							name='calle'
+							placeholder='Ejem: Acceso condominal 432 int 49'
+							value={formik.values.calle}
 							onChange={formik.handleChange}
 							onBlur={formik.handleBlur}
 						/>
 					</FieldWrap>
 				</Validation>
 			</div>
+			
+			{/* Codigo postal y Colonia */}
+			<div className="flex gap-10">
+				<div className='flex-none'>
+					<Label htmlFor='direccion'>Codigo postal</Label>
+					<Validation
+						isValid={formik.isValid}
+						isTouched={formik.touched.cp}
+						invalidFeedback={formik.errors.cp}
+						validFeedback='Información correcta'>
+						<FieldWrap
+							firstSuffix={<Icon icon='HeroHome' className='mx-2' size='text-xl' />}>
+							<Input
+								id='cp'
+								disabled={isView}
+								autoComplete='cp'
+								name='cp'
+								placeholder='58000'
+								value={formik.values.cp}
+								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+							/>
+						</FieldWrap>
+					</Validation>
+				</div>
+				<div className='flex-initial w-full'>
+					<Label htmlFor='direccion'>Colonia</Label>
+					<Validation
+						isValid={formik.isValid}
+						isTouched={formik.touched.colonia}
+						invalidFeedback={formik.errors.colonia}
+						validFeedback='Información correcta'>
+						<FieldWrap
+							firstSuffix={<Icon icon='HeroHome' className='mx-2' size='text-xl' />}>
+							<Input
+								id='colonia'
+								disabled={isView}
+								autoComplete='colonia'
+								name='colonia'
+								placeholder='Fraccionamiento terrazas quinceo'
+								value={formik.values.colonia}
+								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+							/>
+						</FieldWrap>
+					</Validation>
+				</div>
+			</div>
+
+			{/* Telefono */}
 			<div>
 				<Label htmlFor='telefono'>Telefono</Label>
 				<Validation
@@ -213,50 +269,50 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload , values
 			</div>
 			<div className='flex flex-row gap-3'>
 				<div className='w-[90%]'>
-				<Label htmlFor='fechaNacimiento'>Fecha de nacimiento</Label>
-				<Validation
-					isValid={formik.isValid}
-					isTouched={formik.touched.fechaNacimiento}
-					invalidFeedback={formik.errors.fechaNacimiento}
-					validFeedback='Información correcta'>
-					<FieldWrap
-						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
-						<Input
-							id='fechaNacimiento'
-							disabled={isView}
-							autoComplete='fechaNacimiento'
-							name='fechaNacimiento'
-							placeholder='Fecha de nacimiento'
-							value={formik.values.fechaNacimiento}
-							onChange={formik.handleChange}
-							onBlur={formik.handleBlur}
-							type='date'
-						/>
-					</FieldWrap>
-				</Validation>
+					<Label htmlFor='fechaNacimiento'>Fecha de nacimiento</Label>
+					<Validation
+						isValid={formik.isValid}
+						isTouched={formik.touched.fechaNacimiento}
+						invalidFeedback={formik.errors.fechaNacimiento}
+						validFeedback='Información correcta'>
+						<FieldWrap
+							firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
+							<Input
+								id='fechaNacimiento'
+								disabled={isView}
+								autoComplete='fechaNacimiento'
+								name='fechaNacimiento'
+								placeholder='Fecha de nacimiento'
+								value={formik.values.fechaNacimiento}
+								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+								type='date'
+							/>
+						</FieldWrap>
+					</Validation>
 
 				</div>
 				<div>
-				<Label htmlFor='edad'>Edad</Label>
-				<Validation
-					isValid={formik.isValid}
-					isTouched={formik.touched.edad}
-					invalidFeedback={formik.errors.edad}
-					validFeedback='Información correcta'>
-					<FieldWrap
-						firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
-						<Input
-							id='edad'
-							autoComplete='edad'
-							name='edad'
-							placeholder='Edad'
-							value={formik.values.edad}
-							onChange={formik.handleChange}
-							onBlur={formik.handleBlur}
-							disabled
-						/>
-					</FieldWrap>
-				</Validation>
+					<Label htmlFor='edad'>Edad</Label>
+					<Validation
+						isValid={formik.isValid}
+						isTouched={formik.touched.edad}
+						invalidFeedback={formik.errors.edad}
+						validFeedback='Información correcta'>
+						<FieldWrap
+							firstSuffix={<Icon icon='HeroUser' className='mx-2' size='text-xl' />}>
+							<Input
+								id='edad'
+								autoComplete='edad'
+								name='edad'
+								placeholder='Edad'
+								value={formik.values.edad}
+								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+								disabled
+							/>
+						</FieldWrap>
+					</Validation>
 				</div>
 			</div>
 			<div>
@@ -315,7 +371,7 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload , values
 					invalidFeedback={formik.errors.redesSociales}
 					validFeedback='Información correcta'>
 					<FieldWrap
-						firstSuffix={<Icon icon='HeroHandThumbUp' className='mx-2' size='text-xl' />}>
+						firstSuffix={<Icon icon='HeroBolt' className='mx-2' size='text-xl' />}>
 						<Input
 							id='redesSociales'
 							disabled={isView}
@@ -351,7 +407,7 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload , values
 					</FieldWrap>
 				</Validation>
 			</div>
-			<div  hidden>
+			<div hidden>
 				<Label htmlFor='contrasena'>Constraseña</Label>
 				<Validation
 					isValid={formik.isValid}

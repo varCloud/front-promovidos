@@ -25,15 +25,19 @@ const headerRoutes: RouteProps[] = [
 	},
 	{
 		path: promovidosAllPages.promovidoAppPages.to,
-		element: <PromovidosHeaderTemplate />
+		element: <PromovidosHeaderTemplate title={'Promovidos'} />
 	},
 	{
 		path: promovidosAllPages.promotorAppPages.to,
-		element: <PromovidosHeaderTemplate />
+		element: <PromovidosHeaderTemplate title={'Promotores'}/>
 	},
 	{
 		path: promovidosAllPages.dashboardPromodivosAppPages.to,
-		element: <PromovidosHeaderTemplate />
+		element: <PromovidosHeaderTemplate title={'Dashboard'}/>
+	},
+	{
+		path: promovidosAllPages.enlaceAppPages.to,
+		element: <PromovidosHeaderTemplate title={'Enlaces'}/>
 	},
 	{
 		path: '',

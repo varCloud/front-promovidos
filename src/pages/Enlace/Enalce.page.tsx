@@ -37,7 +37,7 @@ import Modal, {
 } from '../../components/ui/Modal';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import FormAddPromovido from './components/FormAddPromovido/FormAddPromovido';
+import FormAddEnlace from './components/FormAddEnlace/FormAddEnlace';
 import PromovidosService from '../../services/promovidos.service';
 import { FetchService } from '../../services/config/FetchService';
 import PromotorService from '../../services/promotor.service';
@@ -46,6 +46,7 @@ import Breadcrumb from '../../components/layouts/Breadcrumb/Breadcrumb';
 import DefaultHeaderRightCommon from '../../templates/layouts/Headers/_common/DefaultHeaderRight.common';
 import { useAuth } from '../../context/authContext';
 import { formatDateCalendarInput } from '../../components/utils/functions';
+import EnlaceService from '../../services/enlace.service';
 
 
 const MySwal = withReactContent(Swal)
@@ -56,69 +57,47 @@ const editLinkPath = `../${appPages.crmAppPages.subPages.customerPage.subPages.e
 const sinRegistro = 'N/A';
 const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal) => {
 	return [
-		columnHelper.accessor('image', {
-			cell: (info) => (
-				<Link to={`${editLinkPath}${info.row.original.id}`}>
-					<Avatar
-						src={info.getValue()?.thumb}
-						name={`${info.row.original.nombres} ${info.row.original.apellidos}`}
-						rounded='rounded'
-					/>
-				</Link>
-			),
-			header: 'Perfil',
-			footer: 'Perfil',
-			enableGlobalFilter: false,
-			enableSorting: false,
-		}),
 		columnHelper.accessor('nombres', {
 			cell: (info) => (
-				<Link to={`${editLinkPath}${info.row.original.id}`}>
 					<div>
 						{info.row.original.nombres}&nbsp;{info.row.original.apellidos}
 					</div>
-				</Link>
 			),
 			header: 'Nombre',
 			footer: 'Nombre',
 			enableGlobalFilter: true,
 			enableSorting: true,
 		}),
-		columnHelper.accessor('Promotor.Usuario.nombres', {
-			cell: (info) => (
-				<div className=''>
-					<span>{info.getValue()  ?? sinRegistro }</span>
-				</div>
-			),
-			header: 'Promotor',
-			footer: 'Promotor',
-			enableGlobalFilter: true,
-			enableSorting: true,
-		}),
 		columnHelper.accessor('calle', {
 			cell: (info) => (
-				<div>{info.row.original.calle ?? sinRegistro}</div>
+				<div>{info.getValue() ?? sinRegistro}</div>
 			),
 			header: 'Calle',
 			footer: 'Calle',
 		}),
-
 		columnHelper.accessor('colonia', {
 			cell: (info) => (
-				<div>{info.getValue()} {info.row.original.cp ? `C.P. ${info.row.original.cp}`:  sinRegistro}</div>
+				<div>{info.getValue() ?? sinRegistro}</div>
 			),
 			header: 'Colonia',
 			footer: 'Colonia',
 		}),
+		columnHelper.accessor('cp', {
+			cell: (info) => (
+				<div>{info.getValue() ?? sinRegistro}</div>
+			),
+			header: 'Codigo postal',
+			footer: 'Codigo postal',
+		}),
 
-		columnHelper.accessor('telefono', {
+		columnHelper.accessor('problematica', {
 			cell: (info) => (
 				<div className='flex flex-row justify-center gap-2 '>
 					<span>{info.getValue()  ?? sinRegistro }</span>
 				</div>
 			),
-			header: 'Telefono',
-			footer: 'Telefono',
+			header: 'Problematica',
+			footer: 'Problematica',
 		}),
 
 		columnHelper.accessor('mail', {
@@ -130,15 +109,27 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 			header: 'Email',
 			footer: 'Email',
 		}),
-
-		columnHelper.accessor('redesSociales', {
+		columnHelper.accessor('telefono', {
 			cell: (info) => (
-				<div className='flex flex-row justify-center gap-2 '>
-					<span>{info.getValue() ?? sinRegistro}</span>
+				<div className=''>
+					<span>{info.getValue()  ?? sinRegistro }</span>
 				</div>
 			),
-			header: 'Redes Sociales',
-			footer: 'Redes Sociales',
+			header: 'Telefono',
+			footer: 'Telefono',
+			enableGlobalFilter: true,
+			enableSorting: true,
+		}),
+		columnHelper.accessor('Promotor.Usuario.nombres', {
+			cell: (info) => (
+				<div className=''>
+					<span>{info.getValue()  ?? sinRegistro }</span>
+				</div>
+			),
+			header: 'Enlace',
+			footer: 'Enlace',
+			enableGlobalFilter: true,
+			enableSorting: true,
 		}),
 
 		columnHelper.display({
@@ -161,18 +152,18 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 	];
 }
 
-const Promovido = () => {
+const Enlace = () => {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [globalFilter, setGlobalFilter] = useState<string>('');
 	const [exModal1, setExModal1] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(true);
-	const [promovidos, setPromovidos] = useState<any>([]);
+	const [enlaces, setEnlaces] = useState<any>([]);
 	const [promotores, setPromotores] = useState<any>([]);
 	const [currentValue, setCurrentValue] = useState<any>();
 	const [isEdit, setIsEdit] = useState<any>();
 	const [isView, setIsView] = useState<any>();
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
-	const _promovidosService: PromovidosService = new PromovidosService(new FetchService(token));
+	const _enlaceService: EnlaceService = new EnlaceService(new FetchService(token));
 	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
 		[]
@@ -186,8 +177,8 @@ const Promovido = () => {
 
 	async function obtenerPromovidos() {
 		setLoading(true);
-		const _promovidos = await _promovidosService.obtenerPromovidos();
-		setPromovidos([..._promovidos]);
+		const _enlaces = await _enlaceService.obtenerEnlaces();
+		setEnlaces([..._enlaces]);
 		setLoading(false);
 	}
 
@@ -221,14 +212,14 @@ const Promovido = () => {
 
 	const handleOpenDeleteAlert = (data) =>{
 		MySwal.fire({
-			title: `<span class="text-lg">Estas seguro que deseas eliminar el promovido: <span> <br/> <span class="text-xl text-red-700">${data.nombres} ${data.apellidos ?? ''}<span>`,
+			title: `<span class="text-lg">Estas seguro que deseas eliminar el enlace: <span> <br/> <span class="text-xl text-red-700">${data.nombres}<span>`,
 			icon: "question",
 			showCancelButton: true,
 			confirmButtonText: "Eliminar",
 			confirmButtonColor:"#991b1b"
 		  }).then(async (result) => {
 			if(result.isConfirmed){
-				 await _promovidosService.eliminarPromovido(data.idPromovido)
+				 await _enlaceService.eliminarEnlace(data.idEnlace)
 				 await obtenerPromovidos()
 			}
 		  })
@@ -245,7 +236,7 @@ const Promovido = () => {
 	}
 
 	const table = useReactTable({
-		data: promovidos,
+		data: enlaces,
 		columns:columns(handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal),
 		state: {
 			sorting,
@@ -317,7 +308,7 @@ const Promovido = () => {
 					<Card className='h-full'>
 						<CardHeader>
 							<CardHeaderChild>
-								<CardTitle>Promovidos</CardTitle>
+								<CardTitle>Enlaces</CardTitle>
 								<Badge
 									variant='outline'
 									className='border-transparent px-4'
@@ -339,7 +330,7 @@ const Promovido = () => {
 				<Modal isOpen={exModal1} setIsOpen={setExModal1} isStaticBackdrop>
 					<ModalHeader>Agregar Promovido</ModalHeader>
 					<ModalBody>
-						<FormAddPromovido
+						<FormAddEnlace
 							handleCloseModal={handleCloseModal}
 							handleCloseModalWithReload={handleCloseModalWithReload}
 							promotores={promotores}
@@ -354,4 +345,4 @@ const Promovido = () => {
 	);
 };
 
-export default Promovido;
+export default Enlace;

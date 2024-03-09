@@ -30,6 +30,14 @@ export const promovidosAllPages  = {
 		icon: 'HeroUser',
 		subPages: {}
 	},
+
+	enlaceAppPages: {
+		id: 'enlace',
+		to: '/enlace',
+		text: 'Enlaces',
+		icon: 'HeroArrowsPointingIn',
+		subPages: {}
+	},
 }
 
 export const examplePages = {

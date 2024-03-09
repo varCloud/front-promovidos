@@ -2,11 +2,11 @@ import React from 'react';
 import Header, { HeaderLeft, HeaderRight } from '../../../components/layouts/Header/Header';
 import SettingsPartial from './_partial/Settings.partial';
 
-const PromovidosHeaderTemplate = () => {
+const PromovidosHeaderTemplate = ({title}) => {
 	return (
 		<Header>
 			<HeaderLeft>
-				<p></p>
+				<h1>{title}</h1>
 			</HeaderLeft>
 			<HeaderRight>
             <SettingsPartial />
