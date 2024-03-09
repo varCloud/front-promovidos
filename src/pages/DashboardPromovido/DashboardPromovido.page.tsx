@@ -16,6 +16,7 @@ import CardIndicador from './components/CardIndicador';
 import { FetchService } from '../../services/config/FetchService';
 import DashboardService from '../../services/dashboard.service';
 import GraficoGenero from './components/GraficoGenero';
+import GraficoEdades from './components/GraficoEdades';
 
 function DashboardPromovido() {
     const { token } = JSON.parse(window.localStorage.getItem(`user`));
@@ -23,6 +24,7 @@ function DashboardPromovido() {
     const [loading, setLoading] = useState<boolean>(true);
     const [indicadores, setIndicadores] = useState<any>([]);
     const [seriesGenero, setSeriesGenero] = useState<any>();
+    const [seriesEdades, setSeriesEdades] = useState<any>();
 
     async function obtenerIndicadores() {
         setLoading(true);
@@ -38,9 +40,17 @@ function DashboardPromovido() {
         setLoading(false);
     }
 
+    async function obtenerDataGraficoEdades() {
+        setLoading(true);
+        const _seriesEdades = await _dashboardService.obtenerDataGraficoEdades();
+        setSeriesEdades(_seriesEdades);
+        setLoading(false);
+    }
+
     useEffect(() => {
         obtenerIndicadores();
         obtenerDataGraficoGenero();
+        obtenerDataGraficoEdades();
         return () => { };
     }, []);
 
@@ -83,6 +93,14 @@ function DashboardPromovido() {
                         <GraficoGenero series={seriesGenero} /> 
                     </div>
                      : null
+                }
+
+                {
+                     seriesEdades ?
+                     <div className='mt-16 '>
+                         <GraficoEdades series={seriesEdades} /> 
+                     </div>
+                      : null
                 }
                 </div>
 

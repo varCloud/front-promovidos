@@ -23,6 +23,15 @@ class DashboardService {
 			throw error;
 		}
 	}
+
+	async obtenerDataGraficoEdades() {
+		try {
+			const uri = `${this.base_uri}dashboard/obtenerDataGraficoEdades`;
+			return await this._httpClient.fetchData(uri);
+		} catch (error) {
+			throw error;
+		}
+	}
 }
 
 export default DashboardService;

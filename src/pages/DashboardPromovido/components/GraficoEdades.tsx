@@ -8,7 +8,7 @@ const buildOptinsChart = (series) => {
             type: 'pie'
         },
         title: {
-            text: 'Promovidos por Genero',
+            text: 'Promovidos por Edades',
 
         },
         tooltip: {
@@ -52,7 +52,7 @@ const buildOptinsChart = (series) => {
     }
 }
 
-const GraficoGenero = ({ series }) => {
+const GraficoEdades = ({ series }) => {
     return (
 
             <HighchartsReact
@@ -63,4 +63,4 @@ const GraficoGenero = ({ series }) => {
     )
 }
 
-export default GraficoGenero
+export default GraficoEdades

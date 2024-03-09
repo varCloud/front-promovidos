@@ -8,7 +8,7 @@ import projectsDb from '../mocks/db/projects.db';
 export const promovidosAllPages  = {
 	dashboardPromodivosAppPages: {
 		id: 'dashboardPromodivos',
-		to: '/dashboardPromodivos',
+		to: '/',
 		text: 'Dashboard',
 		icon: 'HeroRocketLaunch',
 		subPages: {}
@@ -112,7 +112,7 @@ export const appPages = {
 		subPages: {
 			salesDashboardPage: {
 				id: 'salesDashboardPage',
-				to: '/',
+				to: '/dash',
 				text: 'Sales Dashboard',
 				icon: 'HeroRectangleGroup',
 			},

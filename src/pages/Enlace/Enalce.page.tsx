@@ -82,33 +82,37 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 			header: 'Colonia',
 			footer: 'Colonia',
 		}),
-		columnHelper.accessor('cp', {
-			cell: (info) => (
-				<div>{info.getValue() ?? sinRegistro}</div>
-			),
-			header: 'Codigo postal',
-			footer: 'Codigo postal',
-		}),
+
+		// columnHelper.accessor('cp', {
+		// 	cell: (info) => (```
+		// 		<div>{info.getValue() ?? sinRegistro}</div>
+		// 	),
+		// 	header: 'Codigo postal',
+		// 	footer: 'Codigo postal',
+		// }),
 
 		columnHelper.accessor('problematica', {
 			cell: (info) => (
-				<div className='flex flex-row justify-center gap-2 '>
+				<div className="w-[100px]">
 					<span>{info.getValue()  ?? sinRegistro }</span>
-				</div>
+					</div>
 			),
 			header: 'Problematica',
 			footer: 'Problematica',
+			enableResizing: false,
+			size: 500
 		}),
 
-		columnHelper.accessor('mail', {
-			cell: (info) => (
-				<div className='flex flex-row justify-center gap-2 '>
-					<span>{info.getValue() ?? sinRegistro }</span>
-				</div>
-			),
-			header: 'Email',
-			footer: 'Email',
-		}),
+		// columnHelper.accessor('mail', {
+		// 	cell: (info) => (
+		// 		<div className='flex flex-row justify-center gap-2 '>
+		// 			<span>{info.getValue() ?? sinRegistro }</span>
+		// 		</div>
+		// 	),
+		// 	header: 'Email',
+		// 	footer: 'Email',
+		// }),
+
 		columnHelper.accessor('telefono', {
 			cell: (info) => (
 				<div className=''>
@@ -120,6 +124,7 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 			enableGlobalFilter: true,
 			enableSorting: true,
 		}),
+	
 		columnHelper.accessor('Promotor.Usuario.nombres', {
 			cell: (info) => (
 				<div className=''>
@@ -252,8 +257,11 @@ const Enlace = () => {
 		initialState: {
 			pagination: { pageSize: 20 },
 		},
-
-		debugTable: true,
+		defaultColumn: {
+			minSize: 0,
+			size: Number.MAX_SAFE_INTEGER,
+			maxSize: Number.MAX_SAFE_INTEGER,
+		}
 	});
 	
 
