@@ -336,7 +336,7 @@ const Enlace = () => {
 					</Card>
 				</Container>
 				<Modal isOpen={exModal1} setIsOpen={setExModal1} isStaticBackdrop>
-					<ModalHeader>Agregar Promovido</ModalHeader>
+					<ModalHeader>Agregar Enlace</ModalHeader>
 					<ModalBody>
 						<FormAddEnlace
 							handleCloseModal={handleCloseModal}

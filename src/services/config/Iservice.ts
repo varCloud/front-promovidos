@@ -1,4 +1,5 @@
 export interface IService {
+	fetchFile(url: string): Promise<any>;
 	fetchData(url: string): Promise<any>;
 	postData(url: string, data: any): Promise<any>;
 	patchData(url: string, data: any): Promise<any>;

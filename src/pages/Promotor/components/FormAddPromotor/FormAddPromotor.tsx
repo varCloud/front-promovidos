@@ -64,8 +64,8 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload, valuesF
 				errors.nombres = 'Campo Requerido';
 			} else if (values.nombres.length < 3) {
 				errors.nombres = 'Must be 3 letters or longer';
-			} else if (values.nombres.length > 20) {
-				errors.nombres = 'Must be 20 letters or shorter';
+			} else if (values.nombres.length > 100) {
+				errors.nombres = 'Must be 100 letters or shorter';
 			}
 
 			if (

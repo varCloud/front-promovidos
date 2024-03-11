@@ -22,6 +22,21 @@ export class FetchService implements IService {
 		}
 	}
 
+	async fetchFile(url: string): Promise<any> {
+		try {
+			const response = await fetch(url,{
+				method:'GET',
+				headers: this.defaultHeader(),
+			});
+			if (!response.ok) {
+				throw new Error('Failed to fetch data');
+			}
+			return await response
+		} catch (error) {
+			throw new Error(`Failed to fetch data: ${error.message}`);
+		}
+	}
+
 	async postData(url: string, data: any): Promise<any> {
 		try {
 			const response = await fetch(url, {

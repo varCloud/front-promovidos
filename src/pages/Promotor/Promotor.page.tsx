@@ -52,13 +52,14 @@ import { useAuth } from '../../context/authContext';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { formatDateCalendarInput } from '../../components/utils/functions';
 import Cobertura from '../Cobertura/Cobertura';
+import ReportesService from '../../services/reportes.service';
 const MySwal = withReactContent(Swal)
 
 const columnHelper = createColumnHelper<any>();
 
 const editLinkPath = `../${appPages.crmAppPages.subPages.customerPage.subPages.editPageLink.to}/`;
 const sinRegistro = 'N/A';
-const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal) => {
+const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal, handleExportarPromovidosPorPromotor) => {
 	return [
 		columnHelper.accessor('image', {
 			cell: (info) => (
@@ -96,7 +97,7 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 
 		columnHelper.accessor('colonia', {
 			cell: (info) => (
-				<div>{info.getValue()} {info.row.original.cp ? `C.P. ${info.row.original.cp}`:  sinRegistro}</div>
+				<div>{info.getValue()} {info.row.original.cp ? `C.P. ${info.row.original.cp}` : sinRegistro}</div>
 			),
 			header: 'Colonia',
 			footer: 'Colonia',
@@ -141,6 +142,10 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 					<Tooltip text='Editar'>
 						<Button icon='HeroPencil' isActive color='violet' onClick={() => { handleOpenEditModal(_info.row.original) }} />
 					</Tooltip>
+					<Tooltip text='Exportar Promovidos'>
+						<Button icon='HeroDocumentText' isActive color='lime' onClick={() => { handleExportarPromovidosPorPromotor(_info.row.original) }} />
+					</Tooltip>
+
 					<Tooltip text='Eliminar'>
 						<Button icon='HeroTrash' isActive color='red' colorIntensity='800' onClick={() => { handleOpenDeleteAlert(_info.row.original) }} />
 					</Tooltip>
@@ -162,7 +167,7 @@ const Promotor = () => {
 	const [isView, setIsView] = useState<any>();
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
-
+	const _reportesService: ReportesService = new ReportesService(new FetchService(token));
 	async function obtenerPromotores() {
 		setLoading(true);
 		const _promotores = await _promotorService.obtenerPromotores();
@@ -187,8 +192,8 @@ const Promotor = () => {
 	}
 
 	const handleOpenViewModal = (data) => {
-		
-		if(data.fechaNacimiento && data.fechaNacimiento.toString().length > 0){
+
+		if (data.fechaNacimiento && data.fechaNacimiento.toString().length > 0) {
 			data.fechaNacimiento = formatDateCalendarInput(data.fechaNacimiento)
 		}
 		setIsView(true)
@@ -197,20 +202,20 @@ const Promotor = () => {
 		setExModal1(true)
 	}
 
-	const handleOpenDeleteAlert = (data) =>{
+	const handleOpenDeleteAlert = (data) => {
 		console.log(data)
 		MySwal.fire({
 			title: `<span class="text-lg">Estas seguro que deseas eliminar el promotor: <span> <br/> <span class="text-xl text-red-700">${data.Usuario.nombres} ${data.Usuario.apellidos ?? ''}<span>`,
 			icon: "question",
 			showCancelButton: true,
 			confirmButtonText: "Eliminar",
-			confirmButtonColor:"#991b1b"
-		  }).then(async (result) => {
-			if(result.isConfirmed){
-				 await _promotorService.eliminarPromotor(data.idPromotor)
-				 await obtenerPromotores()
+			confirmButtonColor: "#991b1b"
+		}).then(async (result) => {
+			if (result.isConfirmed) {
+				await _promotorService.eliminarPromotor(data.idPromotor)
+				await obtenerPromotores()
 			}
-		  })
+		})
 	}
 
 	const handleOpenAddModal = () => {
@@ -222,14 +227,37 @@ const Promotor = () => {
 	const handleCloseModal = () => {
 		setExModal1(false);
 	};
+
 	const handleCloseModalWithReload = async () => {
 		setExModal1(false);
 		await obtenerPromotores();
 	};
 
+	const handleExportarPromovidosPorPromotor = async (data) => {
+		const pdf = await _reportesService.obtenerPromovidosPorPromtorPDF(data.idPromotor)
+		//console.log(await pdf.blob())
+		const file = new Blob([await pdf.blob()], { type: "application/pdf" });
+		//Build a URL from the file
+		const fileURL = URL.createObjectURL(file);
+		//Open the URL on new Window
+		const pdfWindow = window.open();
+		pdfWindow.location.href = fileURL;
+	}
+
+	const handleExportarTodosPromovidos = async () => {
+		const pdf = await _reportesService.obtenerTodosLosPromovidosPDF()
+		
+		const file = new Blob([await pdf.blob()], { type: "application/pdf" });
+		
+		const fileURL = URL.createObjectURL(file);
+		
+		const pdfWindow = window.open();
+		pdfWindow.location.href = fileURL;
+	}
+
 	const table = useReactTable({
 		data: promotores,
-		columns: columns(handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal),
+		columns: columns(handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal, handleExportarPromovidosPorPromotor),
 		state: {
 			sorting,
 			globalFilter,
@@ -253,7 +281,7 @@ const Promotor = () => {
 		return <div>Loading...</div>;
 	}
 
-	
+
 	return (
 		<>
 			<PageWrapper name='Promotor List'>
@@ -286,6 +314,11 @@ const Promotor = () => {
 						<Button variant='solid' icon='HeroPlus' onClick={() => handleOpenAddModal()}>
 							Agregar
 						</Button>
+						<Tooltip text='Generar el reporte de todos tus promotores incluyendo sus promovidos'>
+							<Button variant='solid' color='lime' icon='HeroDocumentText' onClick={() => handleExportarTodosPromovidos()}>
+								Generar Promovidos
+							</Button>
+						</Tooltip>
 					</SubheaderRight>
 				</Subheader>
 				<Container>
