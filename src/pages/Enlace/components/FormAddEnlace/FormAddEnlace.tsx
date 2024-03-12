@@ -95,7 +95,7 @@ const FormAddEnlace = ({ handleCloseModal, handleCloseModalWithReload, promotore
 	}
 
 	const setCurrentIdPromotor = () => {
-		const valuePromotor = promotores.find((item) => item.idPromotor == valuesForm.idPromotorEnalce);
+		const valuePromotor = promotores.find((item) => item.idPromotor == valuesForm.idPromotorEnlace);
 		if (valuePromotor) {
 			setCurrentSelectPromotor({ value: valuePromotor.idPromotor, label: valuePromotor.Usuario.nombres })
 		}

@@ -17,6 +17,7 @@ import { FetchService } from '../../services/config/FetchService';
 import DashboardService from '../../services/dashboard.service';
 import GraficoGenero from './components/GraficoGenero';
 import GraficoEdades from './components/GraficoEdades';
+import Spinner from '../../components/ui/Spinner';
 
 function DashboardPromovido() {
     const { token } = JSON.parse(window.localStorage.getItem(`user`));
@@ -84,7 +85,7 @@ function DashboardPromovido() {
                             })}
                         </div>
                         :
-                        null
+                        <Spinner fullView={false} />
                 }
                 <div className='grid grid-cols-2 gap-4'>
                 {
@@ -92,7 +93,7 @@ function DashboardPromovido() {
                     <div className='mt-16 '>
                         <GraficoGenero series={seriesGenero} /> 
                     </div>
-                     : null
+                     :  <Spinner fullView={false} />
                 }
 
                 {
@@ -100,7 +101,7 @@ function DashboardPromovido() {
                      <div className='mt-16 '>
                          <GraficoEdades series={seriesEdades} /> 
                      </div>
-                      : null
+                      :  <Spinner fullView={false} />
                 }
                 </div>
 

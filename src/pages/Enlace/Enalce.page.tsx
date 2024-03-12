@@ -47,6 +47,7 @@ import DefaultHeaderRightCommon from '../../templates/layouts/Headers/_common/De
 import { useAuth } from '../../context/authContext';
 import { formatDateCalendarInput } from '../../components/utils/functions';
 import EnlaceService from '../../services/enlace.service';
+import Spinner from '../../components/ui/Spinner';
 
 
 const MySwal = withReactContent(Swal)
@@ -275,7 +276,7 @@ const Enlace = () => {
 	};
 
 	if (loading) {
-		return <div>Loading...</div>;
+		return <Spinner fullView={true} />;
 	}
 
 	return (

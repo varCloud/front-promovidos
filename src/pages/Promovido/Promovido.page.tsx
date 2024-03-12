@@ -46,6 +46,7 @@ import Breadcrumb from '../../components/layouts/Breadcrumb/Breadcrumb';
 import DefaultHeaderRightCommon from '../../templates/layouts/Headers/_common/DefaultHeaderRight.common';
 import { useAuth } from '../../context/authContext';
 import { formatDateCalendarInput } from '../../components/utils/functions';
+import Spinner from '../../components/ui/Spinner';
 
 
 const MySwal = withReactContent(Swal)
@@ -276,7 +277,7 @@ const Promovido = () => {
 	};
 
 	if (loading) {
-		return <div>Loading...</div>;
+		return <Spinner fullView={true} />;
 	}
 
 	return (
