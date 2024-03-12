@@ -323,6 +323,11 @@ const Promotor = () => {
 					</SubheaderRight>
 				</Subheader>
 				<Container>
+					<Card>
+						<CardBody>
+							<Cobertura></Cobertura>
+						</CardBody>
+					</Card>
 					<Card className='h-full'>
 						<CardHeader>
 							<CardHeaderChild>

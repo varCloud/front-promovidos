@@ -2,26 +2,64 @@ import React, { useLayoutEffect } from 'react'
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import highchartsMap from "highcharts/modules/map";
-import * as am5 from "@amcharts/amcharts5";
-import * as am5map from "@amcharts/amcharts5/map";
-import * as am5xy from "@amcharts/amcharts5/xy";
-import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
-
 import proj4 from "proj4";
-// import mapDataIE from "@highcharts/map-collection/countries/ie/ie-all.geo.json";
-import geojson from "./morelia.maps.json";
+import geojson from "./seccion_cp_morelia_map.json";
 highchartsMap(Highcharts);
+
+const states = Highcharts.geojson(geojson, 'map');
+
+const secciones = [
+    {
+        seccion: 1051,
+        value: 438
+    },
+    {
+        seccion: 1179,
+        value: 438
+    },
+    {
+        seccion: 1004,
+        value: 438
+    },
+    {
+        seccion: 1049,
+        value: 438
+    },
+    {
+        seccion: 1131,
+        value: 438
+    }
+]
+
+states.forEach((state) => {
+        const seccion = secciones.find((item) => item.seccion == state.properties?.extras?.SECCION)
+        if (seccion) {
+
+        state.states = {
+            hover: { color: "#ff2e00" }
+        }
+        state.color =  "#ff4d26"
+        state.properties.extras.value = seccion.value
+    }
+})
 
 
 const mapOptions = {
-    chart: {
-        map: geojson
-    },
-
     title: {
-        text: 'GeoJSON in Highmaps'
+        text: 'Mapa de morelia por secciones segun el INE',
+        align: 'left'
+    },
+    subtitle: {
+        text: 'Puedes revisar el avance de los promovidos por secciones',
+        align: 'left'
     },
 
+    accessibility: {
+        point: {
+            valueDescriptionFormat: '{xDescription}, {point.value} people per square kilometer.'
+        },
+        description: 'Mapa de Morelia seccionado'
+    },
 
     mapNavigation: {
         enabled: true,
@@ -30,123 +68,53 @@ const mapOptions = {
         }
     },
 
-    colorAxis: {
-        tickPixelInterval: 100
-    },
+    series: [{
+        name: '<b> Secciones y Colonias </b>',
+
+        data: states,
+        color: Highcharts.color(Highcharts.getOptions().colors[4])
+            .setOpacity(0.75)
+            .get(),
+        states: {
+            hover: {
+                color: Highcharts.getOptions().colors[4]
+            }
+        },
+        dataLabels: {
+            enabled: true,
+            format: '{point.properties.extras.SECCION}',
+            style: {
+                width: '80px',
+                textTransform: 'uppercase',
+                fontWeight: 'bold',
+                textOutline: 'none',
+                color: 'black'
+            }
+        },
+        tooltip: {
+            headerFormat: '',
+            pointFormat: `<b>Promovidos: {point.properties.extras.value}</b>
+                          <br/>Seccion:  <b>{point.properties.extras.SECCION} </b>
+                          <br/> Colonia:  <b>{point.properties.extras.NOMBRE DE COLONIA}</b>
+                          <br/> C.P.:  <b>{point.properties.d_cp}</b>
+                          <br/> Clasificación:  <b>{point.properties.extras.CLASIFICACION}</b>
+                          `
+        },
+    },]
 
 }
 
 const Cobertura = () => {
 
-    // useLayoutEffect(() => {
-    //     let root = am5.Root.new("chartdiv");
-
-    //     root.setThemes([
-    //         am5themes_Animated.new(root)
-    //     ]);
-
-    //     root.setThemes([am5themes_Animated.new(root)]);
-
-    //     var chart = root.container.children.push(am5map.MapChart.new(root, {}));
-
-    //     var polygonSeries = chart.series.push(
-    //         am5map.MapPolygonSeries.new(root, {
-    //             geoJSON:geojson,
-    //             exclude: ["AQ"]
-    //         })
-    //     );
-
-    //     var bubbleSeries = chart.series.push(
-    //         am5map.MapPointSeries.new(root, {
-    //             valueField: "value",
-    //             calculateAggregates: true,
-    //             polygonIdField: "id"
-    //         })
-    //     );
-
-    //     var circleTemplate = am5.Template.new({});
-
-    //     bubbleSeries.bullets.push(function (root, series, dataItem) {
-    //         var container = am5.Container.new(root, {});
-
-    //         var circle = container.children.push(
-    //             am5.Circle.new(root, {
-    //                 radius: 20,
-    //                 fillOpacity: 0.7,
-    //                 fill: am5.color(0xff0000),
-    //                 cursorOverStyle: "pointer",
-    //                 tooltipText: `{name}: [bold]{value}[/]`
-    //             }, circleTemplate)
-    //         );
-
-    //         var countryLabel = container.children.push(
-    //             am5.Label.new(root, {
-    //                 text: "{name}",
-    //                 paddingLeft: 5,
-    //                 populateText: true,
-    //                 fontWeight: "bold",
-    //                 fontSize: 13,
-    //                 centerY: am5.p50
-    //             })
-    //         );
-
-    //         circle.on("radius", function (radius) {
-    //             countryLabel.set("x", radius);
-    //         })
-
-    //         return am5.Bullet.new(root, {
-    //             sprite: container,
-    //             dynamic: true
-    //         });
-    //     });
-
-    //     bubbleSeries.bullets.push(function (root, series, dataItem) {
-    //         return am5.Bullet.new(root, {
-    //             sprite: am5.Label.new(root, {
-    //                 text: "{value.formatNumber('#.')}",
-    //                 fill: am5.color(0xffffff),
-    //                 populateText: true,
-    //                 centerX: am5.p50,
-    //                 centerY: am5.p50,
-    //                 textAlign: "center"
-    //             }),
-    //             dynamic: true
-    //         });
-    //     });
-
-
-
-    //     // minValue and maxValue must be set for the animations to work
-    //     bubbleSeries.set("heatRules", [
-    //         {
-    //             target: circleTemplate,
-    //             dataField: "value",
-    //             min: 10,
-    //             max: 50,
-    //             minValue: 0,
-    //             maxValue: 100,
-    //             key: "radius"
-    //         }
-    //     ]);
-
-    //     //bubbleSeries.data.setAll(mapDataIE);
-
-    //     return () => {
-    //         root.dispose();
-    //     };
-    // }, []);
-
-
     return (
         <>
-            {/* <div id="chartdiv" style={{ width: "500px", height: "500px" }}></div>
             <div>
                 <HighchartsReact
                     constructorType={'mapChart'}
                     highcharts={Highcharts}
                     options={mapOptions}
                 />
-            </div> */}
+            </div>
         </>
     )
 }
