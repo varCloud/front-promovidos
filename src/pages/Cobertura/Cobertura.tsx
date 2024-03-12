@@ -4,6 +4,7 @@ import HighchartsReact from "highcharts-react-official";
 import highchartsMap from "highcharts/modules/map";
 import proj4 from "proj4";
 import geojson from "./seccion_cp_morelia_map.json";
+import './style.css'
 highchartsMap(Highcharts);
 
 const states = Highcharts.geojson(geojson, 'map');
@@ -65,8 +66,15 @@ const mapOptions = {
         enabled: true,
         buttonOptions: {
             verticalAlign: 'bottom'
-        }
+        },
+       
+       
     },
+    mapView: {
+        center: [400, 400],
+        zoom: 11.9
+    },
+
 
     series: [{
         name: '<b> Secciones y Colonias </b>',
@@ -108,7 +116,7 @@ const Cobertura = () => {
 
     return (
         <>
-            <div>
+            <div className='container' >
                 <HighchartsReact
                     constructorType={'mapChart'}
                     highcharts={Highcharts}
