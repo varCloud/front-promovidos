@@ -9,7 +9,7 @@ import Badge from '../../components/ui/Badge';
 import Card, { CardBody, CardHeader, CardHeaderChild, CardTitle } from '../../components/ui/Card';
 import { ModalHeader, ModalBody } from '../../components/ui/Modal';
 import TableTemplate, { TableCardFooterTemplate } from '../../templates/common/TableParts.template';
-import Cobertura from '../Cobertura/Cobertura';
+import Cobertura from '../Cobertura/Cobertura.page';
 import FormAddPromotor from '../Promotor/components/FormAddPromotor/FormAddPromotor';
 import Container from '../../components/layouts/Container/Container';
 import CardIndicador from './components/CardIndicador';

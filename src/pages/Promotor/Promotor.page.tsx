@@ -51,7 +51,7 @@ import DefaultHeaderRightCommon from '../../templates/layouts/Headers/_common/De
 import { useAuth } from '../../context/authContext';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { formatDateCalendarInput } from '../../components/utils/functions';
-import Cobertura from '../Cobertura/Cobertura';
+import Cobertura from '../Cobertura/Cobertura.page';
 import ReportesService from '../../services/reportes.service';
 import ClipLoader from "react-spinners/ClipLoader";
 import Spinner from '../../components/ui/Spinner';

@@ -38,6 +38,14 @@ export const promovidosAllPages  = {
 		icon: 'HeroArrowsPointingIn',
 		subPages: {}
 	},
+
+	coberturaAppPages: {
+		id: 'cobertura',
+		to: '/cobertura',
+		text: 'Cobertura',
+		icon: 'HeroMap',
+		subPages: {}
+	},
 }
 
 export const examplePages = {

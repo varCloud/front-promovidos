@@ -19,21 +19,22 @@ import usersDb from '../../../mocks/db/users.db';
 const DefaultAsideTemplate = () => {
 	const navigate = useNavigate();
 
-	// return(
-	// 	<Aside>
-	// 		<AsideHead>
-	// 			<LogoAndAsideTogglePart />
-	// 		</AsideHead>
-	// 		<AsideBody>
-	// 			<Nav>
-	// 				<NavItem {...promovidosAllPages.dashboardPromodivosAppPages} />
-	// 				<NavItem {...promovidosAllPages.promotorAppPages} />
-	// 				<NavItem {...promovidosAllPages.promovidoAppPages} />
-	// 				<NavItem {...promovidosAllPages.enlaceAppPages} />
-	// 				</Nav>
-	// 		</AsideBody>
-	// 	</Aside>
-	// )
+	return(
+		<Aside>
+			<AsideHead>
+				<LogoAndAsideTogglePart />
+			</AsideHead>
+			<AsideBody>
+				<Nav>
+					<NavItem {...promovidosAllPages.dashboardPromodivosAppPages} />
+					<NavItem {...promovidosAllPages.promotorAppPages} />
+					<NavItem {...promovidosAllPages.promovidoAppPages} />
+					<NavItem {...promovidosAllPages.enlaceAppPages} />
+					<NavItem {...promovidosAllPages.coberturaAppPages} />
+					</Nav>
+			</AsideBody>
+		</Aside>
+	)
 
 	return (
 		<Aside>
@@ -46,6 +47,7 @@ const DefaultAsideTemplate = () => {
 					<NavItem {...promovidosAllPages.promotorAppPages} />
 					<NavItem {...promovidosAllPages.promovidoAppPages} />
 					<NavItem {...promovidosAllPages.enlaceAppPages} />
+					<NavItem {...promovidosAllPages.coberturaAppPages} />
 
 					<NavItem {...appPages.salesAppPages.subPages.salesDashboardPage} />
 					<NavItem {...appPages.aiAppPages.subPages.aiDashboardPage}>
