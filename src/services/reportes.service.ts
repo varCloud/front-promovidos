@@ -23,6 +23,15 @@ class ReportesService {
 			throw error;
 		}
 	}	
+
+	async obtenerTodosLosPromotoresPDF() {
+		try {
+			const uri = `${this.base_uri}reportes/obtenerTodosPromotores`;
+			return await this._httpClient.fetchFile(uri,);
+		} catch (error) {
+			throw error;
+		}
+	}	
 }
 
 export default ReportesService;

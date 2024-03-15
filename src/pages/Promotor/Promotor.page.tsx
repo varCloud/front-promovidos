@@ -163,6 +163,7 @@ const Promotor = () => {
 	const [globalFilter, setGlobalFilter] = useState<string>('');
 	const [exModal1, setExModal1] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(true);
+	const [loadingPDFPromotores, setLoadingPDFPromotores] = useState<boolean>(false);
 	const [promotores, setPromotores] = useState<any>([]);
 	const [currentValue, setCurrentValue] = useState<any>();
 	const [isEdit, setIsEdit] = useState<any>();
@@ -247,14 +248,40 @@ const Promotor = () => {
 	}
 
 	const handleExportarTodosPromovidos = async () => {
-		const pdf = await _reportesService.obtenerTodosLosPromovidosPDF()
-		
-		const file = new Blob([await pdf.blob()], { type: "application/pdf" });
-		
-		const fileURL = URL.createObjectURL(file);
-		
-		const pdfWindow = window.open();
-		pdfWindow.location.href = fileURL;
+		try {
+
+			const pdf = await _reportesService.obtenerTodosLosPromovidosPDF()
+
+			const file = new Blob([await pdf.blob()], { type: "application/pdf" });
+
+			const fileURL = URL.createObjectURL(file);
+
+			const pdfWindow = window.open();
+			pdfWindow.location.href = fileURL;
+
+		} catch (error) {
+			console.log(error)
+		}
+
+	}
+
+	const handleExportarTodosPromotores = async () => {
+		try {
+			setLoadingPDFPromotores(true)
+			const pdf = await _reportesService.obtenerTodosLosPromotoresPDF()
+
+			const file = new Blob([await pdf.blob()], { type: "application/pdf" });
+
+			const fileURL = URL.createObjectURL(file);
+
+			const pdfWindow = window.open();
+			pdfWindow.location.href = fileURL;
+		} catch (error) {
+
+		} finally {
+			setLoadingPDFPromotores(false)
+		}
+
 	}
 
 	const table = useReactTable({
@@ -312,13 +339,20 @@ const Promotor = () => {
 						</FieldWrap>
 					</SubheaderLeft>
 					<SubheaderRight>
-						<Button variant='solid' icon='HeroPlus' onClick={() => handleOpenAddModal()}>
-							Agregar
-						</Button>
 						<Tooltip text='Generar el reporte de todos tus promotores incluyendo sus promovidos'>
 							<Button variant='solid' color='lime' icon='HeroDocumentText' onClick={() => handleExportarTodosPromovidos()}>
 								Generar Promovidos
 							</Button>
+						</Tooltip>
+						<Tooltip text='Exportar todos los promotores que se han dado de alta'>
+							<Button variant='solid' color='violet' icon='HeroDocumentText' isLoading={loadingPDFPromotores} onClick={() => handleExportarTodosPromotores()}>
+								Generar Promotores
+							</Button>
+						</Tooltip>
+						<Tooltip text='Agrega un nuevo promotor para despues asociarle promovidos'>
+						<Button variant='solid' icon='HeroPlus' onClick={() => handleOpenAddModal()}>
+							Agregar
+						</Button>
 						</Tooltip>
 					</SubheaderRight>
 				</Subheader>
