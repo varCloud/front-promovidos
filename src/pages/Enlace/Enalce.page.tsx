@@ -48,11 +48,12 @@ import { useAuth } from '../../context/authContext';
 import { formatDateCalendarInput } from '../../components/utils/functions';
 import EnlaceService from '../../services/enlace.service';
 import Spinner from '../../components/ui/Spinner';
+import ReportesService from '../../services/reportes.service';
 
 
 const MySwal = withReactContent(Swal)
 
-  
+
 const columnHelper = createColumnHelper<any>();
 const editLinkPath = `../${appPages.crmAppPages.subPages.customerPage.subPages.editPageLink.to}/`;
 const sinRegistro = 'N/A';
@@ -60,9 +61,9 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 	return [
 		columnHelper.accessor('nombres', {
 			cell: (info) => (
-					<div>
-						{info.row.original.nombres}&nbsp;{info.row.original.apellidos}
-					</div>
+				<div>
+					{info.row.original.nombres}&nbsp;{info.row.original.apellidos}
+				</div>
 			),
 			header: 'Nombre',
 			footer: 'Nombre',
@@ -84,19 +85,11 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 			footer: 'Colonia',
 		}),
 
-		// columnHelper.accessor('cp', {
-		// 	cell: (info) => (```
-		// 		<div>{info.getValue() ?? sinRegistro}</div>
-		// 	),
-		// 	header: 'Codigo postal',
-		// 	footer: 'Codigo postal',
-		// }),
-
 		columnHelper.accessor('problematica', {
 			cell: (info) => (
 				<div className="w-[100px]">
-					<span>{info.getValue()  ?? sinRegistro }</span>
-					</div>
+					<span>{info.getValue() ?? sinRegistro}</span>
+				</div>
 			),
 			header: 'Problematica',
 			footer: 'Problematica',
@@ -104,20 +97,10 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 			size: 500
 		}),
 
-		// columnHelper.accessor('mail', {
-		// 	cell: (info) => (
-		// 		<div className='flex flex-row justify-center gap-2 '>
-		// 			<span>{info.getValue() ?? sinRegistro }</span>
-		// 		</div>
-		// 	),
-		// 	header: 'Email',
-		// 	footer: 'Email',
-		// }),
-
 		columnHelper.accessor('telefono', {
 			cell: (info) => (
 				<div className=''>
-					<span>{info.getValue()  ?? sinRegistro }</span>
+					<span>{info.getValue() ?? sinRegistro}</span>
 				</div>
 			),
 			header: 'Telefono',
@@ -125,11 +108,11 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 			enableGlobalFilter: true,
 			enableSorting: true,
 		}),
-	
+
 		columnHelper.accessor('Promotor.Usuario.nombres', {
 			cell: (info) => (
 				<div className=''>
-					<span>{info.getValue()  ?? sinRegistro }</span>
+					<span>{info.getValue() ?? sinRegistro}</span>
 				</div>
 			),
 			header: 'Enlace',
@@ -142,13 +125,13 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 			cell: (_info) => (
 				<div className='flex items-center gap-2'>
 					<Tooltip text='Ver'>
-						<Button icon='HeroEye' isActive color='sky'  onClick={() => { handleOpenViewModal(_info.row.original) }} />
+						<Button icon='HeroEye' isActive color='sky' onClick={() => { handleOpenViewModal(_info.row.original) }} />
 					</Tooltip>
 					<Tooltip text='Editar'>
 						<Button icon='HeroPencil' isActive color='violet' onClick={() => { handleOpenEditModal(_info.row.original) }} />
 					</Tooltip>
 					<Tooltip text='Eliminar'>
-						<Button icon='HeroTrash' isActive  color='red' colorIntensity='800' onClick={() => { handleOpenDeleteAlert(_info.row.original) }} />
+						<Button icon='HeroTrash' isActive color='red' colorIntensity='800' onClick={() => { handleOpenDeleteAlert(_info.row.original) }} />
 					</Tooltip>
 				</div>
 			),
@@ -171,9 +154,8 @@ const Enlace = () => {
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _enlaceService: EnlaceService = new EnlaceService(new FetchService(token));
 	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
-	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-		[]
-	  )
+	const _reportesService: ReportesService = new ReportesService(new FetchService(token));
+
 	async function obtenerPromotres() {
 		setLoading(true);
 		const _promotores = await _promotorService.obtenerPromotores();
@@ -189,8 +171,8 @@ const Enlace = () => {
 	}
 
 	const handleOpenEditModal = (data) => {
-		
-		if(data.fechaNacimiento && data.fechaNacimiento.toString().length > 0){
+
+		if (data.fechaNacimiento && data.fechaNacimiento.toString().length > 0) {
 			data.fechaNacimiento = formatDateCalendarInput(data.fechaNacimiento)
 		}
 		setIsEdit(true)
@@ -200,8 +182,8 @@ const Enlace = () => {
 	}
 
 	const handleOpenViewModal = (data) => {
-		
-		if(data.fechaNacimiento && data.fechaNacimiento.toString().length > 0){
+
+		if (data.fechaNacimiento && data.fechaNacimiento.toString().length > 0) {
 			data.fechaNacimiento = formatDateCalendarInput(data.fechaNacimiento)
 		}
 		setIsView(true)
@@ -213,22 +195,23 @@ const Enlace = () => {
 	const handleOpenAddModal = () => {
 		setCurrentValue({})
 		setIsEdit(false)
+		setIsView(false)
 		setExModal1(true)
 	}
 
-	const handleOpenDeleteAlert = (data) =>{
+	const handleOpenDeleteAlert = (data) => {
 		MySwal.fire({
 			title: `<span class="text-lg">Estas seguro que deseas eliminar el enlace: <span> <br/> <span class="text-xl text-red-700">${data.nombres}<span>`,
 			icon: "question",
 			showCancelButton: true,
 			confirmButtonText: "Eliminar",
-			confirmButtonColor:"#991b1b"
-		  }).then(async (result) => {
-			if(result.isConfirmed){
-				 await _enlaceService.eliminarEnlace(data.idEnlace)
-				 await obtenerPromovidos()
+			confirmButtonColor: "#991b1b"
+		}).then(async (result) => {
+			if (result.isConfirmed) {
+				await _enlaceService.eliminarEnlace(data.idEnlace)
+				await obtenerPromovidos()
 			}
-		  })
+		})
 	}
 
 	useEffect(() => {
@@ -237,13 +220,9 @@ const Enlace = () => {
 		return () => { };
 	}, []);
 
-	const filterTable = () =>{
-
-	}
-
 	const table = useReactTable({
 		data: enlaces,
-		columns:columns(handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal),
+		columns: columns(handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal),
 		state: {
 			sorting,
 			globalFilter,
@@ -264,8 +243,6 @@ const Enlace = () => {
 			maxSize: Number.MAX_SAFE_INTEGER,
 		}
 	});
-	
-
 
 	const handleCloseModal = () => {
 		setExModal1(false);
@@ -274,6 +251,18 @@ const Enlace = () => {
 		setExModal1(false);
 		await obtenerPromovidos();
 	};
+
+	const handleExportarEnalces = async () => {
+		const pdf = await _reportesService.obtenerTodosEnlacesPDF()
+		//console.log(await pdf.blob())
+		const file = new Blob([await pdf.blob()], { type: "application/pdf" });
+		//Build a URL from the file
+		const fileURL = URL.createObjectURL(file);
+		//Open the URL on new Window
+		const pdfWindow = window.open();
+		pdfWindow.location.href = fileURL;
+	}
+
 
 	if (loading) {
 		return <Spinner fullView={true} />;
@@ -307,7 +296,12 @@ const Enlace = () => {
 							/>
 						</FieldWrap>
 					</SubheaderLeft>
-					<SubheaderRight>
+					<SubheaderRight className='flex-col sm:flex-row'>
+						<Tooltip text='Generar el reporte de todos los enlaces/problematicas que se han dado de alta'>
+							<Button variant='solid' color='red' colorIntensity='300' icon='HeroDocumentText' onClick={() => handleExportarEnalces()}>
+								Generar Enlaces
+							</Button>
+						</Tooltip>
 						<Button variant='solid' icon='HeroPlus' onClick={() => handleOpenAddModal()}>
 							Agregar
 						</Button>

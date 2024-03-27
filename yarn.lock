@@ -544,6 +544,13 @@
   dependencies:
     "@fullcalendar/daygrid" "~6.1.9"
 
+"@googlemaps/js-api-loader@^1.13.8", "@googlemaps/js-api-loader@^1.14.3":
+  version "1.16.6"
+  resolved "https://registry.npmjs.org/@googlemaps/js-api-loader/-/js-api-loader-1.16.6.tgz"
+  integrity sha512-V8p5W9DbPQx74jWUmyYJOerhiB4C+MHekaO0ZRmc6lrOYrvY7+syLhzOWpp55kqSPeNb+qbC2h8i69aLIX6krQ==
+  dependencies:
+    fast-deep-equal "^3.1.3"
+
 "@hello-pangea/dnd@^16.3.0":
   version "16.3.0"
   resolved "https://registry.npmjs.org/@hello-pangea/dnd/-/dnd-16.3.0.tgz"
@@ -643,6 +650,11 @@
   version "3.4.0"
   resolved "https://registry.npmjs.org/@juggle/resize-observer/-/resize-observer-3.4.0.tgz"
   integrity sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==
+
+"@mapbox/point-geometry@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/@mapbox/point-geometry/-/point-geometry-0.1.0.tgz"
+  integrity sha512-6j56HdLTwWGO0fJPlrZtdU/B13q8Uwmo18Ck2GnGgN9PCFyKTZ3UbXeEdRFh18i9XQ92eH2VdtpJHpBD3aripQ==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -1171,6 +1183,11 @@
   resolved "https://registry.npmjs.org/@types/geojson/-/geojson-7946.0.11.tgz"
   integrity sha512-L7A0AINMXQpVwxHJ4jxD6/XjZ4NDufaRlUJHjNIFKYUFBH1SvOW+neaqb0VTRSLW5suSrSu19ObFEFnfNcr+qg==
 
+"@types/google.maps@^3.50.4", "@types/google.maps@^3.54.10":
+  version "3.55.4"
+  resolved "https://registry.npmjs.org/@types/google.maps/-/google.maps-3.55.4.tgz"
+  integrity sha512-Ip3IfRs3RZjeC88V8FGnWQTQXeS5gkJedPSosN6DMi9Xs8buGTpsPq6UhREoZsGH+62VoQ6jiRBUR8R77If69w==
+
 "@types/hast@^2.0.0":
   version "2.3.6"
   resolved "https://registry.npmjs.org/@types/hast/-/hast-2.3.6.tgz"
@@ -1461,6 +1478,14 @@
   version "1.2.0"
   resolved "https://registry.npmjs.org/@ungap/structured-clone/-/structured-clone-1.2.0.tgz"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
+
+"@vis.gl/react-google-maps@^0.7.1":
+  version "0.7.1"
+  resolved "https://registry.npmjs.org/@vis.gl/react-google-maps/-/react-google-maps-0.7.1.tgz"
+  integrity sha512-KrvSfZ9k9RBrUKCVACTNh96jzzIKumPSymNTd1uNlvLWYVcDaliE6/PF/jBFYVB2n/K5BvDspTF9CLJ3rgx5VQ==
+  dependencies:
+    "@types/google.maps" "^3.54.10"
+    fast-deep-equal "^3.1.3"
 
 "@vitejs/plugin-react-swc@^3.4.0":
   version "3.4.0"
@@ -3409,6 +3434,11 @@ event-emitter@^0.3.5, event-emitter@~0.3.5:
     d "1"
     es5-ext "~0.10.14"
 
+eventemitter3@^4.0.4:
+  version "4.0.7"
+  resolved "https://registry.npmjs.org/eventemitter3/-/eventemitter3-4.0.7.tgz"
+  integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
+
 execa@^5.0.0:
   version "5.1.1"
   resolved "https://registry.npmjs.org/execa/-/execa-5.1.1.tgz"
@@ -3756,6 +3786,21 @@ globrex@^0.1.2:
   version "0.1.2"
   resolved "https://registry.npmjs.org/globrex/-/globrex-0.1.2.tgz"
   integrity sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==
+
+google-map-react@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.npmjs.org/google-map-react/-/google-map-react-2.2.1.tgz"
+  integrity sha512-Dg8aexf5rNSmywj0XKQ5m4RNzVcWwKEM2BGDj5aPChD0um8ZRjB5Upcb/yg/i0oG1aES29asQ5+6BHVgrK5xGA==
+  dependencies:
+    "@googlemaps/js-api-loader" "^1.13.8"
+    "@mapbox/point-geometry" "^0.1.0"
+    eventemitter3 "^4.0.4"
+    prop-types "^15.7.2"
+
+google-maps-react@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.npmjs.org/google-maps-react/-/google-maps-react-2.0.6.tgz"
+  integrity sha512-M8Eo9WndfQEfxcmm6yRq03qdJgw1x6rQmJ9DN+a+xPQ3K7yNDGkVDbinrf4/8vcox7nELbeopbm4bpefKewWfQ==
 
 gopd@^1.0.1:
   version "1.0.1"
@@ -4443,6 +4488,11 @@ lodash.castarray@^4.4.0:
   version "4.4.0"
   resolved "https://registry.npmjs.org/lodash.castarray/-/lodash.castarray-4.4.0.tgz"
   integrity sha512-aVx8ztPv7/2ULbArGJ2Y42bG1mEQ5mGjpdvrbJcJFU3TbYybe+QlLS4pst9zV52ymy2in1KpFPiZnAOATxD4+Q==
+
+lodash.debounce@^4.0.8:
+  version "4.0.8"
+  resolved "https://registry.npmjs.org/lodash.debounce/-/lodash.debounce-4.0.8.tgz"
+  integrity sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==
 
 lodash.isplainobject@^4.0.6:
   version "4.0.6"
@@ -5322,7 +5372,7 @@ proj4@^2.10.0:
     mgrs "1.0.0"
     wkt-parser "^1.3.3"
 
-prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1, prop-types@15:
+prop-types@^15.5.0, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1, prop-types@15:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -5412,6 +5462,24 @@ react-fast-compare@^3.0.1:
   resolved "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-3.2.2.tgz"
   integrity sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==
 
+react-google-autocomplete@^2.7.3:
+  version "2.7.3"
+  resolved "https://registry.npmjs.org/react-google-autocomplete/-/react-google-autocomplete-2.7.3.tgz"
+  integrity sha512-Nm+7/VDe7/NDWb8p/a39is7ktNqt5bNqAOoQv2Ev/XkuEvjsRk08VAPFmXUH03xKuM8IUuDrk2Lwfge44YEj6Q==
+  dependencies:
+    lodash.debounce "^4.0.8"
+    prop-types "^15.5.0"
+
+react-google-places-autocomplete@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.npmjs.org/react-google-places-autocomplete/-/react-google-places-autocomplete-4.0.1.tgz"
+  integrity sha512-BA/+8eky8pvnXjuBiqcPS6CdwPOEM38hjUkh+iOE6D/ctrQVTTFdm5ylQyWOGOD+1LeuB/INE8SwIp/Gre0A9A==
+  dependencies:
+    "@googlemaps/js-api-loader" "^1.14.3"
+    "@types/google.maps" "^3.50.4"
+    react-select "^5.7.2"
+    use-debounce "^3.4.3"
+
 react-i18next@^13.2.2:
   version "13.2.2"
   resolved "https://registry.npmjs.org/react-i18next/-/react-i18next-13.2.2.tgz"
@@ -5494,7 +5562,7 @@ react-router@6.16.0:
   dependencies:
     "@remix-run/router" "1.9.0"
 
-react-select@^5.7.7:
+react-select@^5.7.2, react-select@^5.7.7:
   version "5.7.7"
   resolved "https://registry.npmjs.org/react-select/-/react-select-5.7.7.tgz"
   integrity sha512-HhashZZJDRlfF/AKj0a0Lnfs3sRdw/46VJIRd8IbB9/Ovr74+ZIwkAdSBjSPXsFMG+u72c5xShqwLSKIJllzqw==
@@ -6528,6 +6596,11 @@ uri-js@^4.2.2:
   integrity sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==
   dependencies:
     punycode "^2.1.0"
+
+use-debounce@^3.4.3:
+  version "3.4.3"
+  resolved "https://registry.npmjs.org/use-debounce/-/use-debounce-3.4.3.tgz"
+  integrity sha512-nxy+opOxDccWfhMl36J5BSCTpvcj89iaQk2OZWLAtBJQj7ISCtx1gh+rFbdjGfMl6vtCZf6gke/kYvrkVfHMoA==
 
 use-isomorphic-layout-effect@^1.1.2:
   version "1.1.2"

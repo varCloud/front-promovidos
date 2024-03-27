@@ -100,7 +100,6 @@ const MapCobertura = ({ secciones }) => {
     useEffect(() => {
         setSeriesCobertur(buildMapOptions(secciones))
         return () => { };
-
     }, []);
 
     return (

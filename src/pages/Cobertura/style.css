@@ -4,3 +4,15 @@
     max-width: 600px;
     margin: 0 auto;
 } */
+
+/* .containerMap div:first-child{
+    height: 500px;
+    width: 100%;
+} */
+
+.class{
+
+    background:"#22ccff";
+    color:"#1e89a1";
+    background-color:"#0f677a"
+}

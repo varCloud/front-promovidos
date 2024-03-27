@@ -17,6 +17,7 @@ import MapCobertura from './components/MapCobertura';
 import DashboardService from '../../services/dashboard.service';
 import { FetchService } from '../../services/config/FetchService';
 import Spinner from '../../components/ui/Spinner';
+import CoberturaGoogleMap from './components/CoberturaGoogleMap';
 
 
 const Cobertura = () => {
@@ -61,12 +62,14 @@ const Cobertura = () => {
 								<CardTitle>Cobertura de promovidos</CardTitle>
 							</CardHeaderChild>
 						</CardHeader>
-
-						<CardBody className=' d-flex w-full'>
+						<CardBody className='containerMap'>
+							<CoberturaGoogleMap />
+						</CardBody>
+						{/* <CardBody className=' d-flex w-full'>
 							{
 								secciones ? <MapCobertura secciones={secciones} /> : <Spinner />
 							}
-						</CardBody>
+						</CardBody> */}
 					</Card>
 				</Container>
 			</PageWrapper>

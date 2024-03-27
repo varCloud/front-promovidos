@@ -31,7 +31,34 @@ class ReportesService {
 		} catch (error) {
 			throw error;
 		}
-	}	
+	}
+
+	async obtenerTodosEnlacesPorPromotorPDF(idPromotor) {
+		try {
+			const uri = `${this.base_uri}reportes/obtenerTodosEnlaces/${idPromotor}`;
+			return await this._httpClient.fetchFile(uri,);
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async obtenerTodosEnlacesPDF() {
+		try {
+			const uri = `${this.base_uri}reportes/obtenerTodosEnlaces/`;
+			return await this._httpClient.fetchFile(uri,);
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async obtenerPromovidosPDF() {
+		try {
+			const uri = `${this.base_uri}reportes/obtenerPromovidos/`;
+			return await this._httpClient.fetchFile(uri,);
+		} catch (error) {
+			throw error;
+		}
+	}
 }
 
 export default ReportesService;

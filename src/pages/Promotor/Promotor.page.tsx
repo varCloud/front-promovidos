@@ -55,13 +55,18 @@ import Cobertura from '../Cobertura/Cobertura.page';
 import ReportesService from '../../services/reportes.service';
 import ClipLoader from "react-spinners/ClipLoader";
 import Spinner from '../../components/ui/Spinner';
-const MySwal = withReactContent(Swal)
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import ReactGoogleAutocomplete from 'react-google-autocomplete';
+import SearchBox from '../../components/search-box/SearchBox';
+import { URIS_CONFIG } from '../../config/uris.config';
+import GoogleSearchBoxWithMap from '../../components/search-box/GoogleSearchBoxWithMap';
 
+const MySwal = withReactContent(Swal)
 const columnHelper = createColumnHelper<any>();
 
 const editLinkPath = `../${appPages.crmAppPages.subPages.customerPage.subPages.editPageLink.to}/`;
 const sinRegistro = 'N/A';
-const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal, handleExportarPromovidosPorPromotor) => {
+const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal, handleExportarPromovidosPorPromotor , handleExportarProblemticas) => {
 	return [
 		columnHelper.accessor('image', {
 			cell: (info) => (
@@ -138,19 +143,43 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 		columnHelper.display({
 			cell: (_info) => (
 				<div className='flex items-center gap-2'>
-					<Tooltip text='Ver'>
-						<Button icon='HeroEye' isActive color='sky' onClick={() => { handleOpenViewModal(_info.row.original) }} />
-					</Tooltip>
-					<Tooltip text='Editar'>
-						<Button icon='HeroPencil' isActive color='violet' onClick={() => { handleOpenEditModal(_info.row.original) }} />
-					</Tooltip>
-					<Tooltip text='Exportar Promovidos'>
-						<Button icon='HeroDocumentText' isActive color='lime' onClick={() => { handleExportarPromovidosPorPromotor(_info.row.original) }} />
-					</Tooltip>
-
-					<Tooltip text='Eliminar'>
-						<Button icon='HeroTrash' isActive color='red' colorIntensity='800' onClick={() => { handleOpenDeleteAlert(_info.row.original) }} />
-					</Tooltip>
+					<Dropdown>
+						<DropdownToggle>
+							<Button
+								variant='outline'
+								color='zinc'
+								icon='HeroRocketLaunch'>
+								Selecciona
+							</Button>
+						</DropdownToggle>
+						<DropdownMenu>
+							<DropdownItem>
+								<Tooltip text='Ver'>
+									<Button icon='HeroEye' isActive color='sky' onClick={() => { handleOpenViewModal(_info.row.original) }} > Ver </Button>
+								</Tooltip>
+							</DropdownItem>
+							<DropdownItem>
+								<Tooltip text='Editar'>
+									<Button icon='HeroPencil' isActive color='violet' onClick={() => { handleOpenEditModal(_info.row.original) }}  > Editar </Button>
+								</Tooltip>
+							</DropdownItem>
+							<DropdownItem>
+								<Tooltip text='Exportar Promovidos'>
+									<Button icon='HeroDocumentText' isActive color='lime' onClick={() => { handleExportarPromovidosPorPromotor(_info.row.original) }}  > Exportar Promovidos </Button>
+								</Tooltip>
+							</DropdownItem>
+							<DropdownItem>
+								<Tooltip text='Exportar Enlaces/Problematicas'>
+									<Button icon='HeroDocumentText' isActive color='blue' colorIntensity='900' onClick={() => { handleExportarProblemticas(_info.row.original) }}  > Exportar Enlaces/Problematicas </Button>
+								</Tooltip>
+							</DropdownItem>
+							<DropdownItem>
+								<Tooltip text='Eliminar'>
+									<Button icon='HeroTrash' isActive color='red' colorIntensity='800' onClick={() => { handleOpenDeleteAlert(_info.row.original) }}  > Eliminar </Button>
+								</Tooltip>
+							</DropdownItem>
+						</DropdownMenu>
+					</Dropdown>
 				</div>
 			),
 			header: 'Acciones',
@@ -224,6 +253,7 @@ const Promotor = () => {
 	const handleOpenAddModal = () => {
 		setCurrentValue({})
 		setIsEdit(false)
+		setIsView(false)
 		setExModal1(true)
 	}
 
@@ -284,9 +314,28 @@ const Promotor = () => {
 
 	}
 
+	const handleExportarProblemticas = async (data) => {
+		try {
+			setLoadingPDFPromotores(true)
+			const pdf = await _reportesService.obtenerTodosEnlacesPorPromotorPDF(data.idPromotor)
+
+			const file = new Blob([await pdf.blob()], { type: "application/pdf" });
+
+			const fileURL = URL.createObjectURL(file);
+
+			const pdfWindow = window.open();
+			pdfWindow.location.href = fileURL;
+		} catch (error) {
+
+		} finally {
+			setLoadingPDFPromotores(false)
+		}
+
+	}
+
 	const table = useReactTable({
 		data: promotores,
-		columns: columns(handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal, handleExportarPromovidosPorPromotor),
+		columns: columns(handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal, handleExportarPromovidosPorPromotor, handleExportarProblemticas),
 		state: {
 			sorting,
 			globalFilter,
@@ -338,7 +387,7 @@ const Promotor = () => {
 							/>
 						</FieldWrap>
 					</SubheaderLeft>
-					<SubheaderRight>
+					<SubheaderRight className='flex-col sm:flex-row'>
 						<Tooltip text='Generar el reporte de todos tus promotores incluyendo sus promovidos'>
 							<Button variant='solid' color='lime' icon='HeroDocumentText' onClick={() => handleExportarTodosPromovidos()}>
 								Generar Promovidos
@@ -350,9 +399,9 @@ const Promotor = () => {
 							</Button>
 						</Tooltip>
 						<Tooltip text='Agrega un nuevo promotor para despues asociarle promovidos'>
-						<Button variant='solid' icon='HeroPlus' onClick={() => handleOpenAddModal()}>
-							Agregar
-						</Button>
+							<Button variant='solid' icon='HeroPlus' onClick={() => handleOpenAddModal()}>
+								Agregar
+							</Button>
 						</Tooltip>
 					</SubheaderRight>
 				</Subheader>
@@ -369,7 +418,8 @@ const Promotor = () => {
 								</Badge>
 							</CardHeaderChild>
 						</CardHeader>
-
+						<div>
+						</div>
 						<CardBody className='overflow-auto'>
 							<TableTemplate
 								className='table-fixed max-md:min-w-[70rem]'

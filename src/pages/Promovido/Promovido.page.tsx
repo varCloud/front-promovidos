@@ -47,11 +47,9 @@ import DefaultHeaderRightCommon from '../../templates/layouts/Headers/_common/De
 import { useAuth } from '../../context/authContext';
 import { formatDateCalendarInput } from '../../components/utils/functions';
 import Spinner from '../../components/ui/Spinner';
-
+import ReportesService from '../../services/reportes.service';
 
 const MySwal = withReactContent(Swal)
-
-  
 const columnHelper = createColumnHelper<any>();
 const editLinkPath = `../${appPages.crmAppPages.subPages.customerPage.subPages.editPageLink.to}/`;
 const sinRegistro = 'N/A';
@@ -88,7 +86,7 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 		columnHelper.accessor('Promotor.Usuario.nombres', {
 			cell: (info) => (
 				<div className=''>
-					<span>{info.getValue()  ?? sinRegistro }</span>
+					<span>{info.getValue() ?? sinRegistro}</span>
 				</div>
 			),
 			header: 'Promotor',
@@ -106,7 +104,7 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 
 		columnHelper.accessor('colonia', {
 			cell: (info) => (
-				<div>{info.getValue()} {info.row.original.cp ? `C.P. ${info.row.original.cp}`:  sinRegistro}</div>
+				<div>{info.getValue()} {info.row.original.cp ? `C.P. ${info.row.original.cp}` : sinRegistro}</div>
 			),
 			header: 'Colonia',
 			footer: 'Colonia',
@@ -115,7 +113,7 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 		columnHelper.accessor('telefono', {
 			cell: (info) => (
 				<div className='flex flex-row justify-center gap-2 '>
-					<span>{info.getValue()  ?? sinRegistro }</span>
+					<span>{info.getValue() ?? sinRegistro}</span>
 				</div>
 			),
 			header: 'Telefono',
@@ -125,7 +123,7 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 		columnHelper.accessor('mail', {
 			cell: (info) => (
 				<div className='flex flex-row justify-center gap-2 '>
-					<span>{info.getValue() ?? sinRegistro }</span>
+					<span>{info.getValue() ?? sinRegistro}</span>
 				</div>
 			),
 			header: 'Email',
@@ -146,13 +144,13 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 			cell: (_info) => (
 				<div className='flex items-center gap-2'>
 					<Tooltip text='Ver'>
-						<Button icon='HeroEye' isActive color='sky'  onClick={() => { handleOpenViewModal(_info.row.original) }} />
+						<Button icon='HeroEye' isActive color='sky' onClick={() => { handleOpenViewModal(_info.row.original) }} />
 					</Tooltip>
 					<Tooltip text='Editar'>
 						<Button icon='HeroPencil' isActive color='violet' onClick={() => { handleOpenEditModal(_info.row.original) }} />
 					</Tooltip>
 					<Tooltip text='Eliminar'>
-						<Button icon='HeroTrash' isActive  color='red' colorIntensity='800' onClick={() => { handleOpenDeleteAlert(_info.row.original) }} />
+						<Button icon='HeroTrash' isActive color='red' colorIntensity='800' onClick={() => { handleOpenDeleteAlert(_info.row.original) }} />
 					</Tooltip>
 				</div>
 			),
@@ -175,9 +173,8 @@ const Promovido = () => {
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _promovidosService: PromovidosService = new PromovidosService(new FetchService(token));
 	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
-	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-		[]
-	  )
+	const _reportesService: ReportesService = new ReportesService(new FetchService(token));
+
 	async function obtenerPromotres() {
 		setLoading(true);
 		const _promotores = await _promotorService.obtenerPromotores();
@@ -193,8 +190,8 @@ const Promovido = () => {
 	}
 
 	const handleOpenEditModal = (data) => {
-		
-		if(data.fechaNacimiento && data.fechaNacimiento.toString().length > 0){
+
+		if (data.fechaNacimiento && data.fechaNacimiento.toString().length > 0) {
 			data.fechaNacimiento = formatDateCalendarInput(data.fechaNacimiento)
 		}
 		setIsEdit(true)
@@ -204,8 +201,8 @@ const Promovido = () => {
 	}
 
 	const handleOpenViewModal = (data) => {
-		
-		if(data.fechaNacimiento && data.fechaNacimiento.toString().length > 0){
+
+		if (data.fechaNacimiento && data.fechaNacimiento.toString().length > 0) {
 			data.fechaNacimiento = formatDateCalendarInput(data.fechaNacimiento)
 		}
 		setIsView(true)
@@ -217,22 +214,23 @@ const Promovido = () => {
 	const handleOpenAddModal = () => {
 		setCurrentValue({})
 		setIsEdit(false)
+		setIsView(false)
 		setExModal1(true)
 	}
 
-	const handleOpenDeleteAlert = (data) =>{
+	const handleOpenDeleteAlert = (data) => {
 		MySwal.fire({
 			title: `<span class="text-lg">Estas seguro que deseas eliminar el promovido: <span> <br/> <span class="text-xl text-red-700">${data.nombres} ${data.apellidos ?? ''}<span>`,
 			icon: "question",
 			showCancelButton: true,
 			confirmButtonText: "Eliminar",
-			confirmButtonColor:"#991b1b"
-		  }).then(async (result) => {
-			if(result.isConfirmed){
-				 await _promovidosService.eliminarPromovido(data.idPromovido)
-				 await obtenerPromovidos()
+			confirmButtonColor: "#991b1b"
+		}).then(async (result) => {
+			if (result.isConfirmed) {
+				await _promovidosService.eliminarPromovido(data.idPromovido)
+				await obtenerPromovidos()
 			}
-		  })
+		})
 	}
 
 	useEffect(() => {
@@ -241,13 +239,9 @@ const Promovido = () => {
 		return () => { };
 	}, []);
 
-	const filterTable = () =>{
-
-	}
-
 	const table = useReactTable({
 		data: promovidos,
-		columns:columns(handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal),
+		columns: columns(handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal),
 		state: {
 			sorting,
 			globalFilter,
@@ -262,11 +256,7 @@ const Promovido = () => {
 		initialState: {
 			pagination: { pageSize: 20 },
 		},
-
-		debugTable: true,
 	});
-	
-
 
 	const handleCloseModal = () => {
 		setExModal1(false);
@@ -275,6 +265,17 @@ const Promovido = () => {
 		setExModal1(false);
 		await obtenerPromovidos();
 	};
+
+	const handleExportarPromovidos = async () => {
+		const pdf = await _reportesService.obtenerPromovidosPDF()
+		//console.log(await pdf.blob())
+		const file = new Blob([await pdf.blob()], { type: "application/pdf" });
+		//Build a URL from the file
+		const fileURL = URL.createObjectURL(file);
+		//Open the URL on new Window
+		const pdfWindow = window.open();
+		pdfWindow.location.href = fileURL;
+	}
 
 	if (loading) {
 		return <Spinner fullView={true} />;
@@ -308,7 +309,12 @@ const Promovido = () => {
 							/>
 						</FieldWrap>
 					</SubheaderLeft>
-					<SubheaderRight>
+					<SubheaderRight className='flex-col sm:flex-row'>
+						<Tooltip text='Generar el reporte de todos los promovidos que se han dado de alta'>
+							<Button variant='solid' color='red' colorIntensity='300' icon='HeroDocumentText' onClick={() => handleExportarPromovidos()}>
+								Generar Promovidos
+							</Button>
+						</Tooltip>
 						<Button variant='solid' icon='HeroPlus' onClick={() => handleOpenAddModal()}>
 							Agregar
 						</Button>

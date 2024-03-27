@@ -14,6 +14,9 @@ import PromovidosService from '../../../../services/promovidos.service';
 import { FetchService } from '../../../../services/config/FetchService';
 import PromotorService from '../../../../services/promotor.service';
 import { getAge } from '../../../../components/utils/functions';
+import Autocomplete from "react-google-autocomplete";
+import GoogleSearchBoxWithMap from '../../../../components/search-box/GoogleSearchBoxWithMap';
+import { set } from 'lodash';
 
 type TValues = {
 	usuario: string;
@@ -31,6 +34,10 @@ type TValues = {
 	fechaNacimiento: string;
 	edad: string;
 	redesSociales: string;
+	latitud: string;
+	longitud: string;
+	direccionMapa: string;
+	placeId: string;
 };
 
 const initialValues = {
@@ -48,6 +55,10 @@ const initialValues = {
 	redesSociales: '',
 	colonia: '',
 	cp: '',
+	latitud: '',
+	longitud: '',
+	direccionMapa: '',
+	placeId: '',
 	idRol: 3
 }
 
@@ -55,6 +66,8 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload, valuesF
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
 	const [loading, setLoading] = useState<boolean>(false);
+	const [direccionCompleta, setDireccionCompleta] = useState<string>('');
+
 	const formik = useFormik({
 		initialValues: { ...initialValues },
 		validate: (values: TValues) => {
@@ -78,7 +91,12 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload, valuesF
 			if (values.fechaNacimiento) {
 				values.edad = getAge(values.fechaNacimiento).toString()
 			}
+			if (!values.direccionMapa) {
+				errors.direccionMapa = 'Por favor busque la dirección en el mapa';
+			}
+			//listenerChangeAllDireccion(values)
 
+			console.log(errors)
 			return errors;
 		},
 		onSubmit: async () => {
@@ -94,20 +112,37 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload, valuesF
 	});
 
 	useEffect(() => {
-		const values = { ...valuesForm, ...valuesForm.Usuario }
-		delete values.Usuario
-		formik.setValues({ ...values, idRol: 3 })
+		if (isView || isEdit) {
+			const values = { ...valuesForm, ...valuesForm.Usuario }
+			delete values.Usuario
+			formik.setValues({ ...values, idRol: 3 })
+		}
 
 	}, [])
-	console.log(isView)
+
+	const listenerChangeAllDireccion = (values: TValues) => {
+
+		let _direccionCompleta = `${values.calle ?? ''} ${values.colonia ?? ''} ${values.cp ?? ''}`
+		setDireccionCompleta(_direccionCompleta)
+	}
+
+	const onChangeMarker = (data) => {
+		formik.setValues({
+			...formik.values,
+			latitud: data.latLngValue.lat,
+			longitud: data.latLngValue.lng,
+			direccionMapa: data._value.value.description,
+			placeId: data._value.value.place_id,
+		})
+	}
 
 	return (
-		<form className='flex flex-col gap-4' noValidate>
+		<form className='grid grid-cols-2 gap-4' noValidate>
 			<div>
 				<Label htmlFor='nombres'>Nombres</Label>
 				<Validation
 					isValid={formik.isValid}
-					isTouched={formik.touched.nombres && Boolean(formik.touched.nombres)}
+					isTouched={formik.touched.nombres}
 					invalidFeedback={formik.errors.nombres}
 					validFeedback='Información correcta'>
 					<FieldWrap
@@ -169,7 +204,7 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload, valuesF
 					</FieldWrap>
 				</Validation>
 			</div>
-			
+
 			{/*  Calle */}
 			<div>
 				<Label htmlFor='direccion'>Calle</Label>
@@ -193,31 +228,9 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload, valuesF
 					</FieldWrap>
 				</Validation>
 			</div>
-			
+
 			{/* Codigo postal y Colonia */}
-			<div className="flex gap-10">
-				<div className='flex-none'>
-					<Label htmlFor='direccion'>Codigo postal</Label>
-					<Validation
-						isValid={formik.isValid}
-						isTouched={formik.touched.cp}
-						invalidFeedback={formik.errors.cp}
-						validFeedback='Información correcta'>
-						<FieldWrap
-							firstSuffix={<Icon icon='HeroHome' className='mx-2' size='text-xl' />}>
-							<Input
-								id='cp'
-								disabled={isView}
-								autoComplete='cp'
-								name='cp'
-								placeholder='58000'
-								value={formik.values.cp}
-								onChange={formik.handleChange}
-								onBlur={formik.handleBlur}
-							/>
-						</FieldWrap>
-					</Validation>
-				</div>
+			<div className="flex">
 				<div className='flex-initial w-full'>
 					<Label htmlFor='direccion'>Colonia</Label>
 					<Validation
@@ -242,8 +255,43 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload, valuesF
 				</div>
 			</div>
 
-			{/* Telefono */}
 			<div>
+				<Label htmlFor='cp'>Codigo postal</Label>
+				<Validation
+					isValid={formik.isValid}
+					isTouched={formik.touched.cp}
+					invalidFeedback={formik.errors.cp}
+					validFeedback='Información correcta'>
+					<FieldWrap
+						firstSuffix={<Icon icon='HeroHome' className='mx-2' size='text-xl' />}>
+						<Input
+							id='cp'
+							disabled={isView}
+							autoComplete='cp'
+							name='cp'
+							placeholder='58000'
+							value={formik.values.cp}
+							onChange={formik.handleChange}
+							onBlur={formik.handleBlur}
+						/>
+					</FieldWrap>
+				</Validation>
+			</div>
+
+			<div className='col-span-2'>
+				<GoogleSearchBoxWithMap height='200px' handleChangeMarker={onChangeMarker} direccionToSearch={direccionCompleta} ></GoogleSearchBoxWithMap>
+			</div>
+
+			<div className='col-span-2'>
+				<div className='flex justify-items-start flex-row gap-4'>
+					<p>Latitud: {formik.values.latitud ?? ''}</p>
+					<p>Longitud: {formik.values.longitud ?? ''} </p>
+				</div>
+				<p className='text-orange-500'>{formik.errors.direccionMapa}</p>
+			</div>
+
+			{/* Telefono */}
+			<div className='col-span-2 sm:col-span-1'>
 				<Label htmlFor='telefono'>Telefono</Label>
 				<Validation
 					isValid={formik.isValid}
@@ -267,7 +315,7 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload, valuesF
 					</FieldWrap>
 				</Validation>
 			</div>
-			<div className='flex flex-row gap-3'>
+			<div className='flex flex-row gap-3 col-span-2 sm:col-span-1'>
 				<div className='w-[90%]'>
 					<Label htmlFor='fechaNacimiento'>Fecha de nacimiento</Label>
 					<Validation
@@ -290,7 +338,6 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload, valuesF
 							/>
 						</FieldWrap>
 					</Validation>
-
 				</div>
 				<div>
 					<Label htmlFor='edad'>Edad</Label>
@@ -435,7 +482,7 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload, valuesF
 					</FieldWrap>
 				</Validation>
 			</div>
-			<div className='flex justify-end gap-10'>
+			<div className='col-span-2 flex justify-end gap-10'>
 				<Button
 					size='lg'
 					variant='default'
