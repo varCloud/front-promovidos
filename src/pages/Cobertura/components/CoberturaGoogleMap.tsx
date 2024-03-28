@@ -10,6 +10,7 @@ import { FetchService } from '../../../services/config/FetchService';
 import MarkerWithInfoWindow from './MarkerWithInfoWindow';
 import { ROL } from '../../../utils/enums';
 import PromovidosService from '../../../services/promovidos.service';
+import CasillasService from '../../../services/casillas.service';
 
 const polys = poligonos.id.coordinates[0][0].map((item) => {
     return {
@@ -42,15 +43,20 @@ const Style = {
 }
 
 const colorsMarker = {
-    [ROL.PROMOTOR]:{
-        background:"#22ccff",
-        borderColor:"#1e89a1",
-        glyphColor:"#0f677a"
+    [ROL.PROMOTOR]: {
+        background: "#22ccff",
+        borderColor: "#1e89a1",
+        glyphColor: "#0f677a"
     },
-    [ROL.PROMOVIDO]:{
-        background:"#ff7d04e1",
-        color:"#ffaa0c",
-        glyphColor:"#eb3a1afb"
+    [ROL.PROMOVIDO]: {
+        background: "#ff7d04e1",
+        color: "#ffaa0c",
+        glyphColor: "#eb3a1afb"
+    },
+    "casillas": {
+        background: "#04ff43e1",
+        borderColor: "#118a2fe1",
+        glyphColor: "#0ea333e1"
     }
 }
 
@@ -59,9 +65,18 @@ const CoberturaGoogleMap = () => {
     const { token } = JSON.parse(window.localStorage.getItem(`user`));
     const _promotorService: PromotorService = new PromotorService(new FetchService(token));
     const _promovidosService: PromovidosService = new PromovidosService(new FetchService(token));
+    const _casillasService: CasillasService = new CasillasService(new FetchService(token));
     const [loading, setLoading] = useState<boolean>(true);
     const [promotores, setPromotores] = useState<any>([]);
-	const [promovidos, setPromovidos] = useState<any>([]);
+    const [promovidos, setPromovidos] = useState<any>([]);
+    const [casillas, setCasillas] = useState<any>([]);
+
+    async function obtenerCasillas() {
+        setLoading(true);
+        const _casillas = await _casillasService.obtenerCasillas();
+        setCasillas([..._casillas]);
+        setLoading(false);
+    }
 
     async function obtenerPromotores() {
         setLoading(true);
@@ -71,16 +86,17 @@ const CoberturaGoogleMap = () => {
     }
 
     async function obtenerPromovidos() {
-		setLoading(true);
-		const _promovidos = await _promovidosService.obtenerPromovidos();
-		setPromovidos([..._promovidos]);
-		setLoading(false);
-	}
+        setLoading(true);
+        const _promovidos = await _promovidosService.obtenerPromovidos();
+        setPromovidos([..._promovidos]);
+        setLoading(false);
+    }
 
 
     useEffect(() => {
         obtenerPromotores();
         obtenerPromovidos();
+        obtenerCasillas();
         return () => { };
     }, []);
 
@@ -96,17 +112,27 @@ const CoberturaGoogleMap = () => {
                     promotores.map((p) => {
                         if (p.latitud && p.longitud) {
                             return (
-                                <MarkerWithInfoWindow colorMarker={colorsMarker[p.Usuario.idRol]} latLng= {{lat: Number(p.latitud), lng: Number(p.longitud)}} info={`${p.Usuario.nombres} ${p.Usuario.apellidos ?? ''}`} ></MarkerWithInfoWindow>
+                                <MarkerWithInfoWindow colorMarker={colorsMarker[p.Usuario.idRol]} latLng={{ lat: Number(p.latitud), lng: Number(p.longitud) }} info={`${p.Usuario.nombres} ${p.Usuario.apellidos ?? ''}`} ></MarkerWithInfoWindow>
+                            )
+                        }
+                        return null
+                    })
+                }
+                {
+                    promovidos.map((p) => {
+                        if (p.latitud && p.longitud) {
+                            return (
+                                <MarkerWithInfoWindow colorMarker={colorsMarker[p.idRol]} latLng={{ lat: Number(p.latitud), lng: Number(p.longitud) }} info={`${p.nombres} ${p.apellidos ?? ''}`} ></MarkerWithInfoWindow>
                             )
                         }
                         return null
                     })
                 }
                                 {
-                    promovidos.map((p) => {
+                    casillas.map((p) => {
                         if (p.latitud && p.longitud) {
                             return (
-                                <MarkerWithInfoWindow colorMarker={colorsMarker[p.idRol]} latLng= {{lat: Number(p.latitud), lng: Number(p.longitud)}} info={`${p.nombres} ${p.apellidos ?? ''}`} ></MarkerWithInfoWindow>
+                                <MarkerWithInfoWindow colorMarker={colorsMarker["casillas"]} latLng={{ lat: Number(p.latitud), lng: Number(p.longitud) }} info={`${p.domicilio}`} ></MarkerWithInfoWindow>
                             )
                         }
                         return null
