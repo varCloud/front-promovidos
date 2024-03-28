@@ -11,7 +11,9 @@ import MarkerWithInfoWindow from './MarkerWithInfoWindow';
 import { ROL } from '../../../utils/enums';
 import PromovidosService from '../../../services/promovidos.service';
 import CasillasService from '../../../services/casillas.service';
-
+import imgPromotor from '../imgs/men_promotor.png'
+import imgPromovido from '../imgs/men_promovido.png'
+import imgCasilla from '../imgs/casilla.png'
 const polys = poligonos.id.coordinates[0][0].map((item) => {
     return {
         lat: item[1],
@@ -46,22 +48,25 @@ const colorsMarker = {
     [ROL.PROMOTOR]: {
         background: "#22ccff",
         borderColor: "#1e89a1",
-        glyphColor: "#0f677a"
+        glyphColor: "#0f677a",
+        markerIcon: imgPromotor
     },
     [ROL.PROMOVIDO]: {
         background: "#ff7d04e1",
         color: "#ffaa0c",
-        glyphColor: "#eb3a1afb"
+        glyphColor: "#eb3a1afb",
+        markerIcon: imgPromovido
     },
     "casillas": {
         background: "#04ff43e1",
         borderColor: "#118a2fe1",
-        glyphColor: "#0ea333e1"
+        glyphColor: "#0ea333e1",
+        markerIcon: imgCasilla
     }
 }
 
 const CoberturaGoogleMap = () => {
-    console.log(polysSecciones)
+
     const { token } = JSON.parse(window.localStorage.getItem(`user`));
     const _promotorService: PromotorService = new PromotorService(new FetchService(token));
     const _promovidosService: PromovidosService = new PromovidosService(new FetchService(token));
@@ -128,7 +133,7 @@ const CoberturaGoogleMap = () => {
                         return null
                     })
                 }
-                                {
+                {
                     casillas.map((p) => {
                         if (p.latitud && p.longitud) {
                             return (

@@ -17,10 +17,13 @@ const MarkerWithInfoWindow = ({ latLng, info , colorMarker }) => {
                 }}
 
             >
-                <Pin
+                <div>
+                    <img src={colorMarker.markerIcon} alt="" />
+                </div>
+                {/* <Pin
                     background={colorMarker.background}
                     borderColor={colorMarker.borderColor}
-                    glyphColor={colorMarker.glyphColor}></Pin>
+                    glyphColor={colorMarker.glyphColor}></Pin> */}
             </AdvancedMarker>
             {infowindowOpen && (
                 <InfoWindow

@@ -18,7 +18,9 @@ import DashboardService from '../../services/dashboard.service';
 import { FetchService } from '../../services/config/FetchService';
 import Spinner from '../../components/ui/Spinner';
 import CoberturaGoogleMap from './components/CoberturaGoogleMap';
-
+import imgPromotor from './imgs/men_promotor.png'
+import imgPromovido from './imgs/men_promovido.png'
+import imgCasilla from './imgs/casilla.png'
 
 const Cobertura = () => {
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
@@ -62,7 +64,12 @@ const Cobertura = () => {
 								<CardTitle>Cobertura de promovidos</CardTitle>
 							</CardHeaderChild>
 						</CardHeader>
-						<CardBody className='containerMap'>
+						<CardBody>
+							<div className='flex justify-center items-center gap-2'>
+								<span className='text-xl'>Promotor: </span> <img src={imgPromotor} alt="" />
+								<span className='text-xl'>Promovido: </span> <img src={imgPromovido} alt="" />
+								<span className='text-xl'>Casilla: </span> <img src={imgCasilla} alt="" />
+							</div>
 							<CoberturaGoogleMap />
 						</CardBody>
 						{/* <CardBody className=' d-flex w-full'>
