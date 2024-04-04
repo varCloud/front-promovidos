@@ -44,6 +44,13 @@ const Style = {
     height: '500px'
 }
 
+const BackgroundColorCasilla ={
+    '16': 'orange',
+    '17': 'green',
+    '11': 'pink',
+    '10':  'blue'
+}
+
 const colorsMarker = {
     [ROL.PROMOTOR]: {
         background: "#22ccff",
@@ -62,6 +69,7 @@ const colorsMarker = {
         borderColor: "#118a2fe1",
         glyphColor: "#0ea333e1",
         markerIcon: imgCasilla
+        
     }
 }
 
@@ -137,7 +145,7 @@ const CoberturaGoogleMap = () => {
                     casillas.map((p) => {
                         if (p.latitud && p.longitud) {
                             return (
-                                <MarkerWithInfoWindow colorMarker={colorsMarker["casillas"]} latLng={{ lat: Number(p.latitud), lng: Number(p.longitud) }} info={`${p.domicilio}`} ></MarkerWithInfoWindow>
+                                <MarkerWithInfoWindow  ubicacion={p.ubicacion} backgroundColor={BackgroundColorCasilla[p.distritoLocal.split('.')[0]]} colorMarker={colorsMarker["casillas"]} latLng={{ lat: Number(p.latitud), lng: Number(p.longitud) }} info={`${p.domicilio}`} ></MarkerWithInfoWindow>
                             )
                         }
                         return null

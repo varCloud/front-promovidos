@@ -1,8 +1,8 @@
 import { useAdvancedMarkerRef, AdvancedMarker, InfoWindow, Pin } from '@vis.gl/react-google-maps';
 import React, { useState } from 'react'
+import './style.css'
 
-
-const MarkerWithInfoWindow = ({ latLng, info , colorMarker }) => {
+const MarkerWithInfoWindow = ({ latLng, info , colorMarker , backgroundColor = 'transparent' , ubicacion= undefined }) => {
     const [infowindowOpen, setInfowindowOpen] = useState(false);
     const [markerRef, marker] = useAdvancedMarkerRef();
 
@@ -17,20 +17,19 @@ const MarkerWithInfoWindow = ({ latLng, info , colorMarker }) => {
                 }}
 
             >
-                <div>
+                <div className='container-casilla'  style={{
+                    background:backgroundColor
+                }}>
                     <img src={colorMarker.markerIcon} alt="" />
                 </div>
-                {/* <Pin
-                    background={colorMarker.background}
-                    borderColor={colorMarker.borderColor}
-                    glyphColor={colorMarker.glyphColor}></Pin> */}
             </AdvancedMarker>
             {infowindowOpen && (
                 <InfoWindow
                     anchor={marker}
                     maxWidth={200}
                     onCloseClick={() => setInfowindowOpen(false)}>
-                    Nombre : {info}
+                    Nombre : {info} <br /> <br /> 
+                    { ubicacion ?  `Tipo:  ${ubicacion}`  : null}
                 </InfoWindow>
             )}
 
