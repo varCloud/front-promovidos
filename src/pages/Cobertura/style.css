@@ -1,19 +1,8 @@
-/* .container {
-    height: 100vh;
-    min-width: 310px;
-    max-width: 600px;
-    margin: 0 auto;
-} */
-
-/* .containerMap div:first-child{
-    height: 500px;
-    width: 100%;
-} */
-
-.class{
-
-    background:#ff7d04e1;
-    color:#ffaa0c;
-    color:#eb3a1afb;
+.container-casilla{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-

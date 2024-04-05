@@ -1,26 +1,16 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import './style.css'
-import { Button, Modal } from '@amcharts/amcharts5';
-import { table } from 'console';
-
-import FieldWrap from '../../components/form/FieldWrap';
-import Icon from '../../components/icon/Icon';
 import PageWrapper from '../../components/layouts/PageWrapper/PageWrapper';
 import Subheader, { SubheaderLeft, SubheaderRight } from '../../components/layouts/Subheader/Subheader';
-import Badge from '../../components/ui/Badge';
 import Card, { CardHeader, CardHeaderChild, CardTitle, CardBody } from '../../components/ui/Card';
-import { ModalHeader, ModalBody } from '../../components/ui/Modal';
-import TableTemplate, { TableCardFooterTemplate } from '../../templates/common/TableParts.template';
-import FormAddEnlace from '../Enlace/components/FormAddEnlace/FormAddEnlace';
 import Container from '../../components/layouts/Container/Container';
-import MapCobertura from './components/MapCobertura';
 import DashboardService from '../../services/dashboard.service';
 import { FetchService } from '../../services/config/FetchService';
-import Spinner from '../../components/ui/Spinner';
-import CoberturaGoogleMap from './components/CoberturaGoogleMap';
 import imgPromotor from './imgs/men_promotor.png'
 import imgPromovido from './imgs/men_promovido.png'
 import imgCasilla from './imgs/casilla.png'
+import { BackgroundColorCasilla } from '../../config/constants';
+import MapaCoberturaGoogleMap from './components/MapaCoberturaGoogleMap';
+import './style.css'
 
 const Cobertura = () => {
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
@@ -68,9 +58,36 @@ const Cobertura = () => {
 							<div className='flex justify-center items-center gap-2'>
 								<span className='text-xl'>Promotor: </span> <img src={imgPromotor} alt="" />
 								<span className='text-xl'>Promovido: </span> <img src={imgPromovido} alt="" />
-								<span className='text-xl'>Casilla: </span> <img src={imgCasilla} alt="" />
+								<span className='text-xl text-blue-900  ml-2'>Casilla D.10: </span>
+								<div className='container-casilla' style={{
+									background: BackgroundColorCasilla[10]
+								}}>
+									<img src={imgCasilla} alt="" />
+								</div>
+
+								<span className='text-xl  text-red-200  ml-2'>Casilla D.11: </span>
+								<div className='container-casilla' style={{
+									background: BackgroundColorCasilla[11]
+								}}>
+									<img src={imgCasilla} alt="" />
+								</div>
+
+								<span className='text-xl text-violet-200  ml-2'>Casilla D.16: </span>
+								<div className='container-casilla' style={{
+									background: BackgroundColorCasilla[16]
+								}}>
+									<img src={imgCasilla} alt="" />
+								</div>
+
+								<span className='text-xl text-lime-400  ml-2'>Casilla D.17: </span>
+								<div className='container-casilla' style={{
+									background: BackgroundColorCasilla[17]
+								}}>
+									<img src={imgCasilla} alt="" />
+								</div>
+
 							</div>
-							<CoberturaGoogleMap />
+							<MapaCoberturaGoogleMap />
 						</CardBody>
 						{/* <CardBody className=' d-flex w-full'>
 							{

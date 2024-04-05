@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 // import {Map, InfoWindow, Marker, GoogleApiWrapper, Polygon, Polyline} from 'google-maps-react';
 import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps';
 
-import poligonos from "./poligonos_morelia.json";
-import poligonosMorelia from "./poligonos_secciones_morelia.json";
+import poligonos from "../jsonMaps/poligonos_morelia.json";
+import poligonosMorelia from "../jsonMaps/poligonos_secciones_morelia.json";
 import { Polygon } from './Polygon';
 import PromotorService from '../../../services/promotor.service';
 import { FetchService } from '../../../services/config/FetchService';
@@ -14,6 +14,7 @@ import CasillasService from '../../../services/casillas.service';
 import imgPromotor from '../imgs/men_promotor.png'
 import imgPromovido from '../imgs/men_promovido.png'
 import imgCasilla from '../imgs/casilla.png'
+import { BackgroundColorCasilla } from '../../../config/constants';
 const polys = poligonos.id.coordinates[0][0].map((item) => {
     return {
         lat: item[1],
@@ -44,12 +45,6 @@ const Style = {
     height: '500px'
 }
 
-const BackgroundColorCasilla ={
-    '16': 'orange',
-    '17': 'green',
-    '11': 'pink',
-    '10':  'blue'
-}
 
 const colorsMarker = {
     [ROL.PROMOTOR]: {
@@ -73,7 +68,7 @@ const colorsMarker = {
     }
 }
 
-const CoberturaGoogleMap = () => {
+const MapaCoberturaGoogleMap = () => {
 
     const { token } = JSON.parse(window.localStorage.getItem(`user`));
     const _promotorService: PromotorService = new PromotorService(new FetchService(token));
@@ -145,7 +140,7 @@ const CoberturaGoogleMap = () => {
                     casillas.map((p) => {
                         if (p.latitud && p.longitud) {
                             return (
-                                <MarkerWithInfoWindow  ubicacion={p.ubicacion} backgroundColor={BackgroundColorCasilla[p.distritoLocal.split('.')[0]]} colorMarker={colorsMarker["casillas"]} latLng={{ lat: Number(p.latitud), lng: Number(p.longitud) }} info={`${p.domicilio}`} ></MarkerWithInfoWindow>
+                                <MarkerWithInfoWindow  ubicacion={`${p.tipoCasilla} ${p.ubicacion}`} backgroundColor={BackgroundColorCasilla[p.distritoLocal.split('.')[0]]} colorMarker={colorsMarker["casillas"]} latLng={{ lat: Number(p.latitud), lng: Number(p.longitud) }} info={`${p.domicilio}`} ></MarkerWithInfoWindow>
                             )
                         }
                         return null
@@ -163,4 +158,4 @@ const CoberturaGoogleMap = () => {
     )
 }
 
-export default CoberturaGoogleMap
+export default MapaCoberturaGoogleMap

@@ -1,6 +1,6 @@
 import { useAdvancedMarkerRef, AdvancedMarker, InfoWindow, Pin } from '@vis.gl/react-google-maps';
 import React, { useState } from 'react'
-import './style.css'
+import './../style.css'
 
 const MarkerWithInfoWindow = ({ latLng, info , colorMarker , backgroundColor = 'transparent' , ubicacion= undefined }) => {
     const [infowindowOpen, setInfowindowOpen] = useState(false);
