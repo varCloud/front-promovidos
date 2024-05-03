@@ -48,12 +48,13 @@ import { useAuth } from '../../context/authContext';
 import { formatDateCalendarInput } from '../../components/utils/functions';
 import Spinner from '../../components/ui/Spinner';
 import ReportesService from '../../services/reportes.service';
+import FormAddSeguimiento from './components/FormAddSeguimiento/FormAddSeguimiento';
 
 const MySwal = withReactContent(Swal)
 const columnHelper = createColumnHelper<any>();
 const editLinkPath = `../${appPages.crmAppPages.subPages.customerPage.subPages.editPageLink.to}/`;
 const sinRegistro = 'N/A';
-const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal) => {
+const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal , handleOpenModalObservaciones) => {
 	return [
 		columnHelper.accessor('image', {
 			cell: (info) => (
@@ -149,6 +150,9 @@ const columns = (handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal
 					<Tooltip text='Editar'>
 						<Button icon='HeroPencil' isActive color='violet' onClick={() => { handleOpenEditModal(_info.row.original) }} />
 					</Tooltip>
+					<Tooltip text='Observaciobes'>
+						<Button icon='HeroPhone' isActive color='blue' onClick={() => { handleOpenModalObservaciones(_info.row.original) }} />
+					</Tooltip>
 					<Tooltip text='Eliminar'>
 						<Button icon='HeroTrash' isActive color='red' colorIntensity='800' onClick={() => { handleOpenDeleteAlert(_info.row.original) }} />
 					</Tooltip>
@@ -170,6 +174,7 @@ const Promovido = () => {
 	const [currentValue, setCurrentValue] = useState<any>();
 	const [isEdit, setIsEdit] = useState<any>();
 	const [isView, setIsView] = useState<any>();
+	const [openModalSeguimiento, setOpenModalSeguimiento] = useState<boolean>(false);
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _promovidosService: PromovidosService = new PromovidosService(new FetchService(token));
 	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
@@ -218,6 +223,17 @@ const Promovido = () => {
 		setExModal1(true)
 	}
 
+	const handleOpenModalObservaciones = (data) => {
+		setIsEdit(false)
+		setIsView(false)
+		setCurrentValue(data)
+		setOpenModalSeguimiento(true)
+	}
+
+	const handleCloseModalObservaciones = () => {
+		setOpenModalSeguimiento(false)
+	}
+
 	const handleOpenDeleteAlert = (data) => {
 		MySwal.fire({
 			title: `<span class="text-lg">Estas seguro que deseas eliminar el promovido: <span> <br/> <span class="text-xl text-red-700">${data.nombres} ${data.apellidos ?? ''}<span>`,
@@ -241,7 +257,7 @@ const Promovido = () => {
 
 	const table = useReactTable({
 		data: promovidos,
-		columns: columns(handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal),
+		columns: columns(handleOpenEditModal, handleOpenDeleteAlert, handleOpenViewModal, handleOpenModalObservaciones),
 		state: {
 			sorting,
 			globalFilter,
@@ -261,8 +277,10 @@ const Promovido = () => {
 	const handleCloseModal = () => {
 		setExModal1(false);
 	};
+
 	const handleCloseModalWithReload = async () => {
 		setExModal1(false);
+		setOpenModalSeguimiento(false)
 		await obtenerPromovidos();
 	};
 
@@ -350,6 +368,18 @@ const Promovido = () => {
 							handleCloseModal={handleCloseModal}
 							handleCloseModalWithReload={handleCloseModalWithReload}
 							promotores={promotores}
+							valuesForm={currentValue}
+							isEdit={isEdit}
+							isView={isView}
+						/>
+					</ModalBody>
+				</Modal>
+				<Modal isOpen={openModalSeguimiento} setIsOpen={setOpenModalSeguimiento} isStaticBackdrop>
+					<ModalHeader>Agregar Seguimiento</ModalHeader>
+					<ModalBody>
+						<FormAddSeguimiento
+							handleCloseModal={handleCloseModalObservaciones}
+							handleCloseModalWithReload={handleCloseModalWithReload}
 							valuesForm={currentValue}
 							isEdit={isEdit}
 							isView={isView}

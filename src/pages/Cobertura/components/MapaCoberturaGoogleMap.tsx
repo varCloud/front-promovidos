@@ -64,11 +64,11 @@ const colorsMarker = {
         borderColor: "#118a2fe1",
         glyphColor: "#0ea333e1",
         markerIcon: imgCasilla
-        
+
     }
 }
 
-const MapaCoberturaGoogleMap = () => {
+const MapaCoberturaGoogleMap = ({ filterType }) => {
 
     const { token } = JSON.parse(window.localStorage.getItem(`user`));
     const _promotorService: PromotorService = new PromotorService(new FetchService(token));
@@ -78,11 +78,15 @@ const MapaCoberturaGoogleMap = () => {
     const [promotores, setPromotores] = useState<any>([]);
     const [promovidos, setPromovidos] = useState<any>([]);
     const [casillas, setCasillas] = useState<any>([]);
+    const [_promotores, _setPromotores] = useState<any>([]);
+    const [_promovidos, _setPromovidos] = useState<any>([]);
+    const [_casillas, _setCasillas] = useState<any>([]);
 
     async function obtenerCasillas() {
         setLoading(true);
         const _casillas = await _casillasService.obtenerCasillas();
         setCasillas([..._casillas]);
+        _setCasillas([..._casillas]);
         setLoading(false);
     }
 
@@ -90,6 +94,7 @@ const MapaCoberturaGoogleMap = () => {
         setLoading(true);
         const _promotores = await _promotorService.obtenerPromotores();
         setPromotores([..._promotores]);
+        _setPromotores([..._promotores]);
         setLoading(false);
     }
 
@@ -97,9 +102,43 @@ const MapaCoberturaGoogleMap = () => {
         setLoading(true);
         const _promovidos = await _promovidosService.obtenerPromovidos();
         setPromovidos([..._promovidos]);
+        _setPromovidos([..._promovidos]);
         setLoading(false);
     }
 
+    const filter = (filterType) => {
+        console.log(filterType)
+        switch (filterType) {
+            case ROL.PROMOTOR.toString():
+                setPromotores([..._promotores]);
+                setCasillas([]);
+                setPromovidos([]);
+                break;
+            case ROL.PROMOVIDO.toString():
+                setPromovidos([..._promovidos]);
+                setCasillas([]);
+                setPromotores([]);
+                break;
+            case 'casillas':
+                setCasillas([..._casillas]);
+                setPromotores([]);
+                setPromovidos([]);
+                break;
+            case 'todos':
+                setPromotores([..._promotores]);
+                setPromovidos([..._promovidos]);
+                setCasillas([..._casillas]);
+                break;
+
+            default:
+                break;
+        }
+    };
+
+
+    useEffect(() => {
+        filter(filterType)
+    }, [filterType]);
 
     useEffect(() => {
         obtenerPromotores();
@@ -140,7 +179,7 @@ const MapaCoberturaGoogleMap = () => {
                     casillas.map((p) => {
                         if (p.latitud && p.longitud) {
                             return (
-                                <MarkerWithInfoWindow  ubicacion={`${p.tipoCasilla} ${p.ubicacion}`} backgroundColor={BackgroundColorCasilla[p.distritoLocal.split('.')[0]]} colorMarker={colorsMarker["casillas"]} latLng={{ lat: Number(p.latitud), lng: Number(p.longitud) }} info={`${p.domicilio}`} ></MarkerWithInfoWindow>
+                                <MarkerWithInfoWindow ubicacion={`${p.tipoCasilla} ${p.ubicacion}`} backgroundColor={BackgroundColorCasilla[p.distritoLocal.split('.')[0]]} colorMarker={colorsMarker["casillas"]} latLng={{ lat: Number(p.latitud), lng: Number(p.longitud) }} info={`${p.domicilio}`} ></MarkerWithInfoWindow>
                             )
                         }
                         return null

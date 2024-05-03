@@ -11,12 +11,14 @@ import imgCasilla from './imgs/casilla.png'
 import { BackgroundColorCasilla } from '../../config/constants';
 import MapaCoberturaGoogleMap from './components/MapaCoberturaGoogleMap';
 import './style.css'
+import { ROL } from '../../utils/enums';
 
 const Cobertura = () => {
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _dashboardService: DashboardService = new DashboardService(new FetchService(token));
 	const [loading, setLoading] = useState<boolean>(true);
 	const [secciones, setSecciones] = useState<boolean>();
+	const [filtro, setFiltro] = useState<string>('todos');
 
 	const obtenerSeriesCoberturaPromovidos = async () => {
 		try {
@@ -56,38 +58,39 @@ const Cobertura = () => {
 						</CardHeader>
 						<CardBody>
 							<div className='flex justify-center items-center gap-2'>
-								<span className='text-xl'>Promotor: </span> <img src={imgPromotor} alt="" />
-								<span className='text-xl'>Promovido: </span> <img src={imgPromovido} alt="" />
-								<span className='text-xl text-blue-900  ml-2'>Casilla D.10: </span>
-								<div className='container-casilla' style={{
+								<span className='text-xl text-blue-400 underline cursor-pointer ' onClick={() => setFiltro('todos') }> Actualizar </span> <span> | </span>
+								<span className='text-xl underline cursor-pointer ' onClick={() => setFiltro(ROL.PROMOTOR.toString())}>Promotor: </span> <img onClick={() => setFiltro(ROL.PROMOTOR.toString())} src={imgPromotor} alt="" />
+								<span className='text-xl underline cursor-pointer ' onClick={() => setFiltro(ROL.PROMOVIDO.toString())} >Promovido: </span> <img  onClick={() => setFiltro(ROL.PROMOVIDO.toString())} src={imgPromovido} alt="" />
+								<span className='text-xl underline cursor-pointer text-blue-900  ml-2' onClick={() => setFiltro('casillas')}>Casilla D.10: </span>
+								<div onClick={() => setFiltro('casillas')} className='container-casilla' style={{
 									background: BackgroundColorCasilla[10]
 								}}>
-									<img src={imgCasilla} alt="" />
+									<img src={imgCasilla} onClick={() => setFiltro('casillas')} alt="" />
 								</div>
 
-								<span className='text-xl  text-red-200  ml-2'>Casilla D.11: </span>
-								<div className='container-casilla' style={{
+								<span className='text-xl underline cursor-pointer  text-red-200  ml-2'>Casilla D.11: </span>
+								<div onClick={() => setFiltro('casillas')} className='container-casilla' style={{
 									background: BackgroundColorCasilla[11]
 								}}>
-									<img src={imgCasilla} alt="" />
+									<img src={imgCasilla} onClick={() => setFiltro('casillas')} alt="" />
 								</div>
 
-								<span className='text-xl text-violet-200  ml-2'>Casilla D.16: </span>
-								<div className='container-casilla' style={{
+								<span className='text-xl underline cursor-pointer text-violet-200  ml-2'>Casilla D.16: </span>
+								<div  onClick={() => setFiltro('casillas')}className='container-casilla' style={{
 									background: BackgroundColorCasilla[16]
 								}}>
-									<img src={imgCasilla} alt="" />
+									<img src={imgCasilla} onClick={() => setFiltro('casillas')} alt="" />
 								</div>
 
-								<span className='text-xl text-lime-400  ml-2'>Casilla D.17: </span>
+								<span onClick={() => setFiltro('casillas')} className='text-xl underline cursor-pointer text-lime-400  ml-2'>Casilla D.17: </span>
 								<div className='container-casilla' style={{
 									background: BackgroundColorCasilla[17]
 								}}>
-									<img src={imgCasilla} alt="" />
+									<img src={imgCasilla} onClick={() => setFiltro('casillas')} alt="" />
 								</div>
 
 							</div>
-							<MapaCoberturaGoogleMap />
+							<MapaCoberturaGoogleMap filterType={filtro} />
 						</CardBody>
 						{/* <CardBody className=' d-flex w-full'>
 							{
