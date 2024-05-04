@@ -3,7 +3,7 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import highchartsMap from "highcharts/modules/map";
 import proj4 from "proj4";
-import geojson from "./seccion_cp_morelia_map.json";
+import geojson from "../jsonMaps/seccion_cp_morelia_map.json";
 import './../style.css'
 import Spinner from '../../../components/ui/Spinner';
 highchartsMap(Highcharts);
