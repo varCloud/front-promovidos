@@ -41,6 +41,15 @@ class SegumientosPromovidosService {
 			throw error;
 		}
 	}	
+
+	async obtenerSeguimientosByPromovido(id: any) {
+		try {
+			const uri = `${this.base_uri}segumientosPromovidos/${id}`;
+			return await this._httpClient.fetchData(uri);
+		} catch (error) {
+			throw error;
+		}
+	}	
 }
 
 export default SegumientosPromovidosService;
