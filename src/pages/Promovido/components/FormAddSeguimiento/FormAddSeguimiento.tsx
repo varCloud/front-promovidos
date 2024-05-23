@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import Button from '../../../../components/ui/Button';
 import Label from '../../../../components/form/Label';
@@ -8,18 +8,20 @@ import Textarea from '../../../../components/form/Textarea';
 import { FetchService } from '../../../../services/config/FetchService';
 import SegumientosPromovidosService from '../../../../services/seguimientoPromovido.service';
 import Icon from '../../../../components/icon/Icon';
+import Radio, { RadioGroup } from '../../../../components/form/Radio';
 
 
-type TValues = {
-	vota: boolean;
-	observaciones: string;
-};
+
+const options2: { value: string; content: ReactNode }[] = [
+	{ value: '0', content: 'No apoya' },
+	{ value: '1', content: 'Apoya' },
+	{ value: '2', content: 'No sabe' }
+]
 
 const initialValues = {
-	vota: false,
-	observaciones: ''
+	vota: options2[0].value,
+	observaciones: '',
 }
-
 
 const FormAddSeguimiento = ({ handleCloseModal, handleCloseModalWithReload, valuesForm, isEdit, isView }) => {
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
@@ -27,9 +29,12 @@ const FormAddSeguimiento = ({ handleCloseModal, handleCloseModalWithReload, valu
 	const [loading, setLoading] = useState<boolean>(false);
 	const [seguiminetos, setSeguimientos] = useState<any>([]);
 	const formik = useFormik({
-		initialValues: { ...initialValues },
-		validate: (values: TValues) => {
-			const errors: Partial<TValues> = {};
+		initialValues: { 
+			observaciones: '',
+			vota: options2[0].value,
+		 },
+		validate: (values: any) => {
+			const errors: Partial<any> = {};
 
 			if (!values.observaciones) {
 				errors.observaciones = 'Campo Requerido';
@@ -63,34 +68,45 @@ const FormAddSeguimiento = ({ handleCloseModal, handleCloseModalWithReload, valu
 			setSeguimientos(_seguimientos)
 		}
 	}
+
 	useEffect(() => {
-		formik.setValues({ ...valuesForm, vota: valuesForm.vota ? valuesForm.vota : false })
+		formik.setValues({ ...valuesForm, vota: options2[2].value, })
 		obtenerSeguimientosByPromovido()
 	}, [])
 
 	console.log(`formik values`, formik.values)
 	console.log(`seguiminetos`, seguiminetos)
 
-
 	return (
 		<form className='gap-4 grid grid-cols-2' noValidate>
 			<div className="flex flex-col gap-3">
+			<Label htmlFor='vota' className='!text-lg !w-[100%] !mb-0 text-cyan-950'>Apoya el movimiento ?</Label>
 				<div className='flex justify-start items-center '>
-					<Label htmlFor='vota' className='!text-lg !w-[17%] !mb-0 text-cyan-950'>Vota ?</Label>
-					<Checkbox
-						variant='switch'
-						id='vota'
-						name='vota'
-						onChange={formik.handleChange}
-						checked={formik.values.vota}
-					/>
+					
+					<RadioGroup>
+						{options2.map((i) => (
+							<Radio
+								key={i.value}
+								label={i.content}
+								name='vota'
+								value={i.value}
+								selectedValue={formik.values.vota}
+								onChange={formik.handleChange}
+								color={
+									i.value === options2[0].value
+										? 'red'
+										: 'blue'
+								}
+							/>
+						))}
+					</RadioGroup>
 				</div>
 				<div>
 					<Label htmlFor='nombres' className='!text-lg'>Observaciones</Label>
 					<Validation
 						isValid={formik.isValid}
-						isTouched={formik.touched.observaciones}
-						invalidFeedback={formik.errors.observaciones}
+						isTouched={formik.touched?.observaciones}
+						invalidFeedback={formik.errors?.observaciones}
 						validFeedback='Información correcta'>
 						<Textarea
 							id='observaciones'
@@ -134,7 +150,7 @@ const FormAddSeguimiento = ({ handleCloseModal, handleCloseModalWithReload, valu
 								<Icon icon='HeroPhoneArrowUpRight' className='mx-2 text-white' size='text-xl' />
 							</div>
 							<div className="contaimer-info w-full flex justify-start items-start gap-1 flex-col">
-								<span className='text-xl text-blue-900'>Vota: {item.vota == 1 ? 'Si' : 'No'}</span>
+								<span className='text-xl text-blue-900'>Apoya : {item.vota == 1 ? 'Si' : item.vota == 2 ? 'No' : 'No sabe'}</span>
 								<span className='text-sm'>{item.observaciones}</span>
 								<span className='text-xs text-gray-500' >{item.fechaAlta}</span>
 							</div>

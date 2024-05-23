@@ -46,6 +46,14 @@ export const promovidosAllPages  = {
 		icon: 'HeroMap',
 		subPages: {}
 	},
+
+	casillasAppPages: {
+		id: 'casillas',
+		to: '/casillas',
+		text: 'Casillas',
+		icon: 'HeroInboxStack',
+		subPages: {}
+	},
 }
 
 export const examplePages = {

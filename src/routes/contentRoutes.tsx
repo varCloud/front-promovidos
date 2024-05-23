@@ -168,6 +168,7 @@ const PromotorPage = lazy(() => import('../pages/Promotor/Promotor.page'));
 const DashboardPromovido = lazy(() => import('../pages/DashboardPromovido/DashboardPromovido.page'));
 const EnlacePage = lazy(() => import('../pages/Enlace/Enalce.page'));
 const CoberturaPage = lazy(() => import('../pages/Cobertura/Cobertura.page'));
+const CasillasPage = lazy(() => import('../pages/Casillas/Casillas.page'));
 
 const contentRoutes: RouteProps[] = [
 
@@ -199,6 +200,11 @@ const contentRoutes: RouteProps[] = [
 	{
 		path: promovidosAllPages.coberturaAppPages.to,
 		element: <CoberturaPage />,
+	},
+
+	{
+		path: promovidosAllPages.casillasAppPages.to,
+		element: <CasillasPage />,
 	},
 
 	/**

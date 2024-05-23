@@ -44,6 +44,10 @@ const headerRoutes: RouteProps[] = [
 		element: <PromovidosHeaderTemplate title={'Cobertura'}/>
 	},
 	{
+		path: promovidosAllPages.casillasAppPages.to,
+		element: <PromovidosHeaderTemplate title={'Casillas'}/>
+	},
+	{
 		path: '',
 		element: null,
 	},

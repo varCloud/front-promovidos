@@ -8,7 +8,8 @@ import ContentRouter from '../components/router/ContentRouter';
 import FooterRouter from '../components/router/FooterRouter';
 import useFontSize from '../hooks/useFontSize';
 import getOS from '../utils/getOS.util';
-
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorPage from '../pages/ErrorPage/ErrorPage';
 const App = () => {
 	getOS();
 
@@ -19,12 +20,14 @@ const App = () => {
 		<>
 			<style>{`:root {font-size: ${fontSize}px}`}</style>
 			<div data-component-name='App' className='flex grow flex-col'>
-				<AsideRouter />
-				<Wrapper>
-					<HeaderRouter />
-					<ContentRouter />
-					<FooterRouter />
-				</Wrapper>
+				<ErrorBoundary fallbackRender={ErrorPage}>
+						<AsideRouter />
+					<Wrapper>
+						<HeaderRouter />
+						<ContentRouter />
+						<FooterRouter />
+					</Wrapper>
+				</ErrorBoundary>
 			</div>
 		</>
 	);

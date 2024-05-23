@@ -40,7 +40,8 @@ class PromovidosService {
 		} catch (error) {
 			throw error;
 		}
-	}	
+	}
+	
 }
 
 export default PromovidosService;
