@@ -17,6 +17,10 @@ const options2: { value: string; content: ReactNode }[] = [
 	{ value: '1', content: 'Apoya' },
 	{ value: '2', content: 'No sabe' }
 ]
+type TValues = {
+	observaciones:string;
+	vota:string;
+}
 
 const initialValues = {
 	vota: options2[0].value,
@@ -33,8 +37,8 @@ const FormAddSeguimiento = ({ handleCloseModal, handleCloseModalWithReload, valu
 			observaciones: '',
 			vota: options2[0].value,
 		 },
-		validate: (values: any) => {
-			const errors: Partial<any> = {};
+		validate: (values: TValues) => {
+			const errors: Partial<TValues> = {};
 
 			if (!values.observaciones) {
 				errors.observaciones = 'Campo Requerido';
@@ -105,8 +109,8 @@ const FormAddSeguimiento = ({ handleCloseModal, handleCloseModalWithReload, valu
 					<Label htmlFor='nombres' className='!text-lg'>Observaciones</Label>
 					<Validation
 						isValid={formik.isValid}
-						isTouched={formik.touched?.observaciones}
-						invalidFeedback={formik.errors?.observaciones}
+						isTouched={false}
+						invalidFeedback={formik.errors.observaciones}
 						validFeedback='Información correcta'>
 						<Textarea
 							id='observaciones'

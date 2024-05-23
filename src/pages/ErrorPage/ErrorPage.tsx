@@ -2,7 +2,7 @@ import React from 'react'
 import Button from '../../components/ui/Button'
 import { useNavigate } from 'react-router-dom';
 
-const ErrorPage = ({ error, resetErrorBoundary }) => {
+const ErrorPage = ({ error }) => {
     const navigate = useNavigate();
 
     const handlerClick = () =>{

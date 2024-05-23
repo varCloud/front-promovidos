@@ -14,7 +14,7 @@ const initialValues =
         {
             idCoalicion: '',
             partidos: null,
-            votos:''
+            numeroVotos:''
         }
     ]
 
@@ -26,7 +26,7 @@ const FormAddResultadoCasilla = ({ handleCloseModal, coaliciones, casilla }) => 
     const _creatorService = new CreatorService().createInstanceServices();
     const formik = useFormik({
         initialValues:  [...initialValues] ,
-        validate: (values: any) => {
+        validate: () => {
             const errors: Partial<any> = [];
             return errors;
         },
@@ -35,7 +35,7 @@ const FormAddResultadoCasilla = ({ handleCloseModal, coaliciones, casilla }) => 
             const payload = formik.values.map((x) => {
                 return {
                     idCoalicion : x.idCoalicion,
-                    numeroVotos:    x.numeroVotos && x.numeroVotos.toString().length > 0 ? Number(x.numeroVotos) : 0,
+                    numeroVotos:  x.numeroVotos && x.numeroVotos.toString().length > 0 ? Number(x.numeroVotos) : 0,
                     idCasilla:casilla.idCasilla,
                     idElecciones:1
                 }
@@ -100,7 +100,7 @@ const FormAddResultadoCasilla = ({ handleCloseModal, coaliciones, casilla }) => 
             <form className='flex flex-col gap-4' noValidate>
                 {
                     _coaliciones ?
-                        _coaliciones.map((item, index) => {
+                        _coaliciones.map((item) => {
                             return (
                                 <>
                                     <div className='flex justify-center items-center w-[100%]'>
