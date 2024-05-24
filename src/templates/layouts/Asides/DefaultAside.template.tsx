@@ -19,23 +19,23 @@ import usersDb from '../../../mocks/db/users.db';
 const DefaultAsideTemplate = () => {
 	const navigate = useNavigate();
 
-	// return(
-	// 	<Aside>
-	// 		<AsideHead>
-	// 			<LogoAndAsideTogglePart />
-	// 		</AsideHead>
-	// 		<AsideBody>
-	// 			<Nav>
-	// 				<NavItem {...promovidosAllPages.dashboardPromodivosAppPages} />
-	// 				<NavItem {...promovidosAllPages.promotorAppPages} />
-	// 				<NavItem {...promovidosAllPages.promovidoAppPages} />
-	// 				<NavItem {...promovidosAllPages.enlaceAppPages} />
-	// 				<NavItem {...promovidosAllPages.coberturaAppPages} />
-	// 				<NavItem {...promovidosAllPages.casillasAppPages} />
-	// 				</Nav>
-	// 		</AsideBody>
-	// 	</Aside>
-	// )
+	return(
+		<Aside>
+			<AsideHead>
+				<LogoAndAsideTogglePart />
+			</AsideHead>
+			<AsideBody>
+				<Nav>
+					<NavItem {...promovidosAllPages.dashboardPromodivosAppPages} />
+					<NavItem {...promovidosAllPages.promotorAppPages} />
+					<NavItem {...promovidosAllPages.promovidoAppPages} />
+					<NavItem {...promovidosAllPages.enlaceAppPages} />
+					<NavItem {...promovidosAllPages.coberturaAppPages} />
+					<NavItem {...promovidosAllPages.casillasAppPages} />
+					</Nav>
+			</AsideBody>
+		</Aside>
+	)
 
 	return (
 		<Aside>
