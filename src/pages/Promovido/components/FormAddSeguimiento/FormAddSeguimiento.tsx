@@ -9,6 +9,7 @@ import { FetchService } from '../../../../services/config/FetchService';
 import SegumientosPromovidosService from '../../../../services/seguimientoPromovido.service';
 import Icon from '../../../../components/icon/Icon';
 import Radio, { RadioGroup } from '../../../../components/form/Radio';
+import Input from '../../../../components/form/Input';
 
 
 
@@ -18,8 +19,8 @@ const options2: { value: string; content: ReactNode }[] = [
 	{ value: '2', content: 'No sabe' }
 ]
 type TValues = {
-	observaciones:string;
-	vota:string;
+	observaciones: string;
+	vota: string;
 }
 
 const initialValues = {
@@ -33,20 +34,20 @@ const FormAddSeguimiento = ({ handleCloseModal, handleCloseModalWithReload, valu
 	const [loading, setLoading] = useState<boolean>(false);
 	const [seguiminetos, setSeguimientos] = useState<any>([]);
 	const formik = useFormik({
-		initialValues: { 
+		initialValues: {
 			observaciones: '',
 			vota: options2[0].value,
-		 },
+		},
 		validate: (values: TValues) => {
 			const errors: Partial<TValues> = {};
 
-			if (!values.observaciones) {
-				errors.observaciones = 'Campo Requerido';
-			} else if (values.observaciones.length < 3) {
-				errors.observaciones = 'Must be 3 letters or longer';
-			} else if (values.observaciones.length > 500) {
-				errors.observaciones = 'Must be 500 letters or shorter';
-			}
+			// if (!values.observaciones) {
+			// 	errors.observaciones = 'Campo Requerido';
+			// } else if (values.observaciones.length < 3) {
+			// 	errors.observaciones = 'Must be 3 letters or longer';
+			// } else if (values.observaciones.length > 500) {
+			// 	errors.observaciones = 'Must be 500 letters or shorter';
+			// }
 
 			return errors;
 		},
@@ -78,38 +79,36 @@ const FormAddSeguimiento = ({ handleCloseModal, handleCloseModalWithReload, valu
 		obtenerSeguimientosByPromovido()
 	}, [])
 
-	console.log(`formik values`, formik.values)
-	console.log(`seguiminetos`, seguiminetos)
-
 	return (
 		<form className='gap-4 grid grid-cols-2' noValidate>
 			<div className="flex flex-col gap-3">
-			<Label htmlFor='vota' className='!text-lg !w-[100%] !mb-0 text-cyan-950'>Apoya el movimiento ?</Label>
-				<div className='flex justify-start items-center '>
-					
-					<RadioGroup>
-						{options2.map((i) => (
-							<Radio
-								key={i.value}
-								label={i.content}
-								name='vota'
-								value={i.value}
-								selectedValue={formik.values.vota}
-								onChange={formik.handleChange}
-								color={
-									i.value === options2[0].value
-										? 'red'
-										: 'blue'
-								}
-							/>
-						))}
-					</RadioGroup>
+				<div>
+					<Label htmlFor='vota' className='!text-lg !w-[100%] !mb-0 text-cyan-950'>Apoya el movimiento ?</Label>
+					<div className='flex justify-start items-center '>
+						<RadioGroup>
+							{options2.map((i) => (
+								<Radio
+									key={i.value}
+									label={i.content}
+									name='vota'
+									value={i.value}
+									selectedValue={formik.values.vota}
+									onChange={formik.handleChange}
+									color={
+										i.value === options2[0].value
+											? 'red'
+											: 'blue'
+									}
+								/>
+							))}
+						</RadioGroup>
+					</div>
 				</div>
 				<div>
-					<Label htmlFor='nombres' className='!text-lg'>Observaciones</Label>
+					<Label htmlFor='observaciones' className='!text-lg'>Observaciones</Label>
 					<Validation
 						isValid={formik.isValid}
-						isTouched={false}
+						isTouched={formik.touched.observaciones}
 						invalidFeedback={formik.errors.observaciones}
 						validFeedback='Información correcta'>
 						<Textarea

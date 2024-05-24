@@ -39,7 +39,7 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
 			
 			if (typeof setUserName === 'function') {
 				userData = currentUser
-				await setUserName(currentUser).then(() => navigate('/promotor'));
+				await setUserName(currentUser).then(() => navigate('/'));
 			}
 		} catch (error) {
 			throw error;
