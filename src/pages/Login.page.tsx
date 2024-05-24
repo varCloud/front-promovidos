@@ -23,6 +23,7 @@ const LoginPage = () => {
 	const { onLogin } = useAuth();
 
 	const [passwordShowStatus, setPasswordShowStatus] = useState<boolean>(false);
+	const [loading, setLoading] = useState<boolean>(false);
 
 	const formik = useFormik({
 		initialValues: {
@@ -43,9 +44,13 @@ const LoginPage = () => {
 			return errors;
 		},
 		onSubmit: (values: TValues, { setFieldError }) => {
+			setLoading(true)
 			onLogin(values.username, values.password)
-				.then(() => {})
+				.then(() => {
+					setLoading(false)
+				})
 				.catch((e: Error) => {
+					setLoading(false)
 					console.log('error', e);
 					setFieldError('username', e.message);
 					setFieldError('password', e.message);
@@ -128,6 +133,7 @@ const LoginPage = () => {
 						</div>
 						<div>
 							<Button
+								isLoading={loading}
 								size='lg'
 								variant='solid'
 								className='w-full font-semibold'

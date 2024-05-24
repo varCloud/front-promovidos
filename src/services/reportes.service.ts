@@ -17,7 +17,7 @@ class ReportesService {
 
 	async obtenerTodosLosPromovidosPDF() {
 		try {
-			const uri = `${this.base_uri}reportes/obtenerTodosPromovidos`;
+			const uri = `${this.base_uri}reportes/obtenerPromovidosPorPromotor`;
 			return await this._httpClient.fetchFile(uri,);
 		} catch (error) {
 			throw error;

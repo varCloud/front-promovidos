@@ -15,36 +15,48 @@ import Container from '../../components/layouts/Container/Container';
 import CardIndicador from './components/CardIndicador';
 import { FetchService } from '../../services/config/FetchService';
 import DashboardService from '../../services/dashboard.service';
-import GraficoGenero from './components/GraficoGenero';
+import PieChart from './components/PieChart';
 import GraficoEdades from './components/GraficoEdades';
 import Spinner from '../../components/ui/Spinner';
+import CreatorService from '../../services/creator.service';
+import Barchart from './components/Barchart';
+import ChartPreliminares from './components/ChartPreliminares';
 
 function DashboardPromovido() {
-    const { token } = JSON.parse(window.localStorage.getItem(`user`));
-    const _dashboardService: DashboardService = new DashboardService(new FetchService(token));
+    
+    const creatorService = new CreatorService().createInstanceServices()
     const [loading, setLoading] = useState<boolean>(true);
     const [indicadores, setIndicadores] = useState<any>([]);
     const [seriesGenero, setSeriesGenero] = useState<any>();
     const [seriesEdades, setSeriesEdades] = useState<any>();
+    const [seriesApoyaElMovimiento, setSeriesApoyaElMovimiento] = useState<any>();
 
     async function obtenerIndicadores() {
         setLoading(true);
-        const _indicadores = await _dashboardService.obtenerIndicadores();
+        const _indicadores = await creatorService.dashboardService.obtenerIndicadores();
         setIndicadores([..._indicadores]);
         setLoading(false);
     }
 
     async function obtenerDataGraficoGenero() {
         setLoading(true);
-        const _seriesGenero = await _dashboardService.obtenerDataGraficoGenero();
+        const _seriesGenero = await creatorService.dashboardService.obtenerDataGraficoGenero();
         setSeriesGenero(_seriesGenero);
         setLoading(false);
     }
 
     async function obtenerDataGraficoEdades() {
         setLoading(true);
-        const _seriesEdades = await _dashboardService.obtenerDataGraficoEdades();
+        const _seriesEdades = await creatorService.dashboardService.obtenerDataGraficoEdades();
         setSeriesEdades(_seriesEdades);
+        setLoading(false);
+    }
+
+
+    async function obtenerDataGraficoVotara() {
+        setLoading(true);
+        const _apoyaElMovimiento = await creatorService.dashboardService.obtenerDataGraficoVotara();
+        setSeriesApoyaElMovimiento(_apoyaElMovimiento);
         setLoading(false);
     }
 
@@ -52,6 +64,7 @@ function DashboardPromovido() {
         obtenerIndicadores();
         obtenerDataGraficoGenero();
         obtenerDataGraficoEdades();
+        obtenerDataGraficoVotara();
         return () => { };
     }, []);
 
@@ -87,11 +100,26 @@ function DashboardPromovido() {
                         :
                         <Spinner fullView={false} />
                 }
+                <div className=''>
+                {
+                    <div className='mt-16 '>
+                        <ChartPreliminares></ChartPreliminares>
+                    </div>
+                }
+
+                </div>
                 <div className='grid grid-cols-2 gap-4'>
                 {
                     seriesGenero ?
                     <div className='mt-16 '>
-                        <GraficoGenero series={seriesGenero} /> 
+                        <PieChart colores={['#9235F2','#F235C0','#F5ECF1']} series={seriesApoyaElMovimiento} titulo={'Apoyan el movimiento'} /> 
+                    </div>
+                     :  <Spinner fullView={false} />
+                }
+                {
+                    seriesGenero ?
+                    <div className='mt-16 '>
+                        <PieChart colores={['#355FF2','#D335F2', '#F23581']} series={seriesGenero} titulo={'Promovidos por genero'} /> 
                     </div>
                      :  <Spinner fullView={false} />
                 }

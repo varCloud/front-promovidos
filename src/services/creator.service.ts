@@ -1,6 +1,7 @@
 import CasillasService from "./casillas.service";
 import CoalicionesPartidosService from "./coaliciones.service";
 import { FetchService } from "./config/FetchService";
+import DashboardService from "./dashboard.service";
 import EnlaceService from "./enlace.service";
 import PromotorService from "./promotor.service";
 import ReportesService from "./reportes.service";
@@ -20,7 +21,8 @@ class CreatorService {
             reportesService: new ReportesService(new FetchService(this._token)),
             casillasService: new CasillasService(new FetchService(this._token)),
             votosService: new VotosService(new FetchService(this._token)),
-            coalicionesPartidosService: new CoalicionesPartidosService(new FetchService(this._token))
+            coalicionesPartidosService: new CoalicionesPartidosService(new FetchService(this._token)),
+            dashboardService : new DashboardService(new FetchService( this._token)),
         }
     }
 }

@@ -2,13 +2,14 @@ import HighchartsReact from 'highcharts-react-official'
 import Highcharts from 'highcharts'
 import React from 'react'
 
-const buildOptinsChart = (series) => {
+const _colors = ['#622432', '#FA1201', '#1D42FA', '#FA7500', '#80c7fd',]
+const buildOptinsChart = (series , titulo , colors = _colors) => {
     return {
         chart: {
             type: 'pie'
         },
         title: {
-            text: 'Promovidos por Genero',
+            text: titulo,
 
         },
         tooltip: {
@@ -24,6 +25,7 @@ const buildOptinsChart = (series) => {
         subtitle: {
             text:''
         },
+        colors: colors,
         plotOptions: {
             series: {
                 allowPointSelect: true,
@@ -52,15 +54,15 @@ const buildOptinsChart = (series) => {
     }
 }
 
-const GraficoGenero = ({ series }) => {
+const PieChart = ({ series , titulo , colores = _colors}) => {
     return (
 
             <HighchartsReact
                 highcharts={Highcharts}
-                options={buildOptinsChart(series)}
+                options={buildOptinsChart(series, titulo, colores)}
             />
 
     )
 }
 
-export default GraficoGenero
+export default PieChart
