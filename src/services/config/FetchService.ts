@@ -18,7 +18,7 @@ export class FetchService implements IService {
 			}
 			return await response.json();
 		} catch (error) {
-			throw new Error(`Failed to fetch data: ${error.message}`);
+			throw new Error(`Failed to fetch data: ${error?.message ?? `Error no controlado`}`);
 		}
 	}
 

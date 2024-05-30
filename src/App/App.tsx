@@ -14,9 +14,18 @@ import Button from '../components/ui/Button';
 import Tooltip from '../components/ui/Tooltip';
 import Modal, { ModalBody, ModalHeader } from '../components/ui/Modal';
 import ChartPreliminares from '../pages/DashboardPromovido/components/ChartPreliminares';
+
+function fallbackRender({ error, resetErrorBoundary }) {  
+	return (
+	  <div role="alert">
+		<p>Something went wrong:</p>
+		<pre style={{ color: "red" }}>{error.message}</pre>
+	  </div>
+	);
+  }
+
 const App = () => {
 	getOS();
-
 	const { fontSize } = useFontSize();
 	dayjs.extend(localizedFormat);
 	const [openChart, setOpenChart] = useState<boolean>(false);
@@ -24,7 +33,7 @@ const App = () => {
 		<>
 			<style>{`:root {font-size: ${fontSize}px}`}</style>
 			<div data-component-name='App' className='flex grow flex-col'>
-				<ErrorBoundary fallbackRender={ErrorPage}>
+				<ErrorBoundary FallbackComponent={ErrorPage} >
 				
 					<div className='fixed bottom-0 right-0 rounded-full bg-orange-600 mb-10'>
 						<Tooltip text='Ver grafico preliminar'>

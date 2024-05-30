@@ -26,18 +26,18 @@ const columns = (handleOpenAddModal) => {
 	return [
 		columnHelper.accessor('idCasilla', {
 			cell: (id) => (
-					<span>{id.getValue()}</span>
+				<span>{id.getValue()}</span>
 			),
 			header: '#',
 			footer: '#',
 			enableGlobalFilter: false,
 			enableSorting: false,
-			size:10,
+			size: 10,
 		}),
 
 		columnHelper.accessor('seccion', {
 			cell: (seccion) => (
-					<span>{seccion.getValue()}</span>
+				<span>{seccion.getValue()}</span>
 			),
 			header: 'Seccion',
 			footer: 'Seccion',
@@ -54,11 +54,11 @@ const columns = (handleOpenAddModal) => {
 			footer: 'Domicilio',
 			enableGlobalFilter: true,
 			enableSorting: true,
-			size:200
+			size: 200
 		}),
 		columnHelper.accessor('ubicacion', {
 			cell: (ubicacion) => (
-				<div>{ubicacion.getValue()?? sinRegistro}</div>
+				<div>{ubicacion.getValue() ?? sinRegistro}</div>
 			),
 			header: 'Ubicacion',
 			footer: 'Ubicacion',
@@ -82,7 +82,7 @@ const columns = (handleOpenAddModal) => {
 
 		columnHelper.accessor('casilla', {
 			cell: (casilla) => (
-					<span>{casilla.getValue() ?? sinRegistro}</span>
+				<span>{casilla.getValue() ?? sinRegistro}</span>
 			),
 			header: 'Casilla',
 			footer: 'Casilla',
@@ -102,27 +102,27 @@ const columns = (handleOpenAddModal) => {
 	];
 }
 
-const  Casilla = () => {
-    const [sorting, setSorting] = useState<SortingState>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+const Casilla = () => {
+	const [sorting, setSorting] = useState<SortingState>([]);
+	const [loading, setLoading] = useState<boolean>(true);
 	const [casillas, setCasillas] = useState<any>([]);
 	const [currentCasilla, setCurrentCasilla] = useState<any>([]);
 	const [coaliciones, setColiciones] = useState<any>([]);
-    const _creatorService: any = new CreatorService().createInstanceServices()
+	const _creatorService: any = new CreatorService().createInstanceServices()
 	const [globalFilter, setGlobalFilter] = useState<string>('');
 	const [openModalSeguimiento, setOpenModalSeguimiento] = useState<boolean>(false);
-	
-    useEffect(() => {
+
+	useEffect(() => {
 		obtenerCasillas();
 		obtenerCoaliciones();
 		return () => { };
 	}, []);
 
-    async function obtenerCasillas() {
-		setLoading(true);
-		const _casiilas = await _creatorService.casillasService.obtenerCasillas()
-		setCasillas([..._casiilas]);
-		setLoading(false);
+	async function obtenerCasillas() {
+			setLoading(true);
+			const _casiilas = await _creatorService.casillasService.obtenerCasillas()
+			setCasillas([..._casiilas]);
+			setLoading(false);
 	}
 
 	async function obtenerCoaliciones() {
@@ -132,7 +132,7 @@ const  Casilla = () => {
 		setLoading(false);
 	}
 
-    const handleOpenAddModal = (value) =>{
+	const handleOpenAddModal = (value) => {
 		setCurrentCasilla(value)
 		console.log(`handleOpenAddModal`)
 		setOpenModalSeguimiento(true)
@@ -140,16 +140,16 @@ const  Casilla = () => {
 
 	const handleCloseModal = (realoadPage = false) => {
 		setOpenModalSeguimiento(false);
-		if(realoadPage){
+		if (realoadPage) {
 			obtenerCasillas()
 		}
 	};
 
-    const handleExportarPromovidos = () => {}
+	const handleExportarPromovidos = () => { }
 
-    
 
-    const table = useReactTable({
+
+	const table = useReactTable({
 		data: casillas,
 		columns: columns(handleOpenAddModal),
 		state: {
@@ -172,11 +172,11 @@ const  Casilla = () => {
 			maxSize: 500, //enforced during column resizing
 		},
 	});
-    
-    
 
-  return (
-    		<>
+
+
+	return (
+		<>
 			<PageWrapper name='Customer List'>
 				<Subheader>
 					<SubheaderLeft>
