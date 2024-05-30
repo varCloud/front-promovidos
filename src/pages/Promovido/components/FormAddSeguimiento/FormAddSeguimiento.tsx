@@ -40,14 +40,7 @@ const FormAddSeguimiento = ({ handleCloseModal, handleCloseModalWithReload, valu
 		},
 		validate: (values: TValues) => {
 			const errors: Partial<TValues> = {};
-
-			// if (!values.observaciones) {
-			// 	errors.observaciones = 'Campo Requerido';
-			// } else if (values.observaciones.length < 3) {
-			// 	errors.observaciones = 'Must be 3 letters or longer';
-			// } else if (values.observaciones.length > 500) {
-			// 	errors.observaciones = 'Must be 500 letters or shorter';
-			// }
+			console.log(values)
 
 			return errors;
 		},

@@ -15,7 +15,7 @@ import Tooltip from '../components/ui/Tooltip';
 import Modal, { ModalBody, ModalHeader } from '../components/ui/Modal';
 import ChartPreliminares from '../pages/DashboardPromovido/components/ChartPreliminares';
 
-function fallbackRender({ error, resetErrorBoundary }) {  
+function fallbackRender({ error }) {  
 	return (
 	  <div role="alert">
 		<p>Something went wrong:</p>
