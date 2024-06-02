@@ -1,6 +1,6 @@
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts'
-
+import imgCasilla from '../../Cobertura/imgs/casilla.png'
 const buildOptinsChart = (series, categorias) => {
     return {
         chart: {
@@ -18,18 +18,22 @@ const buildOptinsChart = (series, categorias) => {
             backgroundColor: '#FCFFC5',
             borderColor: 'black',
             borderRadius: 10,
-            borderWidth: 3
+            borderWidth: 3,    
         },
         subtitle: {
             text:''
         },
         xAxis: {
-            categories: categorias,
-            title: {
-                text: null
-            },
-            gridLineWidth: 1,
-            lineWidth: 0
+            categories:categorias,
+            // labels:{
+            //     useHTML: true,
+            //     padding:10,
+            //     height:10,
+            //     width:10,
+            //     formatter: function(){
+            //         return '<img src="https://fastly.picsum.photos/id/781/200/300.jpg?hmac=BPGlXlV8K6X2z4SJCt86Qh1io6ezZBBdynv-QiXwLro"  style="width:20px"></img>';                        
+            //     }
+            // }
         },
         yAxis: {
             min: 0,
@@ -42,7 +46,7 @@ const buildOptinsChart = (series, categorias) => {
             },
             gridLineWidth: 0
         },
-        colors: ['#622432', '#FA1201', '#1D42FA', '#FA7500', '#80c7fd'],
+        colors: [ '#FA7500' ,'#1D42FA', '#FA1201',  '#622432', '#80c7fd' , '#ec4da9' ],
         plotOptions: {
             bar: {
                 borderRadius: '50%',
@@ -74,6 +78,7 @@ const buildOptinsChart = (series, categorias) => {
     }
 }
 const Barchart = ({series , categorias}) => {
+    console.log(categorias)
         return (
 
             <HighchartsReact
