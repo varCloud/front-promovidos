@@ -93,8 +93,7 @@ const FormAddResultadoCasilla = ({ handleCloseModal, coaliciones, casilla }) => 
         _setCoaliciones(resetCoaliciones)
         formik.setValues(resetCoaliciones)
     }
-    
-    console.log(formik.values)
+
     return (
         <>
             <form className='flex flex-col gap-4' noValidate>

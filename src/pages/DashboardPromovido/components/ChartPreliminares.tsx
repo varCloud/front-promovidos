@@ -7,6 +7,7 @@ const ChartPreliminares = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [preliminares, setPreliminares] = useState<any>();
     const creatorService = new CreatorService().createInstanceServices()
+    const MINUTE_MS = 20000;
 
     async function obtenerDataGraficoPremilinares() {
         setLoading(true);
@@ -15,12 +16,18 @@ const ChartPreliminares = () => {
         setLoading(false);
     }
 
-    useEffect(() => {
-        obtenerDataGraficoPremilinares();
-        return () => { };
-    }, []);
 
-    console.log(preliminares)
+
+
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            await obtenerDataGraficoPremilinares();
+        }, MINUTE_MS);
+
+        return () => {
+            clearInterval(interval);
+        }
+        }, [])
 
     if (loading) {
         return (

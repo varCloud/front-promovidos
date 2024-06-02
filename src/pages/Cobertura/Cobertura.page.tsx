@@ -25,7 +25,6 @@ const Cobertura = () => {
 			setLoading(true)
 			const _secciones = await _dashboardService.obtenerCoberturaPromovidos()
 			setSecciones(_secciones)
-			console.log(secciones)
 			setLoading(false)
 
 		} catch (error) {
