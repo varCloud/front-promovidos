@@ -5,7 +5,9 @@ import DashboardService from "./dashboard.service";
 import EnlaceService from "./enlace.service";
 import PromotorService from "./promotor.service";
 import ReportesService from "./reportes.service";
+import SeccionesService from "./secciones.service";
 import VotosService from "./votos.service";
+import VotosSeccionesService from "./votosSecciones.service";
 
 class CreatorService {
     private _token : string  = ''
@@ -23,6 +25,9 @@ class CreatorService {
             votosService: new VotosService(new FetchService(this._token)),
             coalicionesPartidosService: new CoalicionesPartidosService(new FetchService(this._token)),
             dashboardService : new DashboardService(new FetchService( this._token)),
+            seccionesService : new SeccionesService(new FetchService( this._token)),
+            votosSeccionesService : new VotosSeccionesService(new FetchService( this._token)),
+
         }
     }
 }

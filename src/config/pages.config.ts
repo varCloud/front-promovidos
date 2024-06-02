@@ -54,6 +54,14 @@ export const promovidosAllPages  = {
 		icon: 'HeroInboxStack',
 		subPages: {}
 	},
+
+	seccionesAppPages: {
+		id: 'secciones',
+		to: '/secciones',
+		text: 'Secciones',
+		icon: 'HeroInboxStack',
+		subPages: {}
+	},
 }
 
 export const examplePages = {

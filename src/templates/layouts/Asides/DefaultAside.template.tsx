@@ -31,6 +31,7 @@ const DefaultAsideTemplate = () => {
 					<NavItem {...promovidosAllPages.promovidoAppPages} />
 					<NavItem {...promovidosAllPages.enlaceAppPages} />
 					<NavItem {...promovidosAllPages.coberturaAppPages} />
+					<NavItem {...promovidosAllPages.seccionesAppPages} />
 					<NavItem {...promovidosAllPages.casillasAppPages} />
 					</Nav>
 			</AsideBody>

@@ -20,6 +20,7 @@ const ChartPreliminares = () => {
         return () => { };
     }, []);
 
+    console.log(preliminares)
 
     if (loading) {
         return (
@@ -33,13 +34,15 @@ const ChartPreliminares = () => {
         <>
             {
                 preliminares ?
-                    <Barchart series={
+                    <Barchart
+                     series={
                         {
                             name: "Elecciones",
-                            data: preliminares.data.map((c) => c.y)
+                            data: preliminares.data.map((c) => Number(c.y))
                         }
 
-                    } categorias={preliminares.data.map((c) => c.name)} />
+                    }
+                    categorias={preliminares.data.map((c) => c.name)} />
 
                     : null
             }

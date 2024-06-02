@@ -169,6 +169,7 @@ const DashboardPromovido = lazy(() => import('../pages/DashboardPromovido/Dashbo
 const EnlacePage = lazy(() => import('../pages/Enlace/Enalce.page'));
 const CoberturaPage = lazy(() => import('../pages/Cobertura/Cobertura.page'));
 const CasillasPage = lazy(() => import('../pages/Casillas/Casillas.page'));
+const SeccionesPage = lazy(() => import('../pages/Secciones/Secciones.page'));
 
 const contentRoutes: RouteProps[] = [
 
@@ -206,7 +207,10 @@ const contentRoutes: RouteProps[] = [
 		path: promovidosAllPages.casillasAppPages.to,
 		element: <CasillasPage />,
 	},
-
+	{
+		path: promovidosAllPages.seccionesAppPages.to,
+		element: <SeccionesPage />,
+	},
 	/**
 	 * SALES::BEGIN
 	 */

@@ -42,7 +42,7 @@ const buildOptinsChart = (series, categorias) => {
             },
             gridLineWidth: 0
         },
-        colors: ['#622432', '#FA1201', '#1D42FA', '#FA7500', '#80c7fd',],
+        colors: ['#622432', '#FA1201', '#1D42FA', '#FA7500', '#80c7fd'],
         plotOptions: {
             bar: {
                 borderRadius: '50%',
