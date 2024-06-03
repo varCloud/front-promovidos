@@ -7,7 +7,7 @@ const buildOptinsChart = (series, categorias) => {
             type: 'bar'
         },
         title: {
-            text: 'Resultados Preliminares 2024',
+            text: 'Resultados Preliminares 2024 "Presidente Municipal de Morelia"',
 
         },
         tooltip: {
