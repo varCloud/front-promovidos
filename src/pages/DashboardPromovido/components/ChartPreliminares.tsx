@@ -20,6 +20,7 @@ const ChartPreliminares = () => {
 
 
     useEffect(() => {
+        obtenerDataGraficoPremilinares();
         const interval = setInterval(async () => {
             await obtenerDataGraficoPremilinares();
         }, MINUTE_MS);
