@@ -3,7 +3,8 @@ import { useAuth } from '../context/authContext';
 import { IService } from './config/Iservice';
 
 class CoalicionesPartidosService {
-	readonly base_uri = URIS_CONFIG.BASE_URL
+	readonly base_uri = URIS_CONFIG.BASE_URL;
+
 	constructor(private _httpClient: IService) {}
 
 	async obtenerCoalicionesPartidos() {

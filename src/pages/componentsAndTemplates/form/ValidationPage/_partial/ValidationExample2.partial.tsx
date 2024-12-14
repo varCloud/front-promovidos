@@ -317,7 +317,7 @@ const ValidationExample2Partial = () => {
 						label='I have read and accept the terms and conditions.'
 						id='termsAndConditionals'
 						onChange={formik.handleChange}
-						checked={(typeof(formik.values.termsAndConditionals == 'string') ? true : false)}
+						checked={!!typeof (formik.values.termsAndConditionals == 'string')}
 					/>
 				</Validation>
 			</div>

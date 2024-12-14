@@ -11,26 +11,31 @@ import Icon from '../../../../components/icon/Icon';
 import Radio, { RadioGroup } from '../../../../components/form/Radio';
 import Input from '../../../../components/form/Input';
 
-
-
 const options2: { value: string; content: ReactNode }[] = [
 	{ value: '0', content: 'No apoya' },
 	{ value: '1', content: 'Apoya' },
-	{ value: '2', content: 'No sabe' }
-]
+	{ value: '2', content: 'No sabe' },
+];
 type TValues = {
 	observaciones: string;
 	vota: string;
-}
+};
 
 const initialValues = {
 	vota: options2[0].value,
 	observaciones: '',
-}
+};
 
-const FormAddSeguimiento = ({ handleCloseModal, handleCloseModalWithReload, valuesForm, isEdit, isView }) => {
+const FormAddSeguimiento = ({
+	handleCloseModal,
+	handleCloseModalWithReload,
+	valuesForm,
+	isEdit,
+	isView,
+}) => {
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
-	const _segumientosPromovidosService: SegumientosPromovidosService = new SegumientosPromovidosService(new FetchService(token));
+	const _segumientosPromovidosService: SegumientosPromovidosService =
+		new SegumientosPromovidosService(new FetchService(token));
 	const [loading, setLoading] = useState<boolean>(false);
 	const [seguiminetos, setSeguimientos] = useState<any>([]);
 	const formik = useFormik({
@@ -40,44 +45,50 @@ const FormAddSeguimiento = ({ handleCloseModal, handleCloseModalWithReload, valu
 		},
 		validate: (values: TValues) => {
 			const errors: Partial<TValues> = {};
-			console.log(values)
+			console.log(values);
 
 			return errors;
 		},
 		onSubmit: async () => {
-			setLoading(true)
+			setLoading(true);
 			try {
 				if (isEdit) {
-					await _segumientosPromovidosService.actualizarSegumientosPromovidos(formik.values);
+					await _segumientosPromovidosService.actualizarSegumientosPromovidos(
+						formik.values,
+					);
 				} else {
 					await _segumientosPromovidosService.crearSegumientosPromovidos(formik.values);
 				}
-				setLoading(false)
+				setLoading(false);
 				handleCloseModalWithReload();
 			} catch (error) {
-				console.log(error)
+				console.log(error);
 			}
 		},
 	});
 
 	const obtenerSeguimientosByPromovido = async () => {
-		const _seguimientos = await _segumientosPromovidosService.obtenerSeguimientosByPromovido(valuesForm.idPromovido)
+		const _seguimientos = await _segumientosPromovidosService.obtenerSeguimientosByPromovido(
+			valuesForm.idPromovido,
+		);
 		if (_seguimientos) {
-			setSeguimientos(_seguimientos)
+			setSeguimientos(_seguimientos);
 		}
-	}
+	};
 
 	useEffect(() => {
-		formik.setValues({ ...valuesForm, vota: options2[2].value, })
-		obtenerSeguimientosByPromovido()
-	}, [])
+		formik.setValues({ ...valuesForm, vota: options2[2].value });
+		obtenerSeguimientosByPromovido();
+	}, []);
 
 	return (
-		<form className='gap-4 grid grid-cols-2' noValidate>
-			<div className="flex flex-col gap-3">
+		<form className='grid grid-cols-2 gap-4' noValidate>
+			<div className='flex flex-col gap-3'>
 				<div>
-					<Label htmlFor='vota' className='!text-lg !w-[100%] !mb-0 text-cyan-950'>Apoya el movimiento ?</Label>
-					<div className='flex justify-start items-center '>
+					<Label htmlFor='vota' className='!mb-0 !w-[100%] !text-lg text-cyan-950'>
+						Apoya el movimiento ?
+					</Label>
+					<div className='flex items-center justify-start '>
 						<RadioGroup>
 							{options2.map((i) => (
 								<Radio
@@ -87,18 +98,16 @@ const FormAddSeguimiento = ({ handleCloseModal, handleCloseModalWithReload, valu
 									value={i.value}
 									selectedValue={formik.values.vota}
 									onChange={formik.handleChange}
-									color={
-										i.value === options2[0].value
-											? 'red'
-											: 'blue'
-									}
+									color={i.value === options2[0].value ? 'red' : 'blue'}
 								/>
 							))}
 						</RadioGroup>
 					</div>
 				</div>
 				<div>
-					<Label htmlFor='observaciones' className='!text-lg'>Observaciones</Label>
+					<Label htmlFor='observaciones' className='!text-lg'>
+						Observaciones
+					</Label>
 					<Validation
 						isValid={formik.isValid}
 						isTouched={formik.touched.observaciones}
@@ -130,33 +139,37 @@ const FormAddSeguimiento = ({ handleCloseModal, handleCloseModalWithReload, valu
 						className='font-semibold'
 						onClick={() => formik.handleSubmit()}
 						isDisable={isView}
-						isLoading={loading}
-					>
+						isLoading={loading}>
 						Guardar
 					</Button>
 				</div>
 			</div>
-			<div className="list-segumientos flex flex-col gap-3">
-				{
-					seguiminetos.length > 0 ?
+			<div className='list-segumientos flex flex-col gap-3'>
+				{seguiminetos.length > 0 ? (
 					seguiminetos.map((item) => {
 						return (
-						<div className="flex justify-start items-center gap-5 m-2">
-							<div className="container-icon rounded-full p-2 bg-blue-950">
-								<Icon icon='HeroPhoneArrowUpRight' className='mx-2 text-white' size='text-xl' />
+							<div className='m-2 flex items-center justify-start gap-5'>
+								<div className='container-icon rounded-full bg-blue-950 p-2'>
+									<Icon
+										icon='HeroPhoneArrowUpRight'
+										className='mx-2 text-white'
+										size='text-xl'
+									/>
+								</div>
+								<div className='contaimer-info flex w-full flex-col items-start justify-start gap-1'>
+									<span className='text-xl text-blue-900'>
+										Apoya :{' '}
+										{item.vota == 1 ? 'Si' : item.vota == 2 ? 'No' : 'No sabe'}
+									</span>
+									<span className='text-sm'>{item.observaciones}</span>
+									<span className='text-xs text-gray-500'>{item.fechaAlta}</span>
+								</div>
 							</div>
-							<div className="contaimer-info w-full flex justify-start items-start gap-1 flex-col">
-								<span className='text-xl text-blue-900'>Apoya : {item.vota == 1 ? 'Si' : item.vota == 2 ? 'No' : 'No sabe'}</span>
-								<span className='text-sm'>{item.observaciones}</span>
-								<span className='text-xs text-gray-500' >{item.fechaAlta}</span>
-							</div>
-
-						</div>
-						)
+						);
 					})
-					:
+				) : (
 					<p>Aun no tiene observaciones agregadas</p>
-				}
+				)}
 			</div>
 		</form>
 	);

@@ -59,13 +59,12 @@ const SettingsPartial = () => {
 				</DropdownItem>
 				<DropdownItem className='flex flex-col !items-start'>
 					<div>Cerrar Sesion:</div>
-					
-						<Button
-							icon='HeroArrowRightOnRectangle'
-							onClick={() => onLogout()}
-							isActive={darkModeStatus === DARK_MODE.DARK}
-						/>
-					
+
+					<Button
+						icon='HeroArrowRightOnRectangle'
+						onClick={() => onLogout()}
+						isActive={darkModeStatus === DARK_MODE.DARK}
+					/>
 				</DropdownItem>
 			</DropdownMenu>
 		</Dropdown>

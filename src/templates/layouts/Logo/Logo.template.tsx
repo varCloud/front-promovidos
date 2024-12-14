@@ -1,15 +1,16 @@
 import React, { FC, HTMLAttributes } from 'react';
 import colors from 'tailwindcss/colors';
 import themeConfig from '../../../config/theme.config';
-import logoBC from '../../../assets/logo.png'
+import logoBC from '../../../assets/logo.png';
+
 type ILogoTemplateProps = HTMLAttributes<HTMLOrSVGElement>;
 const LogoTemplate: FC<ILogoTemplateProps> = (props) => {
 	const { ...rest } = props;
 	return (
 		<div>
-			<img src={logoBC} alt="" className="w-3/4" />
+			<img src={logoBC} alt='' className='w-3/4' />
 		</div>
-	)
+	);
 	return (
 		<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 198.43 176.06' {...rest}>
 			<g>

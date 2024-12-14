@@ -44,13 +44,13 @@ const LoginPage = () => {
 			return errors;
 		},
 		onSubmit: (values: TValues, { setFieldError }) => {
-			setLoading(true)
+			setLoading(true);
 			onLogin(values.username, values.password)
 				.then(() => {
-					setLoading(false)
+					setLoading(false);
 				})
 				.catch((e: Error) => {
-					setLoading(false)
+					setLoading(false);
 					console.log('error', e);
 					setFieldError('username', e.message);
 					setFieldError('password', e.message);

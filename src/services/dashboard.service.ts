@@ -3,7 +3,8 @@ import { useAuth } from '../context/authContext';
 import { IService } from './config/Iservice';
 
 class DashboardService {
-	readonly base_uri = URIS_CONFIG.BASE_URL
+	readonly base_uri = URIS_CONFIG.BASE_URL;
+
 	constructor(private _httpClient: IService) {}
 
 	async obtenerIndicadores() {
@@ -59,8 +60,6 @@ class DashboardService {
 			throw error;
 		}
 	}
-
-	
 }
 
 export default DashboardService;

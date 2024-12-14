@@ -2,7 +2,7 @@ import { URIS_CONFIG } from '../config/uris.config';
 import { IService } from './config/Iservice';
 
 class SegumientosPromovidosService {
-	readonly base_uri =URIS_CONFIG.BASE_URL
+	readonly base_uri = URIS_CONFIG.BASE_URL;
 
 	constructor(private _httpClient: IService) {}
 
@@ -40,7 +40,7 @@ class SegumientosPromovidosService {
 		} catch (error) {
 			throw error;
 		}
-	}	
+	}
 
 	async obtenerSeguimientosByPromovido(id: any) {
 		try {
@@ -49,7 +49,7 @@ class SegumientosPromovidosService {
 		} catch (error) {
 			throw error;
 		}
-	}	
+	}
 }
 
 export default SegumientosPromovidosService;

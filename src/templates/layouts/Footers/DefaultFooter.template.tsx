@@ -10,7 +10,7 @@ const DefaultFooterTemplate = () => {
 			</FooterLeft>
 			<FooterRight className='text-zinc-500'>
 				<span>
-					<b></b>
+					<b />
 				</span>
 			</FooterRight>
 		</Footer>

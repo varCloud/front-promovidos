@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
+import Autocomplete from 'react-google-autocomplete';
+import { set } from 'lodash';
 import FieldWrap from '../../../../components/form/FieldWrap';
 import Icon from '../../../../components/icon/Icon';
 import Input from '../../../../components/form/Input';
@@ -14,9 +16,7 @@ import PromovidosService from '../../../../services/promovidos.service';
 import { FetchService } from '../../../../services/config/FetchService';
 import PromotorService from '../../../../services/promotor.service';
 import { getAge } from '../../../../components/utils/functions';
-import Autocomplete from "react-google-autocomplete";
 import GoogleSearchBoxWithMap from '../../../../components/search-box/GoogleSearchBoxWithMap';
-import { set } from 'lodash';
 
 type TValues = {
 	usuario: string;
@@ -59,10 +59,16 @@ const initialValues = {
 	longitud: '',
 	direccionMapa: '',
 	placeId: '',
-	idRol: 3
-}
+	idRol: 3,
+};
 
-const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload, valuesForm, isEdit, isView }: any) => {
+const FormAddPromotor = ({
+	handleCloseModal,
+	handleCloseModalWithReload,
+	valuesForm,
+	isEdit,
+	isView,
+}: any) => {
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _promotorService: PromotorService = new PromotorService(new FetchService(token));
 	const [loading, setLoading] = useState<boolean>(false);
@@ -89,42 +95,42 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload, valuesF
 				errors.mail = 'la estructrura del email es incorrecta';
 			}
 			if (values.fechaNacimiento) {
-				values.edad = getAge(values.fechaNacimiento).toString()
+				values.edad = getAge(values.fechaNacimiento).toString();
 			}
 			if (!values.direccionMapa) {
 				errors.direccionMapa = 'Por favor busque la dirección en el mapa';
 			}
-			//listenerChangeAllDireccion(values)
+			// listenerChangeAllDireccion(values)
 
-			console.log(errors)
+			console.log(errors);
 			return errors;
 		},
 		onSubmit: async () => {
-			setLoading(true)
+			setLoading(true);
 			if (isEdit) {
 				await _promotorService.actualizarPromotor(formik.values);
 			} else {
 				await _promotorService.crearPromotor(formik.values);
 			}
-			setLoading(false)
+			setLoading(false);
 			handleCloseModalWithReload();
 		},
 	});
 
 	useEffect(() => {
 		if (isView || isEdit) {
-			const values = { ...valuesForm, ...valuesForm.Usuario }
-			delete values.Usuario
-			formik.setValues({ ...values, idRol: 3 })
+			const values = { ...valuesForm, ...valuesForm.Usuario };
+			delete values.Usuario;
+			formik.setValues({ ...values, idRol: 3 });
 		}
-
-	}, [])
+	}, []);
 
 	const listenerChangeAllDireccion = (values: TValues) => {
-
-		let _direccionCompleta = `${values.calle ?? ''} ${values.colonia ?? ''} ${values.cp ?? ''}`
-		setDireccionCompleta(_direccionCompleta)
-	}
+		const _direccionCompleta = `${values.calle ?? ''} ${values.colonia ?? ''} ${
+			values.cp ?? ''
+		}`;
+		setDireccionCompleta(_direccionCompleta);
+	};
 
 	const onChangeMarker = (data) => {
 		formik.setValues({
@@ -133,8 +139,8 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload, valuesF
 			longitud: data.latLngValue.lng,
 			direccionMapa: data._value.value.description,
 			placeId: data._value.value.place_id,
-		})
-	}
+		});
+	};
 
 	return (
 		<form className='grid grid-cols-2 gap-4' noValidate>
@@ -230,8 +236,8 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload, valuesF
 			</div>
 
 			{/* Codigo postal y Colonia */}
-			<div className="flex">
-				<div className='flex-initial w-full'>
+			<div className='flex'>
+				<div className='w-full flex-initial'>
 					<Label htmlFor='direccion'>Colonia</Label>
 					<Validation
 						isValid={formik.isValid}
@@ -279,11 +285,15 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload, valuesF
 			</div>
 
 			<div className='col-span-2'>
-				<GoogleSearchBoxWithMap height='200px' handleChangeMarker={onChangeMarker} direccionToSearch={direccionCompleta} ></GoogleSearchBoxWithMap>
+				<GoogleSearchBoxWithMap
+					height='200px'
+					handleChangeMarker={onChangeMarker}
+					direccionToSearch={direccionCompleta}
+				/>
 			</div>
 
 			<div className='col-span-2'>
-				<div className='flex justify-items-start flex-row gap-4'>
+				<div className='flex flex-row justify-items-start gap-4'>
 					<p>Latitud: {formik.values.latitud ?? ''}</p>
 					<p>Longitud: {formik.values.longitud ?? ''} </p>
 				</div>
@@ -315,7 +325,7 @@ const FormAddPromotor = ({ handleCloseModal, handleCloseModalWithReload, valuesF
 					</FieldWrap>
 				</Validation>
 			</div>
-			<div className='flex flex-row gap-3 col-span-2 sm:col-span-1'>
+			<div className='col-span-2 flex flex-row gap-3 sm:col-span-1'>
 				<div className='w-[90%]'>
 					<Label htmlFor='fechaNacimiento'>Fecha de nacimiento</Label>
 					<Validation

@@ -166,8 +166,14 @@ const ExamplesPage = () => {
 										<Label htmlFor='assigned'>Coffee:</Label>
 										<Validation
 											isValid={formik.isValid}
-											isTouched={formik.touched.assigned && Boolean(formik.touched.assigned)}
-											invalidFeedback={formik.errors.assigned && formik.touched.assigned.toString()}
+											isTouched={
+												formik.touched.assigned &&
+												Boolean(formik.touched.assigned)
+											}
+											invalidFeedback={
+												formik.errors.assigned &&
+												formik.touched.assigned.toString()
+											}
 											validFeedback='Looks good! - select'>
 											<SelectReact
 												options={options}

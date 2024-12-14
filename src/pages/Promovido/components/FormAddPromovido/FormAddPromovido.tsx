@@ -56,11 +56,17 @@ const initialValues = {
 	latitud: '',
 	longitud: '',
 	direccionMapa: '',
-	placeId: ''
-}
+	placeId: '',
+};
 
-
-const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promotores, valuesForm, isEdit, isView }) => {
+const FormAddPromovido = ({
+	handleCloseModal,
+	handleCloseModalWithReload,
+	promotores,
+	valuesForm,
+	isEdit,
+	isView,
+}) => {
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _promovidosService: PromovidosService = new PromovidosService(new FetchService(token));
 	const [currentSelectPromtor, setCurrentSelectPromotor] = useState<any>();
@@ -88,7 +94,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 			}
 
 			if (values.fechaNacimiento) {
-				values.edad = getAge(values.fechaNacimiento).toString()
+				values.edad = getAge(values.fechaNacimiento).toString();
 			}
 
 			if (!values.direccionMapa) {
@@ -98,45 +104,48 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 			return errors;
 		},
 		onSubmit: async () => {
-			setLoading(true)
+			setLoading(true);
 			try {
 				if (isEdit) {
 					await _promovidosService.actualizarPromovido(formik.values);
 				} else {
 					await _promovidosService.crearPromovido(formik.values);
 				}
-				setLoading(false)
+				setLoading(false);
 				handleCloseModalWithReload();
 			} catch (error) {
-				console.log(error)
+				console.log(error);
 			}
 		},
-
 	});
 
 	useEffect(() => {
-		if(isView || isEdit){
-			setCurrentIdPromotor()
-			formik.setValues({ ...valuesForm, idRol: 4 })
+		if (isView || isEdit) {
+			setCurrentIdPromotor();
+			formik.setValues({ ...valuesForm, idRol: 4 });
 		}
-	}, [])
+	}, []);
 
 	const onChangeSelectPromotor = (data) => {
-		formik.setFieldValue(`idPromotor`, data.value)
-	}
+		formik.setFieldValue(`idPromotor`, data.value);
+	};
 
 	const listenerChangeAllDireccion = (values: TValues) => {
-
-		let _direccionCompleta = `${values.calle ?? ''} ${values.colonia ?? ''} ${values.cp ?? ''}`
-		setDireccionCompleta(_direccionCompleta)
-	}
+		const _direccionCompleta = `${values.calle ?? ''} ${values.colonia ?? ''} ${
+			values.cp ?? ''
+		}`;
+		setDireccionCompleta(_direccionCompleta);
+	};
 
 	const setCurrentIdPromotor = () => {
 		const valuePromotor = promotores.find((item) => item.idPromotor == valuesForm.idPromotor);
 		if (valuePromotor) {
-			setCurrentSelectPromotor({ value: valuePromotor.idPromotor, label: valuePromotor.Usuario.nombres })
+			setCurrentSelectPromotor({
+				value: valuePromotor.idPromotor,
+				label: valuePromotor.Usuario.nombres,
+			});
 		}
-	}
+	};
 
 	const onChangeMarker = (data) => {
 		formik.setValues({
@@ -145,8 +154,8 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 			longitud: data.latLngValue.lng,
 			direccionMapa: data._value.value.description,
 			placeId: data._value.value.place_id,
-		})
-	}
+		});
+	};
 
 	return (
 		<form className='grid grid-cols-2 gap-4' noValidate>
@@ -241,8 +250,8 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 			</div>
 
 			{/* Codigo postal y Colonia */}
-			<div className="flex">
-				<div className='flex-initial w-full'>
+			<div className='flex'>
+				<div className='w-full flex-initial'>
 					<Label htmlFor='direccion'>Colonia</Label>
 					<Validation
 						isValid={formik.isValid}
@@ -288,11 +297,15 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 				</Validation>
 			</div>
 			<div className='col-span-2'>
-				<GoogleSearchBoxWithMap height='200px' handleChangeMarker={onChangeMarker} direccionToSearch={direccionCompleta} ></GoogleSearchBoxWithMap>
+				<GoogleSearchBoxWithMap
+					height='200px'
+					handleChangeMarker={onChangeMarker}
+					direccionToSearch={direccionCompleta}
+				/>
 			</div>
 
 			<div className=' col-span-2'>
-				<div className='flex justify-items-start flex-row gap-4'>
+				<div className='flex flex-row justify-items-start gap-4'>
 					<p>Latitud: {formik.values.latitud ?? ''}</p>
 					<p>Longitud: {formik.values.longitud ?? ''} </p>
 				</div>
@@ -306,7 +319,9 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 					invalidFeedback={formik.errors.telefono}
 					validFeedback='Información correcta'>
 					<FieldWrap
-						firstSuffix={<Icon icon='HeroDevicePhoneMobile' className='mx-2' size='text-xl' />}>
+						firstSuffix={
+							<Icon icon='HeroDevicePhoneMobile' className='mx-2' size='text-xl' />
+						}>
 						<Input
 							id='telefono'
 							disabled={isView}
@@ -320,7 +335,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 					</FieldWrap>
 				</Validation>
 			</div>
-			<div className='flex flex-row gap-3  col-span-2 sm:col-span-1'>
+			<div className='col-span-2 flex flex-row  gap-3 sm:col-span-1'>
 				<div className='w-[90%]'>
 					<Label htmlFor='fechaNacimiento'>Fecha de nacimiento</Label>
 					<Validation
@@ -343,7 +358,6 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 							/>
 						</FieldWrap>
 					</Validation>
-
 				</div>
 				<div>
 					<Label htmlFor='edad'>Edad</Label>
@@ -424,7 +438,9 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 					invalidFeedback={formik.errors.redesSociales}
 					validFeedback='Información correcta'>
 					<FieldWrap
-						firstSuffix={<Icon icon='HeroHandThumbUp' className='mx-2' size='text-xl' />}>
+						firstSuffix={
+							<Icon icon='HeroHandThumbUp' className='mx-2' size='text-xl' />
+						}>
 						<Input
 							id='redesSociales'
 							disabled={isView}
@@ -443,14 +459,19 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 				<Validation
 					isValid={formik.isValid}
 					isTouched={formik.touched.idPromotor && Boolean(formik.touched.idPromotor)}
-					invalidFeedback={formik.errors.idPromotor && formik.errors.idPromotor.toString()}
+					invalidFeedback={
+						formik.errors.idPromotor && formik.errors.idPromotor.toString()
+					}
 					validFeedback='Información correcta'>
 					<FieldWrap
-						firstSuffix={<Icon icon='HeroUserCircle' className='mx-2' size='text-xl' />}
-					>
+						firstSuffix={
+							<Icon icon='HeroUserCircle' className='mx-2' size='text-xl' />
+						}>
 						<div className='col-span-12 lg:col-span-4'>
 							<SelectReact
-								options={promotores.map((item) => { return { value: item.idPromotor, label: item.Usuario.nombres } })}
+								options={promotores.map((item) => {
+									return { value: item.idPromotor, label: item.Usuario.nombres };
+								})}
 								id='idPromotor'
 								isDisabled={isView}
 								name='idPromotor'
@@ -458,7 +479,6 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 								onChange={(item) => onChangeSelectPromotor(item)}
 							/>
 						</div>
-
 					</FieldWrap>
 				</Validation>
 			</div>
@@ -468,7 +488,6 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 					variant='outline'
 					className='font-semibold'
 					onClick={handleCloseModal}>
-
 					Cancelar
 				</Button>
 
@@ -478,8 +497,7 @@ const FormAddPromovido = ({ handleCloseModal, handleCloseModalWithReload, promot
 					className='font-semibold'
 					onClick={() => formik.handleSubmit()}
 					isDisable={isView}
-					isLoading={loading}
-				>
+					isLoading={loading}>
 					Guardar
 				</Button>
 			</div>

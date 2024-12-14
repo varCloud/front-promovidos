@@ -2,15 +2,16 @@ import { json } from 'd3-fetch';
 import { IService } from './Iservice';
 
 export class FetchService implements IService {
-     token:string
-	constructor(token){
-		this.token = token
+	token: string;
+
+	constructor(token) {
+		this.token = token;
 	}
 
 	async fetchData(url: string): Promise<any> {
 		try {
-			const response = await fetch(url,{
-				method:'GET',
+			const response = await fetch(url, {
+				method: 'GET',
 				headers: this.defaultHeader(),
 			});
 			if (!response.ok) {
@@ -24,14 +25,14 @@ export class FetchService implements IService {
 
 	async fetchFile(url: string): Promise<any> {
 		try {
-			const response = await fetch(url,{
-				method:'GET',
+			const response = await fetch(url, {
+				method: 'GET',
 				headers: this.defaultHeader(),
 			});
 			if (!response.ok) {
 				throw new Error('Failed to fetch data');
 			}
-			return await response
+			return response;
 		} catch (error) {
 			throw new Error(`Failed to fetch data: ${error.message}`);
 		}
@@ -104,8 +105,8 @@ export class FetchService implements IService {
 
 	private defaultHeader() {
 		return {
-				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${this.token}`
-			}
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${this.token}`,
+		};
 	}
 }

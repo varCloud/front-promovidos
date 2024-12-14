@@ -2,7 +2,7 @@ import { URIS_CONFIG } from '../config/uris.config';
 import { IService } from './config/Iservice';
 
 class PromovidosService {
-	readonly base_uri =URIS_CONFIG.BASE_URL
+	readonly base_uri = URIS_CONFIG.BASE_URL;
 
 	constructor(private _httpClient: IService) {}
 
@@ -41,7 +41,6 @@ class PromovidosService {
 			throw error;
 		}
 	}
-	
 }
 
 export default PromovidosService;

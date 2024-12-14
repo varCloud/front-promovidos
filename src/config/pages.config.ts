@@ -4,23 +4,21 @@ import usersDb from '../mocks/db/users.db';
 import rolesDb from '../mocks/db/roles.db';
 import projectsDb from '../mocks/db/projects.db';
 
-
-export const promovidosAllPages  = {
+export const promovidosAllPages = {
 	dashboardPromodivosAppPages: {
 		id: 'dashboardPromodivos',
 		to: '/',
 		text: 'Dashboard',
 		icon: 'HeroRocketLaunch',
-		subPages: {}
+		subPages: {},
 	},
-
 
 	promovidoAppPages: {
 		id: 'promovido',
 		to: '/promovido',
 		text: 'Promovidos',
 		icon: 'HeroUsers',
-		subPages: {}
+		subPages: {},
 	},
 
 	promotorAppPages: {
@@ -28,7 +26,7 @@ export const promovidosAllPages  = {
 		to: '/promotor',
 		text: 'Promotores',
 		icon: 'HeroUser',
-		subPages: {}
+		subPages: {},
 	},
 
 	enlaceAppPages: {
@@ -36,7 +34,7 @@ export const promovidosAllPages  = {
 		to: '/enlace',
 		text: 'Enlaces',
 		icon: 'HeroArrowsPointingIn',
-		subPages: {}
+		subPages: {},
 	},
 
 	coberturaAppPages: {
@@ -44,7 +42,7 @@ export const promovidosAllPages  = {
 		to: '/cobertura',
 		text: 'Cobertura',
 		icon: 'HeroMap',
-		subPages: {}
+		subPages: {},
 	},
 
 	casillasAppPages: {
@@ -52,7 +50,7 @@ export const promovidosAllPages  = {
 		to: '/casillas',
 		text: 'Casillas',
 		icon: 'HeroInboxStack',
-		subPages: {}
+		subPages: {},
 	},
 
 	seccionesAppPages: {
@@ -60,9 +58,9 @@ export const promovidosAllPages  = {
 		to: '/secciones',
 		text: 'Secciones',
 		icon: 'HeroInboxStack',
-		subPages: {}
+		subPages: {},
 	},
-}
+};
 
 export const examplePages = {
 	examplesPage: {
@@ -79,9 +77,7 @@ export const examplePages = {
 	},
 };
 
-
 export const appPages = {
-
 	aiAppPages: {
 		id: 'aiApp',
 		to: '/ai',
@@ -560,7 +556,7 @@ export const authPages = {
 // };
 const pagesConfig = {
 	...authPages,
-	...promovidosAllPages
-}
+	...promovidosAllPages,
+};
 
 export default pagesConfig;

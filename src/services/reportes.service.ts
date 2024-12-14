@@ -2,7 +2,7 @@ import { URIS_CONFIG } from '../config/uris.config';
 import { IService } from './config/Iservice';
 
 class ReportesService {
-	readonly base_uri =URIS_CONFIG.BASE_URL
+	readonly base_uri = URIS_CONFIG.BASE_URL;
 
 	constructor(private _httpClient: IService) {}
 
@@ -18,16 +18,16 @@ class ReportesService {
 	async obtenerTodosLosPromovidosPDF() {
 		try {
 			const uri = `${this.base_uri}reportes/obtenerPromovidosPorPromotor`;
-			return await this._httpClient.fetchFile(uri,);
+			return await this._httpClient.fetchFile(uri);
 		} catch (error) {
 			throw error;
 		}
-	}	
+	}
 
 	async obtenerTodosLosPromotoresPDF() {
 		try {
 			const uri = `${this.base_uri}reportes/obtenerTodosPromotores`;
-			return await this._httpClient.fetchFile(uri,);
+			return await this._httpClient.fetchFile(uri);
 		} catch (error) {
 			throw error;
 		}
@@ -36,7 +36,7 @@ class ReportesService {
 	async obtenerTodosEnlacesPorPromotorPDF(idPromotor) {
 		try {
 			const uri = `${this.base_uri}reportes/obtenerTodosEnlaces/${idPromotor}`;
-			return await this._httpClient.fetchFile(uri,);
+			return await this._httpClient.fetchFile(uri);
 		} catch (error) {
 			throw error;
 		}
@@ -45,7 +45,7 @@ class ReportesService {
 	async obtenerTodosEnlacesPDF() {
 		try {
 			const uri = `${this.base_uri}reportes/obtenerTodosEnlaces/`;
-			return await this._httpClient.fetchFile(uri,);
+			return await this._httpClient.fetchFile(uri);
 		} catch (error) {
 			throw error;
 		}
@@ -54,7 +54,7 @@ class ReportesService {
 	async obtenerPromovidosPDF() {
 		try {
 			const uri = `${this.base_uri}reportes/obtenerPromovidos/`;
-			return await this._httpClient.fetchFile(uri,);
+			return await this._httpClient.fetchFile(uri);
 		} catch (error) {
 			throw error;
 		}

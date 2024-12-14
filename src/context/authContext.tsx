@@ -24,8 +24,8 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const _loginService: LoginService = new LoginService(new FetchService(''));
 
-	//const { response, isLoading, getCheckUser } = useFakeUserAPI(usernameStorage as string);
-	let userData
+	// const { response, isLoading, getCheckUser } = useFakeUserAPI(usernameStorage as string);
+	let userData;
 
 	const navigate = useNavigate();
 
@@ -36,15 +36,15 @@ export const AuthProvider: FC<IAuthProviderProps> = ({ children }) => {
 				usuario: username,
 				contrasena: password,
 			});
-			
+
 			if (typeof setUserName === 'function') {
-				userData = currentUser
+				userData = currentUser;
 				await setUserName(currentUser).then(() => navigate('/'));
 			}
 		} catch (error) {
 			throw error;
-		} finally{
-			setIsLoading(false)
+		} finally {
+			setIsLoading(false);
 		}
 	};
 

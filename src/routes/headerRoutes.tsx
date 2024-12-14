@@ -25,31 +25,31 @@ const headerRoutes: RouteProps[] = [
 	},
 	{
 		path: promovidosAllPages.promovidoAppPages.to,
-		element: <PromovidosHeaderTemplate title={'Promovidos'} />
+		element: <PromovidosHeaderTemplate title='Promovidos' />,
 	},
 	{
 		path: promovidosAllPages.promotorAppPages.to,
-		element: <PromovidosHeaderTemplate title={'Promotores'}/>
+		element: <PromovidosHeaderTemplate title='Promotores' />,
 	},
 	{
 		path: promovidosAllPages.dashboardPromodivosAppPages.to,
-		element: <PromovidosHeaderTemplate title={'Dashboard'}/>
+		element: <PromovidosHeaderTemplate title='Dashboard' />,
 	},
 	{
 		path: promovidosAllPages.enlaceAppPages.to,
-		element: <PromovidosHeaderTemplate title={'Enlaces'}/>
+		element: <PromovidosHeaderTemplate title='Enlaces' />,
 	},
 	{
 		path: promovidosAllPages.coberturaAppPages.to,
-		element: <PromovidosHeaderTemplate title={'Cobertura'}/>
+		element: <PromovidosHeaderTemplate title='Cobertura' />,
 	},
 	{
 		path: promovidosAllPages.casillasAppPages.to,
-		element: <PromovidosHeaderTemplate title={'Casillas'}/>
+		element: <PromovidosHeaderTemplate title='Casillas' />,
 	},
 	{
 		path: promovidosAllPages.seccionesAppPages.to,
-		element: <PromovidosHeaderTemplate title={'Secciones'}/>
+		element: <PromovidosHeaderTemplate title='Secciones' />,
 	},
 	{
 		path: '',

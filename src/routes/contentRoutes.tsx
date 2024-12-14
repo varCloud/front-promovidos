@@ -1,6 +1,12 @@
 import React, { lazy } from 'react';
 import { RouteProps } from 'react-router-dom';
-import { appPages, authPages, componentsPages, examplePages, promovidosAllPages } from '../config/pages.config';
+import {
+	appPages,
+	authPages,
+	componentsPages,
+	examplePages,
+	promovidosAllPages,
+} from '../config/pages.config';
 import NotFoundPage from '../pages/NotFound.page';
 import LoginPage from '../pages/Login.page';
 import Promotor from '../pages/Promotor/Promotor.page';
@@ -105,7 +111,6 @@ const SalesDashboardPage = lazy(
 	() => import('../pages/sales/SalesDashboardPage/SalesDashboard.page'),
 );
 
-
 const ProductListPage = lazy(
 	() => import('../pages/sales/products/ProductListPage/ProductList.page'),
 );
@@ -159,20 +164,20 @@ const ChatPage = lazy(() => import('../pages/ChatPage/Chat.page'));
  */
 const UnderConstructionPage = lazy(() => import('../pages/UnderConstruction.page'));
 
-
 /**
  * PROMOVIDOS
  */
 const PromovidoPage = lazy(() => import('../pages/Promovido/Promovido.page'));
 const PromotorPage = lazy(() => import('../pages/Promotor/Promotor.page'));
-const DashboardPromovido = lazy(() => import('../pages/DashboardPromovido/DashboardPromovido.page'));
+const DashboardPromovido = lazy(
+	() => import('../pages/DashboardPromovido/DashboardPromovido.page'),
+);
 const EnlacePage = lazy(() => import('../pages/Enlace/Enalce.page'));
 const CoberturaPage = lazy(() => import('../pages/Cobertura/Cobertura.page'));
 const CasillasPage = lazy(() => import('../pages/Casillas/Casillas.page'));
 const SeccionesPage = lazy(() => import('../pages/Secciones/Secciones.page'));
 
 const contentRoutes: RouteProps[] = [
-
 	{
 		path: promovidosAllPages.dashboardPromodivosAppPages.to,
 		element: <DashboardPromovido />,

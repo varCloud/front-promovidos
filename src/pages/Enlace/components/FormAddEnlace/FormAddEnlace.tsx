@@ -37,10 +37,16 @@ const initialValues = {
 	cp: '',
 	problematica: '',
 	idPromotorEnlace: undefined,
-}
+};
 
-
-const FormAddEnlace = ({ handleCloseModal, handleCloseModalWithReload, promotores, valuesForm, isEdit, isView }) => {
+const FormAddEnlace = ({
+	handleCloseModal,
+	handleCloseModalWithReload,
+	promotores,
+	valuesForm,
+	isEdit,
+	isView,
+}) => {
 	const { token } = JSON.parse(window.localStorage.getItem(`user`));
 	const _enlaceService: EnlaceService = new EnlaceService(new FetchService(token));
 	const [currentSelectPromtor, setCurrentSelectPromotor] = useState<any>();
@@ -69,39 +75,43 @@ const FormAddEnlace = ({ handleCloseModal, handleCloseModalWithReload, promotore
 			return errors;
 		},
 		onSubmit: async () => {
-			setLoading(true)
+			setLoading(true);
 			try {
 				if (isEdit) {
 					await _enlaceService.actualizarEnlace(formik.values);
 				} else {
 					await _enlaceService.crearEnlace(formik.values);
 				}
-				setLoading(false)
+				setLoading(false);
 				handleCloseModalWithReload();
 			} catch (error) {
-				console.log(error)
+				console.log(error);
 			}
 		},
-
 	});
 
 	useEffect(() => {
-		setCurrentIdPromotor()
-		formik.setValues({ ...valuesForm })
-	}, [])
+		setCurrentIdPromotor();
+		formik.setValues({ ...valuesForm });
+	}, []);
 
 	const onChangeSelectPromotor = (data) => {
-		formik.setFieldValue(`idPromotorEnlace`, data.value)
-	}
+		formik.setFieldValue(`idPromotorEnlace`, data.value);
+	};
 
 	const setCurrentIdPromotor = () => {
-		const valuePromotor = promotores.find((item) => item.idPromotor == valuesForm.idPromotorEnlace);
+		const valuePromotor = promotores.find(
+			(item) => item.idPromotor == valuesForm.idPromotorEnlace,
+		);
 		if (valuePromotor) {
-			setCurrentSelectPromotor({ value: valuePromotor.idPromotor, label: valuePromotor.Usuario.nombres })
+			setCurrentSelectPromotor({
+				value: valuePromotor.idPromotor,
+				label: valuePromotor.Usuario.nombres,
+			});
 		}
-	}
+	};
 
-	console.log(valuesForm)
+	console.log(valuesForm);
 
 	return (
 		<form className='flex flex-col gap-4' noValidate>
@@ -138,7 +148,9 @@ const FormAddEnlace = ({ handleCloseModal, handleCloseModalWithReload, promotore
 					invalidFeedback={formik.errors.telefono}
 					validFeedback='Información correcta'>
 					<FieldWrap
-						firstSuffix={<Icon icon='HeroDevicePhoneMobile' className='mx-2' size='text-xl' />}>
+						firstSuffix={
+							<Icon icon='HeroDevicePhoneMobile' className='mx-2' size='text-xl' />
+						}>
 						<Input
 							id='telefono'
 							disabled={isView}
@@ -201,7 +213,7 @@ const FormAddEnlace = ({ handleCloseModal, handleCloseModalWithReload, promotore
 			</div>
 
 			{/* Codigo postal y Colonia */}
-			<div className="flex gap-10">
+			<div className='flex gap-10'>
 				<div className='flex-none'>
 					<Label htmlFor='direccion'>Codigo postal</Label>
 					<Validation
@@ -224,7 +236,7 @@ const FormAddEnlace = ({ handleCloseModal, handleCloseModalWithReload, promotore
 						</FieldWrap>
 					</Validation>
 				</div>
-				<div className='flex-initial w-full'>
+				<div className='w-full flex-initial'>
 					<Label htmlFor='direccion'>Colonia</Label>
 					<Validation
 						isValid={formik.isValid}
@@ -247,8 +259,6 @@ const FormAddEnlace = ({ handleCloseModal, handleCloseModalWithReload, promotore
 					</Validation>
 				</div>
 			</div>
-
-
 
 			<div>
 				<Label htmlFor='problematica'>Problematica</Label>
@@ -281,15 +291,22 @@ const FormAddEnlace = ({ handleCloseModal, handleCloseModalWithReload, promotore
 				<Label htmlFor='idPromotorEnlace'>Promotor</Label>
 				<Validation
 					isValid={formik.isValid}
-					isTouched={formik.touched.idPromotorEnlace && Boolean(formik.touched.idPromotorEnlace)}
-					invalidFeedback={formik.errors.idPromotorEnlace && formik.errors.idPromotorEnlace.toString()}
+					isTouched={
+						formik.touched.idPromotorEnlace && Boolean(formik.touched.idPromotorEnlace)
+					}
+					invalidFeedback={
+						formik.errors.idPromotorEnlace && formik.errors.idPromotorEnlace.toString()
+					}
 					validFeedback='Información correcta'>
 					<FieldWrap
-						firstSuffix={<Icon icon='HeroUserCircle' className='mx-2' size='text-xl' />}
-					>
+						firstSuffix={
+							<Icon icon='HeroUserCircle' className='mx-2' size='text-xl' />
+						}>
 						<div className='col-span-12 lg:col-span-4'>
 							<SelectReact
-								options={promotores.map((item) => { return { value: item.idPromotor, label: item.Usuario.nombres } })}
+								options={promotores.map((item) => {
+									return { value: item.idPromotor, label: item.Usuario.nombres };
+								})}
 								id='idPromotorEnlace'
 								isDisabled={isView}
 								name='idPromotorEnlace'
@@ -297,7 +314,6 @@ const FormAddEnlace = ({ handleCloseModal, handleCloseModalWithReload, promotore
 								onChange={(item) => onChangeSelectPromotor(item)}
 							/>
 						</div>
-
 					</FieldWrap>
 				</Validation>
 			</div>
@@ -307,7 +323,6 @@ const FormAddEnlace = ({ handleCloseModal, handleCloseModalWithReload, promotore
 					variant='outline'
 					className='font-semibold'
 					onClick={handleCloseModal}>
-
 					Cancelar
 				</Button>
 
@@ -317,8 +332,7 @@ const FormAddEnlace = ({ handleCloseModal, handleCloseModalWithReload, promotore
 					className='font-semibold'
 					onClick={() => formik.handleSubmit()}
 					isDisable={isView}
-					isLoading={loading}
-				>
+					isLoading={loading}>
 					Guardar
 				</Button>
 			</div>
